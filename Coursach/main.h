@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <cstdio>
 #include "sha1.h"
 
 using namespace std;
