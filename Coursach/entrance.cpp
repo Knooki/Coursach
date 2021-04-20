@@ -120,26 +120,24 @@ void log_pas::change_pas() {
 	int counter = load_from_file();
 	for (register int i = 0; i < counter; i++)
 		if (login == _login[i])
-			if (new_pas(i + 1)) cout << "Пароль успешно изменен." << endl;
+			if (new_pas(i)) cout << "Пароль успешно изменен." << endl;
 			else cout << "Произошла ошибка в изменении пароля." << endl;
 }
 
 bool log_pas::new_pas(int place) {
 	ofstream fout;
-	fout.open("file_log_pas.txt", ios_base::out);
+	fout.open("file.txt", ios_base::out);
 	if (!fout.is_open())
 	{
 		cout << "Ошибка открытия файла." << endl;
 		return false;
 	}
 	else {
-		for (int i = 1; i < place; i++) {
-		}
 		this->password = sha1(this->password);
-		if (fout << this->password)
-		{
-			fout.close();
-			return true;
+		_password[place] = this->password;
+		for (register int i = 0; fout << _login[i] << endl; i++) {
+			fout << _password[i] << endl;
+			fout << _type[i] << endl;
 		}
 	}
 }
