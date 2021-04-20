@@ -7,13 +7,14 @@
 //дружественные функции и классы friend
 int main() {
 	system("chcp 1251");
-	string* password = new string;
 	string* login = new string;
+	string* password = new string;
 	log_pas log(login, password);
 	while (1) {
 		switch (log.entrance()) {
 		case -1: return (0);
 		case 0: cout << "Простой посетитель." << endl;
+			system("pause");
 			break;
 		case 1:
 		{

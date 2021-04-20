@@ -3,7 +3,6 @@
 #include "entrance.h"
 
 int admin::menu_admin() {
-	system("cls");
 	int sw;
 	cout << "Выберите опцию:" << endl;
 	cout << "1)Добавление записи." << endl;

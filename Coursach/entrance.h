@@ -3,7 +3,7 @@
 
 class log_pas {
 private:
-	string login, password, * pas, * log;
+	string login, password, * log, * pas;
 	int type;
 	vector<string> _login, _password;
 	vector<int> _type;
@@ -12,8 +12,8 @@ private:
 	bool load_in_file(string login, string password, int type);
 public:
 	log_pas(string* log, string* pas) {
-		this->pas = pas;
 		this->log = log;
+		this->pas = pas;
 	}
 	log_pas(string login, string password) {
 		this->login = login;
