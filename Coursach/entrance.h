@@ -10,7 +10,6 @@ private:
 	int entr_menu();
 	int load_from_file();
 	bool load_in_file(string login, string password, int type);
-	bool new_pas(int place);
 public:
 	log_pas(string* log, string* pas) {
 		this->pas = pas;
