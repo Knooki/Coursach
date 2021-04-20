@@ -18,8 +18,8 @@ int main() {
 			break;
 		case 1:
 		{
-			admin adm(login, password);
-			adm.operation();
+			admin ad(login, password);
+			ad.operation();
 		}
 		break;
 		default: cout << "?" << endl;

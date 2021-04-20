@@ -2,7 +2,6 @@
 #include "entrance.h"
 
 int log_pas::entr_menu() {
-	system("cls");
 	int sw;
 	cout << "Выберите опцию." << endl;
 	cout << "1)Вход.\n2)Регистрация\n3)Выход из программы." << endl;
@@ -16,72 +15,66 @@ int log_pas::entr_menu() {
 
 int log_pas::entrance() {
 	int counter = load_from_file();
-	if (counter == 0) return(-1);
-	else {
-		switch (entr_menu()) {
-		case 1:
-			if (counter != 0) {
-				do {
-					system("cls");
-					cout << "Введите логин." << endl;
-					rewind(stdin);
-					getline(cin, login);
-					cout << "Введите пароль." << endl;
-					rewind(stdin);
-					getline(cin, password);
-					login = sha1(login);
-					password = sha1(password);
-					for (register int i = 0; i < counter; i++)
-						if (login == _login[i] && password == _password[i])
-						{
-							*log = _login[i];
-							*pas = _password[i];
-							return(_type[i]);
-						}
-					cout << "Вы ввели неверный логин или пароль." << endl;
-				} while (is_repeat_operation());
-			}
-			else
-				cout << "В базе еще нет учетных записей." << endl;
-			break;
-		case 2:
-			while (1) {
-				system("cls");
+	switch (entr_menu()) {
+	case 1:
+		if (counter != 0) {
+			do {
 				cout << "Введите логин." << endl;
 				rewind(stdin);
 				getline(cin, login);
+				cout << "Введите пароль." << endl;
+				rewind(stdin);
+				getline(cin, password);
 				login = sha1(login);
-				int i = 0;
-				while (i < counter) {
-					if (login == _login[i])
+				password = sha1(password);
+				for (register int i = 0; i < counter; i++)
+					if (login == _login[i] && password == _password[i])
 					{
-						cout << "Этот логин уже занят." << endl;
-						break;
+						*log = _login[i];
+						*pas = _password[i];
+						return(_type[i]);
 					}
-					i++;
-				}
-				if (i == counter) break;
-			}
-			cout << "Введите пароль." << endl;
-			rewind(stdin);
-			getline(cin, password);
-			password = sha1(password);
-			if (load_in_file(login, password, 1))
-			{
-				*log = login;
-				*pas = password;
-				cout << "Вы успешно зарегестрировались." << endl;
-				system("pause");
-				return (0);
-			}
-			else cout << "Ошибка регистрации." << endl;
-			system("pause");
-			break;
-		case 3:
-			return(-1);
-		default: cout << "Вы ввели неизвестную опцию." << endl;
+				cout << "Вы ввели неверный логин или пароль." << endl;
+			} while (is_repeat_operation());
 		}
+		else
+			cout << "В базе еще нет учетных записей." << endl;
+		break;
+	case 2:
+		while (1) {
+			cout << "Введите логин." << endl;
+			rewind(stdin);
+			getline(cin, login);
+			login = sha1(login);
+			int i = 0;
+			while (i < counter) {
+				if (login == _login[i])
+				{
+					cout << "Этот логин уже занят." << endl;
+					break;
+				}
+				i++;
+			}
+			if (i == counter) break;
+		}
+		cout << "Введите пароль." << endl;
+		rewind(stdin);
+		getline(cin, password);
+		password = sha1(password);
+		if (load_in_file(login, password, 1))
+		{
+			*log = login;
+			*pas = password;
+			cout << "Вы успешно зарегестрировались." << endl;
+			return (0);
+		}
+		else cout << "Ошибка регистрации." << endl;
+		break;
+	case 3:
+		return(-1);
+	default: cout << "Вы ввели неизвестную опцию." << endl;
 	}
+	return(-1);
 }
 
 int log_pas::load_from_file() {
@@ -99,7 +92,6 @@ int log_pas::load_from_file() {
 			getline(fin, buffer);
 			log_pas::_password.push_back(buffer);
 			fin >> buf;
-			fin.ignore(numeric_limits<streamsize>::max(), '\n');
 			log_pas::_type.push_back(buf);
 			i++;
 		}
@@ -116,60 +108,36 @@ bool log_pas::load_in_file(string login, string password, int type) {
 		return false;
 	}
 	else {
-		fout << endl;
 		fout << login << endl;
 		fout << password << endl;
-		fout << type;
+		fout << type << endl;
 		fout.close();
 		return true;
 	}
 }
 
 void log_pas::change_pas() {
-	string pas;
-	cout << "Введите нынешний пароль." << endl;
-	cin >> pas;
-	pas = sha1(pas);
-	if (pas == this->password)
+	int counter = load_from_file();
+	for (register int i = 0; i < counter; i++)
+		if (login == _login[i])
+			if (new_pas(i)) cout << "Пароль успешно изменен." << endl;
+			else cout << "Произошла ошибка в изменении пароля." << endl;
+}
+
+bool log_pas::new_pas(int place) {
+	ofstream fout;
+	fout.open("file.txt", ios_base::out);
+	if (!fout.is_open())
 	{
-		cout << "Введите новый пароль." << endl;
-		cin >> this->password;
-		int counter = load_from_file();
-		int i = 0;
-		while (i < counter)
-		{
-			if (this->login == _login[i])
-			{
-				fstream fout;
-				fout.open("file.txt", ios_base::out);
-				if (!fout.is_open())
-				{
-					cout << "Ошибка открытия файла." << endl;
-				}
-				else {
-					this->password = sha1(this->password);
-					_password[i] = this->password;
-					for (register int i = 0; i < counter; i++) {
-						fout << _login[i] << endl;
-						fout << _password[i] << endl;
-						fout << _type[i];
-					}
-					remove("file_log_pas.txt");
-					char old_name[] = "file.txt", new_name[] = "file_log_pas.txt";
-					fout.close();
-					if (rename(old_name, new_name) == 0) {
-						cout << "Вы успешно изменили пароль." << endl;
-						break;
-					}
-					else cout << "Ошибка в переименовании файлов." << endl;
-				}
-			}
-			i++;
-		}
-		if (i == counter) cout << "Произошла ошибка в изменении пароля." << endl;
+		cout << "Ошибка открытия файла." << endl;
+		return false;
 	}
 	else {
-		cout << "Вы ввели неверный пароль." << endl;
-		if (is_repeat_operation()) return;
+		this->password = sha1(this->password);
+		_password[place] = this->password;
+		for (register int i = 0; fout << _login[i] << endl; i++) {
+			fout << _password[i] << endl;
+			fout << _type[i] << endl;
+		}
 	}
 }
