@@ -3,6 +3,7 @@
 #include "entrance.h"
 
 int admin::menu_admin() {
+	system("cls");
 	int sw;
 	cout << "Выберите опцию:" << endl;
 	cout << "1)Добавление записи." << endl;
@@ -49,32 +50,13 @@ void admin::operation() {
 	case 6:
 		break;
 	case 7:
-		change_pas();
-		break;
+	{
+		log_pas log(*this->login, *this->password);
+		log.change_pas();
+	}
+	break;
 	case 8:
 		return;
 	default: cout << "Вы ввели несуществующую опцию." << endl;
-	}
-}
-
-void admin::change_pas() {
-	string pas;
-	while (1)
-	{
-		cout << "Введите нынешний пароль." << endl;
-		cin >> pas;
-		pas = sha1(pas);
-		if (pas == *(this->password))
-		{
-			cout << "Введите новый пароль." << endl;
-			cin >> *password;
-			log_pas log(*this->login, *this->password);
-			log.change_pas();
-			return;
-		}
-		else {
-			cout << "Вы ввели неверный пароль." << endl;
-			if (is_repeat_operation()) return;
-		}
 	}
 }
