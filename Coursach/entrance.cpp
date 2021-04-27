@@ -5,12 +5,12 @@
 int entrance::entr_menu() {
 	system("cls");
 	int sw;
-	cout << "Âûáåðèòå îïöèþ." << endl;
-	cout << "1)Âõîä.\n2)Ðåãèñòðàöèÿ\n3)Âûõîä èç ïðîãðàììû." << endl;
+	cout << "Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð¾Ð¿Ñ†Ð¸ÑŽ." << endl;
+	cout << "1)Ð’Ñ…Ð¾Ð´.\n2)Ð ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ\n3)Ð’Ñ‹Ñ…Ð¾Ð´ Ð¸Ð· Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹." << endl;
 	while (!(cin >> sw) || cin.peek() != '\n') {
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Îøèáêà. Âû ìîæåòå ââåñòè òîëüêî öèôðû." << endl;
+		cout << "ÐžÑˆÐ¸Ð±ÐºÐ°. Ð’Ñ‹ Ð¼Ð¾Ð¶ÐµÑ‚Ðµ Ð²Ð²ÐµÑÑ‚Ð¸ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ñ†Ð¸Ñ„Ñ€Ñ‹." << endl;
 	}
 	return (sw);
 }
@@ -18,7 +18,7 @@ int entrance::entr_menu() {
 int entrance::entering() {
 	int counter = load_from_file();
 	if (counter == 0) {
-		cout << "Íåò ó÷åòíûõ çàïèñåé." << endl;
+		cout << "ÐÐµÑ‚ ÑƒÑ‡ÐµÑ‚Ð½Ñ‹Ñ… Ð·Ð°Ð¿Ð¸ÑÐµÐ¹." << endl;
 		return(-1);
 	}
 	else {
@@ -27,10 +27,10 @@ int entrance::entering() {
 		case 1:
 			do {
 				system("cls");
-				cout << "Ââåäèòå ëîãèí." << endl;
+				cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð»Ð¾Ð³Ð¸Ð½." << endl;
 				rewind(stdin);
 				getline(cin, login);
-				cout << "Ââåäèòå ïàðîëü." << endl;
+				cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ." << endl;
 				rewind(stdin);
 				getline(cin, password);
 				login = sha1(login);
@@ -42,13 +42,13 @@ int entrance::entering() {
 						*pas = _password[i];
 						return(_type[i]);
 					}
-				cout << "Âû ââåëè íåâåðíûé ëîãèí èëè ïàðîëü." << endl;
+				cout << "Ð’Ñ‹ Ð²Ð²ÐµÐ»Ð¸ Ð½ÐµÐ²ÐµÑ€Ð½Ñ‹Ð¹ Ð»Ð¾Ð³Ð¸Ð½ Ð¸Ð»Ð¸ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ." << endl;
 			} while (is_repeat_operation());
 			break;
 		case 2:
 			while (1) {
 				system("cls");
-				cout << "Ââåäèòå ëîãèí." << endl;
+				cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð»Ð¾Ð³Ð¸Ð½." << endl;
 				rewind(stdin);
 				getline(cin, login);
 				login = sha1(login);
@@ -56,7 +56,7 @@ int entrance::entering() {
 				while (i < counter) {
 					if (login == _login[i])
 					{
-						cout << "Ýòîò ëîãèí óæå çàíÿò." << endl;
+						cout << "Ð­Ñ‚Ð¾Ñ‚ Ð»Ð¾Ð³Ð¸Ð½ ÑƒÐ¶Ðµ Ð·Ð°Ð½ÑÑ‚." << endl;
 						system("pause");
 						break;
 					}
@@ -64,7 +64,7 @@ int entrance::entering() {
 				}
 				if (i == counter) break;
 			}
-			cout << "Ââåäèòå ïàðîëü." << endl;
+			cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ." << endl;
 			rewind(stdin);
 			getline(cin, password);
 			password = sha1(password);
@@ -72,17 +72,17 @@ int entrance::entering() {
 			{
 				*log = login;
 				*pas = password;
-				cout << "Âû óñïåøíî çàðåãåñòðèðîâàëèñü." << endl;
+				cout << "Ð’Ñ‹ ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð·Ð°Ñ€ÐµÐ³ÐµÑÑ‚Ñ€Ð¸Ñ€Ð¾Ð²Ð°Ð»Ð¸ÑÑŒ." << endl;
 				counter++;
 				system("pause");
 				return (0);
 			}
-			else cout << "Îøèáêà ðåãèñòðàöèè." << endl;
+			else cout << "ÐžÑˆÐ¸Ð±ÐºÐ° Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ð¸." << endl;
 			system("pause");
 			break;
 		case 3:
 			return(-1);
-		default: cout << "Âû ââåëè íåèçâåñòíóþ îïöèþ." << endl;
+		default: cout << "Ð’Ñ‹ Ð²Ð²ÐµÐ»Ð¸ Ð½ÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½ÑƒÑŽ Ð¾Ð¿Ñ†Ð¸ÑŽ." << endl;
 		}
 	}
 }
@@ -90,7 +90,7 @@ int entrance::entering() {
 int entrance::load_from_file() {
 	ifstream fin(file_log_pas, ios_base::in);
 	if (!fin.is_open()) {
-		cout << "Îøèáêà îòêðûòèÿ ôàéëà." << endl;
+		cout << "ÐžÑˆÐ¸Ð±ÐºÐ° Ð¾Ñ‚ÐºÑ€Ñ‹Ñ‚Ð¸Ñ Ñ„Ð°Ð¹Ð»Ð°." << endl;
 		return(0);
 	}
 	else {
@@ -115,7 +115,7 @@ bool entrance::save_in_file(string login, string password, int type) {
 	ofstream fout;
 	fout.open(file_log_pas, ios_base::app);
 	if (!fout.is_open()) {
-		cout << "Îøèáêà îòêðûòèÿ ôàéëà." << endl;
+		cout << "ÐžÑˆÐ¸Ð±ÐºÐ° Ð¾Ñ‚ÐºÑ€Ñ‹Ñ‚Ð¸Ñ Ñ„Ð°Ð¹Ð»Ð°." << endl;
 		return false;
 	}
 	else {
@@ -130,12 +130,12 @@ bool entrance::save_in_file(string login, string password, int type) {
 
 void entrance::change_pas(string* login, string* password) {
 	string pas;
-	cout << "Ââåäèòå íûíåøíèé ïàðîëü." << endl;
+	cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ñ‹Ð½ÐµÑˆÐ½Ð¸Ð¹ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ." << endl;
 	cin >> pas;
 	pas = sha1(pas);
 	if (pas == *password)
 	{
-		cout << "Ââåäèòå íîâûé ïàðîëü." << endl;
+		cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð¾Ð²Ñ‹Ð¹ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ." << endl;
 		cin >> *password;
 		int counter = load_from_file();
 		int i = 0;
@@ -147,7 +147,7 @@ void entrance::change_pas(string* login, string* password) {
 				fout.open(file, ios_base::out);
 				if (!fout.is_open())
 				{
-					cout << "Îøèáêà îòêðûòèÿ ôàéëà." << endl;
+					cout << "ÐžÑˆÐ¸Ð±ÐºÐ° Ð¾Ñ‚ÐºÑ€Ñ‹Ñ‚Ð¸Ñ Ñ„Ð°Ð¹Ð»Ð°." << endl;
 				}
 				else {
 					*password = sha1(*password);
@@ -169,19 +169,19 @@ void entrance::change_pas(string* login, string* password) {
 					char old_name[] = file, new_name[] = file_log_pas;
 					fout.close();
 					if (rename(old_name, new_name) == 0) {
-						cout << "Âû óñïåøíî èçìåíèëè ïàðîëü." << endl;
+						cout << "Ð’Ñ‹ ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð¸Ð·Ð¼ÐµÐ½Ð¸Ð»Ð¸ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ." << endl;
 						system("pause");
 						break;
 					}
-					else cout << "Îøèáêà â ïåðåèìåíîâàíèè ôàéëîâ." << endl;
+					else cout << "ÐžÑˆÐ¸Ð±ÐºÐ° Ð² Ð¿ÐµÑ€ÐµÐ¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ð½Ð¸Ð¸ Ñ„Ð°Ð¹Ð»Ð¾Ð²." << endl;
 				}
 			}
 			i++;
 		}
-		if (i == counter) cout << "Ïðîèçîøëà îøèáêà â èçìåíåíèè ïàðîëÿ." << endl;
+		if (i == counter) cout << "ÐŸÑ€Ð¾Ð¸Ð·Ð¾ÑˆÐ»Ð° Ð¾ÑˆÐ¸Ð±ÐºÐ° Ð² Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ð¸ Ð¿Ð°Ñ€Ð¾Ð»Ñ." << endl;
 	}
 	else {
-		cout << "Âû ââåëè íåâåðíûé ïàðîëü." << endl;
+		cout << "Ð’Ñ‹ Ð²Ð²ÐµÐ»Ð¸ Ð½ÐµÐ²ÐµÑ€Ð½Ñ‹Ð¹ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ." << endl;
 		if (is_repeat_operation()) return;
 	}
 }
