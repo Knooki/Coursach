@@ -11,6 +11,7 @@
 
 #define file_log_pas "file_log_pas.txt"
 #define file "file.txt"
+#define file_struct "file_data.txt"
 
 using namespace std;
 

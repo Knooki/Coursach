@@ -140,18 +140,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="admin.cpp" />
-    <ClCompile Include="admin.h" />
     <ClCompile Include="entrance.cpp" />
-    <ClCompile Include="entrance.h" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="sha1.cpp" />
     <ClCompile Include="past.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="user.cpp" />
-    <ClCompile Include="user.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Header.h" />
+    <ClInclude Include="Classes.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="sha1.h" />
   </ItemGroup>

@@ -1,7 +1,8 @@
+#pragma once
 #include "main.h"
-#include "entrance.h"
+#include "Classes.h"
 
-int log_pas::entr_menu() {
+int entrance::entr_menu() {
 	system("cls");
 	int sw;
 	cout << "Выберите опцию." << endl;
@@ -14,15 +15,16 @@ int log_pas::entr_menu() {
 	return (sw);
 }
 
-int log_pas::entrance() {
-	switch (entr_menu()) {
-	case 1:
-		int counter = load_from_file();
-		if (counter == 0) {
-			cout << "Нет учетных записей." << endl;
-			return(-1);
-		}
-		else {
+int entrance::entering() {
+	int counter = load_from_file();
+	if (counter == 0) {
+		cout << "Нет учетных записей." << endl;
+		return(-1);
+	}
+	else {
+		counter = load_from_file();
+		switch (entr_menu()) {
+		case 1:
 			do {
 				system("cls");
 				cout << "Введите логин." << endl;
@@ -42,15 +44,8 @@ int log_pas::entrance() {
 					}
 				cout << "Вы ввели неверный логин или пароль." << endl;
 			} while (is_repeat_operation());
-		}
-		break;
-	case 2:
-		int counter = load_from_file();
-		if (counter == 0) {
-			cout << "Нет учетных записей." << endl;
-			return(-1);
-		}
-		else {
+			break;
+		case 2:
 			while (1) {
 				system("cls");
 				cout << "Введите логин." << endl;
@@ -73,7 +68,7 @@ int log_pas::entrance() {
 			rewind(stdin);
 			getline(cin, password);
 			password = sha1(password);
-			if (load_in_file(login, password, 1))
+			if (save_in_file(login, password, 1))
 			{
 				*log = login;
 				*pas = password;
@@ -84,15 +79,15 @@ int log_pas::entrance() {
 			}
 			else cout << "Ошибка регистрации." << endl;
 			system("pause");
+			break;
+		case 3:
+			return(-1);
+		default: cout << "Вы ввели неизвестную опцию." << endl;
 		}
-		break;
-	case 3:
-		return(-1);
-	default: cout << "Вы ввели неизвестную опцию." << endl;
 	}
 }
 
-int log_pas::load_from_file() {
+int entrance::load_from_file() {
 	ifstream fin(file_log_pas, ios_base::in);
 	if (!fin.is_open()) {
 		cout << "Ошибка открытия файла." << endl;
@@ -103,12 +98,12 @@ int log_pas::load_from_file() {
 		string buffer = "";
 		int buf;
 		while (getline(fin, buffer, ',')) {
-			log_pas::_login.push_back(buffer);
+			_login.push_back(buffer);
 			getline(fin, buffer, ',');
-			log_pas::_password.push_back(buffer);
+			_password.push_back(buffer);
 			fin >> buf;
 			fin.ignore(numeric_limits<streamsize>::max(), '\n');
-			log_pas::_type.push_back(buf);
+			_type.push_back(buf);
 			i++;
 		}
 		return (i);
@@ -116,7 +111,7 @@ int log_pas::load_from_file() {
 	}
 }
 
-bool log_pas::load_in_file(string login, string password, int type) {
+bool entrance::save_in_file(string login, string password, int type) {
 	ofstream fout;
 	fout.open(file_log_pas, ios_base::app);
 	if (!fout.is_open()) {
@@ -133,20 +128,20 @@ bool log_pas::load_in_file(string login, string password, int type) {
 	}
 }
 
-void log_pas::change_pas() {
+void entrance::change_pas(string* login, string* password) {
 	string pas;
 	cout << "Введите нынешний пароль." << endl;
 	cin >> pas;
 	pas = sha1(pas);
-	if (pas == this->password)
+	if (pas == *password)
 	{
 		cout << "Введите новый пароль." << endl;
-		cin >> this->password;
+		cin >> *password;
 		int counter = load_from_file();
 		int i = 0;
 		while (i < counter)
 		{
-			if (this->login == _login[i])
+			if (*login == _login[i])
 			{
 				fstream fout;
 				fout.open(file, ios_base::out);
@@ -155,8 +150,8 @@ void log_pas::change_pas() {
 					cout << "Ошибка открытия файла." << endl;
 				}
 				else {
-					this->password = sha1(this->password);
-					_password[i] = this->password;
+					*password = sha1(*password);
+					_password[i] = *password;
 					for (register int i = 0; i < counter; i++) {
 						if (i == counter - 1)
 						{

@@ -1,11 +1,5 @@
 #include "main.h"
 
-void show_data() {
-}
-
-void search() {
-}
-
 bool is_repeat_operation() {
 	cout << "Чтобы продолжить нажмите любую клавишу." << endl;
 	cout << "Чтобы вернуться нажмите esc." << endl;
