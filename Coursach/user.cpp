@@ -41,8 +41,8 @@ void user::operation() {
 	break;
 	case 4:
 	{
-		entrance us(login);
-		us.change_pas(login);
+		entrance us;
+		us.change_pas(login, password);
 	}
 	break;
 	case 5:

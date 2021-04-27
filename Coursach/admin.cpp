@@ -20,7 +20,6 @@ int admin::menu_admin() {
 	}
 	return(sw);
 }
-
 void admin::operation() {
 	cout << "Вы успешно вошли под правами админа." << endl;
 	switch (menu_admin()) {
@@ -38,8 +37,8 @@ void admin::operation() {
 		break;
 	case 7:
 	{
-		entrance ad(login);
-		ad.change_pas(login);
+		entrance ad;
+		ad.change_pas(login, password);
 	}
 	break;
 	case 8:
@@ -47,15 +46,17 @@ void admin::operation() {
 	default: cout << "Вы ввели несуществующую опцию." << endl;
 	}
 }
-
 void admin::add_data() {
 }
-
 void admin::change_data() {
 }
-
 void admin::delete_data() {
 }
-
 void admin::user_manage() {
+}
+void admin::show_info() {
+}
+void admin::search() {
+}
+void admin::three_subjects() {
 }
