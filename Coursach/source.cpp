@@ -1,8 +1,8 @@
 #include "main.h"
 
 bool is_repeat_operation() {
-	cout << "×òîáû ïðîäîëæèòü íàæìèòå ëþáóþ êëàâèøó." << endl;
-	cout << "×òîáû âåðíóòüñÿ íàæìèòå esc." << endl;
+	cout << "Ð§Ñ‚Ð¾Ð±Ñ‹ Ð¿Ñ€Ð¾Ð´Ð¾Ð»Ð¶Ð¸Ñ‚ÑŒ Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð»ÑŽÐ±ÑƒÑŽ ÐºÐ»Ð°Ð²Ð¸ÑˆÑƒ." << endl;
+	cout << "Ð§Ñ‚Ð¾Ð±Ñ‹ Ð²ÐµÑ€Ð½ÑƒÑ‚ÑŒÑÑ Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ esc." << endl;
 	return(_getch() != 27);
 }
 //int entering() {
@@ -13,12 +13,12 @@ bool is_repeat_operation() {
 //		password = new string[counter];
 //		priority = new int[counter];
 //		load_log_pas();
-//		cout << "Âûáåðèòå îïöèþ." << endl;
-//		cout << "1)Âõîä.\n2)Ðåãèñòðàöèÿ\n3)Âûõîä" << endl;
+//		cout << "Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð¾Ð¿Ñ†Ð¸ÑŽ." << endl;
+//		cout << "1)Ð’Ñ…Ð¾Ð´.\n2)Ð ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ\n3)Ð’Ñ‹Ñ…Ð¾Ð´" << endl;
 //		while (!(cin >> sw) || cin.peek() != '\n') {
 //			cin.clear();
 //			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-//			cout << "Îøèáêà. Âû ìîæåòå ââåñòè òîëüêî öèôðû." << endl;
+//			cout << "ÐžÑˆÐ¸Ð±ÐºÐ°. Ð’Ñ‹ Ð¼Ð¾Ð¶ÐµÑ‚Ðµ Ð²Ð²ÐµÑÑ‚Ð¸ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ñ†Ð¸Ñ„Ñ€Ñ‹." << endl;
 //		}
 //		switch (sw) {
 //		case 1:
@@ -27,16 +27,16 @@ bool is_repeat_operation() {
 //					for (int i = 0; i < counter; i++)
 //						if (*(login + i) == _login && *(password + i) == _password && *(priority + i) >= 0)
 //						{
-//							cout << "Âû óñïåøíî âîøëè." << endl;
+//							cout << "Ð’Ñ‹ ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð²Ð¾ÑˆÐ»Ð¸." << endl;
 //							return (*(priority + i));
 //						}
 //						else
-//							cout << "Âû ââåëè íåïðàâèëüíûé ëîãèí èëè ïàðîëü." << endl;
+//							cout << "Ð’Ñ‹ Ð²Ð²ÐµÐ»Ð¸ Ð½ÐµÐ¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ñ‹Ð¹ Ð»Ð¾Ð³Ð¸Ð½ Ð¸Ð»Ð¸ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ." << endl;
 //				} while (is_operation());
-//			else cout << "Â ñèñòåìå ïîêà åùå íåò ó÷åòíûõ çàïèñåé. Çàðåãèñòðèðóéòåñü." << endl;
+//			else cout << "Ð’ ÑÐ¸ÑÑ‚ÐµÐ¼Ðµ Ð¿Ð¾ÐºÐ° ÐµÑ‰Ðµ Ð½ÐµÑ‚ ÑƒÑ‡ÐµÑ‚Ð½Ñ‹Ñ… Ð·Ð°Ð¿Ð¸ÑÐµÐ¹. Ð—Ð°Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð¸Ñ€ÑƒÐ¹Ñ‚ÐµÑÑŒ." << endl;
 //			break;
 //		case 2:
-//			cout << "Ââåäèòå íîâûé ëîãèí è ïàðîëü." << endl;
+//			cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð¾Ð²Ñ‹Ð¹ Ð»Ð¾Ð³Ð¸Ð½ Ð¸ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ." << endl;
 //			do {
 //				rewind(stdin);
 //				getline(cin, _login);
@@ -44,7 +44,7 @@ bool is_repeat_operation() {
 //				while (i < counter)
 //				{
 //					if (*(login + i) == _login) {
-//						cout << "Òàêîå èìÿ ïîëüçîâàòåëÿ óæå çàíÿòî." << endl;
+//						cout << "Ð¢Ð°ÐºÐ¾Ðµ Ð¸Ð¼Ñ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ ÑƒÐ¶Ðµ Ð·Ð°Ð½ÑÑ‚Ð¾." << endl;
 //						break;
 //					}
 //					i++;
@@ -53,10 +53,10 @@ bool is_repeat_operation() {
 //			rewind(stdin);
 //			getline(cin, _password);
 //			if (add_log_pas(_login, _password, 1))
-//				cout << "Ðåãèñòðàöèÿ ïðîøëà óñïåøíî." << endl;
+//				cout << "Ð ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¿Ñ€Ð¾ÑˆÐ»Ð° ÑƒÑÐ¿ÐµÑˆÐ½Ð¾." << endl;
 //			break;
 //		case 3: return(-1);
-//		default: cout << "Âû ââåëè íåâåðíóþ îïöèþ." << endl; break;
+//		default: cout << "Ð’Ñ‹ Ð²Ð²ÐµÐ»Ð¸ Ð½ÐµÐ²ÐµÑ€Ð½ÑƒÑŽ Ð¾Ð¿Ñ†Ð¸ÑŽ." << endl; break;
 //		}
 //	}
 //}
