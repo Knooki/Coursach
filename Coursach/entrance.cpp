@@ -23,6 +23,7 @@ int entrance::entering() {
 	}
 	else {
 		counter = load_from_file();
+		string login, password;
 		switch (entr_menu()) {
 		case 1:
 			do {
@@ -39,7 +40,6 @@ int entrance::entering() {
 					if (login == _login[i] && password == _password[i])
 					{
 						*log = _login[i];
-						*pas = _password[i];
 						return(_type[i]);
 					}
 				cout << "Вы ввели неверный логин или пароль." << endl;
@@ -68,10 +68,9 @@ int entrance::entering() {
 			rewind(stdin);
 			getline(cin, password);
 			password = sha1(password);
-			if (save_in_file(login, password, 1))
+			if (save_to_file(login, password, 1))
 			{
 				*log = login;
-				*pas = password;
 				cout << "Вы успешно зарегестрировались." << endl;
 				counter++;
 				system("pause");
@@ -111,7 +110,7 @@ int entrance::load_from_file() {
 	}
 }
 
-bool entrance::save_in_file(string login, string password, int type) {
+bool entrance::save_to_file(string login, string password, int type) {
 	ofstream fout;
 	fout.open(file_log_pas, ios_base::app);
 	if (!fout.is_open()) {
@@ -128,21 +127,19 @@ bool entrance::save_in_file(string login, string password, int type) {
 	}
 }
 
-void entrance::change_pas(string* login, string* password) {
-	string pas;
-	cout << "Введите нынешний пароль." << endl;
-	cin >> pas;
-	pas = sha1(pas);
-	if (pas == *password)
-	{
-		cout << "Введите новый пароль." << endl;
-		cin >> *password;
-		int counter = load_from_file();
-		int i = 0;
-		while (i < counter)
-		{
-			if (*login == _login[i])
+void entrance::change_pas(string* login) {
+	int counter = load_from_file();
+	int i = 0;
+	while (i < counter) {
+		if (*login == _login[i]) {
+			string pas;
+			cout << "Введите нынешний пароль." << endl;
+			cin >> pas;
+			pas = sha1(pas);
+			if (pas == _password[i])
 			{
+				cout << "Введите новый пароль." << endl;
+				cin >> _password[i];
 				fstream fout;
 				fout.open(file, ios_base::out);
 				if (!fout.is_open())
@@ -150,10 +147,9 @@ void entrance::change_pas(string* login, string* password) {
 					cout << "Ошибка открытия файла." << endl;
 				}
 				else {
-					*password = sha1(*password);
-					_password[i] = *password;
-					for (register int i = 0; i < counter; i++) {
-						if (i == counter - 1)
+					_password[i] = sha1(_password[i]);
+					for (register int j = 0; j < counter; j++) {
+						if (j == counter - 1)
 						{
 							fout << _login[i] << ',';
 							fout << _password[i] << ',';
@@ -176,12 +172,12 @@ void entrance::change_pas(string* login, string* password) {
 					else cout << "Ошибка в переименовании файлов." << endl;
 				}
 			}
-			i++;
+			else {
+				cout << "Вы ввели неверный пароль." << endl;
+				if (is_repeat_operation()) return;
+			}
 		}
-		if (i == counter) cout << "Произошла ошибка в изменении пароля." << endl;
+		else i++;
 	}
-	else {
-		cout << "Вы ввели неверный пароль." << endl;
-		if (is_repeat_operation()) return;
-	}
+	if (i == counter) cout << "Произошла ошибка в изменении пароля." << endl;
 }
