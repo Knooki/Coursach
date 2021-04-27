@@ -33,7 +33,7 @@ public:
 		this->password = password;
 	}
 	admin() {}
-	void three_subjects();//Вывести на экран 3 пред-мета по которым больше всего отрицательных оценок
+	void three_subjects();//Р’С‹РІРµСЃС‚Рё РЅР° СЌРєСЂР°РЅ 3 РїСЂРµРґ-РјРµС‚Р° РїРѕ РєРѕС‚РѕСЂС‹Рј Р±РѕР»СЊС€Рµ РІСЃРµРіРѕ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹С… РѕС†РµРЅРѕРє
 	void show_info();
 	void search();
 	void operation();
@@ -41,7 +41,7 @@ public:
 
 class user {
 private:
-	//сделай счетчик с помощью static
+	//СЃРґРµР»Р°Р№ СЃС‡РµС‚С‡РёРє СЃ РїРѕРјРѕС‰СЊСЋ static
 	string* login, * password;
 	int menu_user();
 public:
