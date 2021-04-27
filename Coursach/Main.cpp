@@ -2,7 +2,7 @@
 //venia11let 21a56638304140b3099acee719c3ab0b6ebc6c4b
 #include "main.h"
 #include "Classes.h"
-//дружественные функции и классы friend
+//РґСЂСѓР¶РµСЃС‚РІРµРЅРЅС‹Рµ С„СѓРЅРєС†РёРё Рё РєР»Р°СЃСЃС‹ friend
 int main() {
 	system("chcp 1251");
 	string* login = new string;
