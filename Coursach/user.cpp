@@ -23,20 +23,14 @@ void user::operation() {
 	switch (menu_user()) {
 	case 1:
 	{
-		admin us;
-		us.show_info();
 	}
 	break;
 	case 2:
 	{
-		admin us;
-		us.three_subjects();
 	}
 	break;
 	case 3:
 	{
-		admin us;
-		us.search();
 	}
 	break;
 	case 4:

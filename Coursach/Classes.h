@@ -34,26 +34,24 @@ public:
 
 class user {
 private:
-	int code_of_student;
-	string full_name;
-	string birth_date;
-	string speciality;
-	int group;
 	string* login;
 	int menu_user();
 public:
 	user(string* login) {
 		this->login = login;
 	}
-	user(string* login, int code_of_student, string full_name, string birth_date, string speciality, int group) {
-		this->login = login;
-		this->code_of_student = code_of_student;
-		this->full_name = full_name;
-		this->birth_date = birth_date;
-		this->speciality = speciality;
-		this->group = group;
-	}
 	void operation();
+};
+
+struct accounting {
+	int code_of_student;
+	int code_of_subject;
+	string date;
+	int mark;
+	void show_info();
+	void add_info();
+	void change_info();
+	void delete_info();
 };
 
 struct subject {
@@ -68,4 +66,18 @@ struct subject {
 	void add_subj();
 	void change_subj();
 	void delete_subj();
+};
+
+struct student {
+	int code_of_student;
+	string full_name;
+	string birth_date;
+	string speciality;
+	string group;
+	vector<student> load_from_file();
+	void save_to_file(student new_stud);
+	void show_info_stud();
+	void add_stud();
+	void change_stud();
+	void delete_stud();
 };

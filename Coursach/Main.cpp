@@ -3,6 +3,7 @@
 #include "main.h"
 #include "Classes.h"
 int main() {
+	setlocale(LC_ALL, "Rus");
 	system("chcp 1251");
 	string* login = new string;
 	entrance person(login);

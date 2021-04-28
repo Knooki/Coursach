@@ -31,12 +31,12 @@ vector<subject> subject::load_from_file() {
 void subject::show_info_subj() {
 	vector<subject> array = load_from_file();
 	cout << "Информация о предметах." << endl;
-	cout << "Код предмета" << setw(20) << left << "Название предмета"
+	cout << "Код предмета " << setw(20) << left << "Название предмета"
 		<< setw(20) << "ФИО Преподавателя"
 		<< setw(6) << "Часы"
 		<< setw(7) << "Семестр" << endl;
-	for (register int j = 0; j < i; j++) {
-		cout << array[j].code << setw(20) << left << array[j].name
+	for (register int j = 0; j < array.size(); j++) {
+		cout << setw(13) << left << array[j].code << setw(20) << left << array[j].name
 			<< setw(20) << array[j].teacher_name
 			<< setw(6) << array[j].hours
 			<< setw(7) << array[j].semester << endl;
@@ -50,10 +50,12 @@ void subject::add_subj() {
 		subject buffer;
 		cout << "Введите новые данные по предмету." << endl;
 		cout << "Код предмета" << endl;
-		while (!(cin >> buffer.code) || cin.peek() != '\n') {
+		while (!(cin >> buffer.code) || cin.peek() != '\n' || buffer.code < 0) {
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Вы можете ввести только цифры." << endl;
+			if (buffer.code < 0) cout << "Код предмета не может быть отрицательным." << endl;
+			else
+				cout << "Вы можете ввести только цифры." << endl;
 		}
 		for (register int i = 0; i < array.size(); i++)
 			if (buffer.code == array[i].code) {
@@ -61,12 +63,14 @@ void subject::add_subj() {
 				break;
 			}
 		if (flag == 1) {
+			flag = 0;
 			cout << "Такой код предмета уже введен." << endl;
 			continue;
 		}
 		cout << "Название предмета:" << endl;
 		while (1)
 		{
+			rewind(stdin);
 			getline(cin, buffer.name, '\n');
 			if (buffer.name.size() > 20)
 			{
@@ -81,12 +85,14 @@ void subject::add_subj() {
 				break;
 			}
 		if (flag == 1) {
+			flag = 0;
 			cout << "Такое название предмета уже введено." << endl;
 			continue;
 		}
 		cout << "ФИО преподавателя:" << endl;
 		while (1)
 		{
+			rewind(stdin);
 			getline(cin, buffer.teacher_name, '\n');
 			if (buffer.name.size() > 20)
 			{
@@ -96,11 +102,13 @@ void subject::add_subj() {
 			else break;
 		}
 		cout << "Количество часов:" << endl;
-		while (!(cin >> buffer.hours) || cin.peek() != '\n')
+		while (!(cin >> buffer.hours) || cin.peek() != '\n' || buffer.hours < 2 || buffer.hours % 2 != 0)
 		{
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Вы можете ввести только цифры." << endl;
+			if (buffer.hours < 2 || buffer.hours % 2 != 0) cout << "Количество часов не может быть отрицательным или не кратным 2." << endl;
+			else
+				cout << "Вы можете ввести только цифры." << endl;
 		}
 		cout << "Какой по счету семестр:" << endl;
 		while (!(cin >> buffer.semester) || cin.peek() != '\n' || buffer.semester > 8 || buffer.semester < 1)
@@ -111,12 +119,13 @@ void subject::add_subj() {
 			else cout << "Вы можете ввести только цифры." << endl;
 		}
 		save_to_file(buffer);
+		flag = 1;
 	}
 }
 
 void subject::save_to_file(subject new_subj) {
 	fstream fout;
-	fout.open(file_subject, ios_base::in);
+	fout.open(file_subject, ios_base::app);
 	if (!fout.is_open())
 		cout << "Ошибка открытия файла" << endl;
 	else {
@@ -134,6 +143,7 @@ void subject::change_subj() {
 	if (array.size() != 0) {
 		show_info_subj();
 		int buffer;
+		int flag = 1;
 		cout << "Введите код предмета, который хотите поменять." << endl;
 		while (!(cin >> buffer) || cin.peek() != '\n') {
 			cin.clear();
@@ -143,95 +153,104 @@ void subject::change_subj() {
 		for (register int i = 0; i < array.size(); i++)
 			if (buffer == array[i].code) {
 				buffer = i;
+				flag = 0;
 				break;
 			}
-		subject buf;
-		int flag = 0;
-		while (flag == 0) {
-			cout << "Введите новые данные по предмету." << endl;
-			cout << "Код предмета" << endl;
-			while (!(cin >> buf.code) || cin.peek() != '\n') {
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << "Вы можете ввести только цифры." << endl;
-			}
-			for (register int i = 0; i < array.size(); i++)
-				if (buf.code == array[i].code) {
-					flag = 1;
-					break;
+		if (flag == 0) {
+			subject buf;
+			while (flag == 0) {
+				cout << "Введите новые данные по предмету." << endl;
+				cout << "Код предмета" << endl;
+				while (!(cin >> buf.code) || cin.peek() != '\n' || buf.code < 0) {
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					if (buf.code < 0) cout << "Код предмета не может быть отрицательным." << endl;
+					else
+						cout << "Вы можете ввести только цифры." << endl;
 				}
-			if (flag == 1) {
-				cout << "Такой код предмета уже введен." << endl;
-				continue;
-			}
-			cout << "Название предмета:" << endl;
-			while (1)
-			{
-				getline(cin, buf.name, '\n');
-				if (buf.name.size() > 20)
-				{
-					cout << "Имя предмета не должно превышать 20 символов." << endl;
+				for (register int i = 0; i < array.size(); i++)
+					if (buf.code == array[i].code) {
+						flag = 1;
+						break;
+					}
+				if (flag == 1) {
+					flag = 0;
+					cout << "Такой код предмета уже введен." << endl;
 					continue;
 				}
-				else break;
-			}
-			for (register int i = 0; i < array.size(); i++)
-				if (buf.name == array[i].name) {
-					flag = 1;
-					break;
-				}
-			if (flag == 1) {
-				cout << "Такое название предмета уже введено." << endl;
-				continue;
-			}
-			cout << "ФИО преподавателя:" << endl;
-			while (1)
-			{
-				getline(cin, buf.teacher_name, '\n');
-				if (buf.name.size() > 20)
+				cout << "Название предмета:" << endl;
+				while (1)
 				{
-					cout << "Имя преподавателя не должно превышать 20 символов." << endl;
+					getline(cin, buf.name, '\n');
+					if (buf.name.size() > 20)
+					{
+						cout << "Имя предмета не должно превышать 20 символов." << endl;
+						continue;
+					}
+					else break;
+				}
+				for (register int i = 0; i < array.size(); i++)
+					if (buf.name == array[i].name) {
+						flag = 1;
+						break;
+					}
+				if (flag == 1) {
+					flag = 0;
+					cout << "Такое название предмета уже введено." << endl;
 					continue;
 				}
-				else break;
+				cout << "ФИО преподавателя:" << endl;
+				while (1)
+				{
+					getline(cin, buf.teacher_name, '\n');
+					if (buf.teacher_name.size() > 20)
+					{
+						cout << "Имя преподавателя не должно превышать 20 символов." << endl;
+						continue;
+					}
+					else break;
+				}
+				cout << "Количество часов:" << endl;
+				while (!(cin >> buf.hours) || cin.peek() != '\n' || buf.hours < 2 || buf.hours % 2 != 0)
+				{
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					if (buf.hours < 2 || buf.hours % 2 != 0) cout << "Количество часов не может быть отрицательным или не кратным 2." << endl;
+					else
+						cout << "Вы можете ввести только цифры." << endl;
+				}
+				cout << "Какой по счету семестр:" << endl;
+				while (!(cin >> buf.semester) || cin.peek() != '\n' || buf.semester > 8 || buf.semester < 1)
+				{
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					if (buf.semester > 8 || buf.semester < 1) cout << "Всего может быть только 8 семестров." << endl;
+					else cout << "Вы можете ввести только цифры." << endl;
+				}
 			}
-			cout << "Количество часов:" << endl;
-			while (!(cin >> buf.hours) || cin.peek() != '\n')
-			{
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << "Вы можете ввести только цифры." << endl;
-			}
-			cout << "Какой по счету семестр:" << endl;
-			while (!(cin >> buf.semester) || cin.peek() != '\n' || buf.semester > 8 || buf.semester < 1)
-			{
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				if (buf.semester > 8 || buf.semester < 1) cout << "Всего может быть только 8 семестров." << endl;
-				else cout << "Вы можете ввести только цифры." << endl;
+			array[buffer] = buf;
+			fstream fout;
+			fout.open(file, ios_base::out);
+			if (!fout.is_open())
+				cout << "Ошибка открытия файла." << endl;
+			else {
+				for (register int i = 0; i < array.size(); i++)
+				{
+					fout << array[i].code << ','
+						<< array[i].name << ','
+						<< array[i].teacher_name << ','
+						<< array[i].hours << ','
+						<< array[i].semester << endl;
+				}
+				remove(file_subject);
+				char old_name[] = file, new_name[] = file_subject;
+				fout.close();
+				if (rename(old_name, new_name) == 0)
+					cout << "Вы успешно изменили пароль." << endl;
+				else cout << "Ошибка в переименовании файлов." << endl;
 			}
 		}
-		array[buffer] = buf;
-		fstream fout;
-		fout.open(file, ios_base::out);
-		if (!fout.is_open())
-			cout << "Ошибка открытия файла." << endl;
-		else {
-			for (register int i = 0; i < array.size(); i++)
-			{
-				fout << array[i].code << ','
-					<< array[i].name << ','
-					<< array[i].teacher_name << ','
-					<< array[i].hours << ','
-					<< array[i].semester << endl;
-			}
-			remove(file_subject);
-			char old_name[] = file, new_name[] = file_subject;
-			fout.close();
-			if (rename(old_name, new_name) == 0)
-				cout << "Вы успешно изменили пароль." << endl;
-			else cout << "Ошибка в переименовании файлов." << endl;
-		}
+		else cout << "Вы ввели неизвестный код предмета." << endl;
 	}
 	else cout << "Нет информации по предметам." << endl;
 }
@@ -241,6 +260,7 @@ void subject::delete_subj() {
 	if (array.size() != 0) {
 		show_info_subj();
 		int buffer;
+		int flag = 0;
 		cout << "Введите код предмета, который хотите удалить." << endl;
 		while (!(cin >> buffer) || cin.peek() != '\n') {
 			cin.clear();
@@ -250,27 +270,31 @@ void subject::delete_subj() {
 		for (register int i = 0; i < array.size(); i++)
 			if (buffer == array[i].code) {
 				array.erase(array.begin() + i);
+				flag = 1;
 				break;
 			}
-		fstream fout;
-		fout.open(file, ios_base::out);
-		if (!fout.is_open())
-			cout << "Ошибка открытия файла." << endl;
+		if (flag = 0) cout << "Вы ввели неизвестный код предмета." << endl;
 		else {
-			for (register int i = 0; i < array.size(); i++)
-			{
-				fout << array[i].code << ','
-					<< array[i].name << ','
-					<< array[i].teacher_name << ','
-					<< array[i].hours << ','
-					<< array[i].semester << endl;
+			fstream fout;
+			fout.open(file, ios_base::out);
+			if (!fout.is_open())
+				cout << "Ошибка открытия файла." << endl;
+			else {
+				for (register int i = 0; i < array.size(); i++)
+				{
+					fout << array[i].code << ','
+						<< array[i].name << ','
+						<< array[i].teacher_name << ','
+						<< array[i].hours << ','
+						<< array[i].semester << endl;
+				}
+				remove(file_subject);
+				char old_name[] = file, new_name[] = file_subject;
+				fout.close();
+				if (rename(old_name, new_name) == 0)
+					cout << "Вы успешно удалили запись о предмете." << endl;
+				else cout << "Ошибка в переименовании файлов." << endl;
 			}
-			remove(file_subject);
-			char old_name[] = file, new_name[] = file_subject;
-			fout.close();
-			if (rename(old_name, new_name) == 0)
-				cout << "Вы успешно изменили пароль." << endl;
-			else cout << "Ошибка в переименовании файлов." << endl;
 		}
 	}
 	else cout << "Нет информации по предметам." << endl;
