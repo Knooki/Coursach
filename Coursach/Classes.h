@@ -29,7 +29,6 @@ public:
 	admin(string* login) {
 		this->login = login;
 	}
-	admin() {}
 	void operation();
 };
 
@@ -44,21 +43,8 @@ public:
 	void operation();
 };
 
-struct accounting {
-	int code_of_student;
-	int code_of_subject;
-	string date;
-	int mark;
-	vector<accounting> load_from_file();
-	void show_info(string sort_type);
-	void add_info();
-	void change_info();
-	void delete_info_or_sort_info(string type);
-	void show_info_about_three();
-};
-
 struct subject {
-	int code;
+	int code_of_subject;
 	string name;
 	string teacher_name;
 	int hours;
@@ -66,6 +52,7 @@ struct subject {
 	vector<subject> load_from_file();
 	vector<subject> sort_array(vector<subject> arr);
 	void save_to_file(subject new_subj);
+	void change_data_in_file(vector<subject> array, string type_sort);
 	void show_info_subj(string sort_type);
 	void add_subj();
 	void change_subj();
@@ -80,9 +67,27 @@ struct student {
 	string group;
 	vector<student> load_from_file();
 	vector<student> sort_array(vector<student> array);
+	vector<student> sort_array_of_accounting(vector<student> array_of_stud);
 	void save_to_file(student new_stud);
+	void change_data_in_file(vector<student> array, string type_sort);
 	void show_info_stud(string sort_type);
 	void add_stud();
 	void change_stud();
 	void delete_stud_or_sort_stud(string type);
+};
+
+struct accounting {
+	student st;
+	subject sub;
+	string date;
+	int mark;
+	int code_of_acc;
+	vector<accounting> load_from_file();
+	void save_to_file(accounting new_acc);
+	void change_data_in_file(vector<accounting> array, string type_sort);
+	void show_info(string sort_type);
+	void add_info();
+	void change_info();
+	void delete_info_or_sort_info(string type);
+	void show_info_about_three();
 };

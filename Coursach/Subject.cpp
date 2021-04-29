@@ -1,6 +1,46 @@
 #include "main.h"
 #include "Classes.h"
 
+void subject::save_to_file(subject new_subj) {
+	fstream fout;
+	fout.open(file_subject, ios_base::app);
+	if (!fout.is_open())
+		cout << "Ошибка открытия файла" << endl;
+	else {
+		fout << new_subj.code_of_subject << ','
+			<< new_subj.name << ','
+			<< new_subj.teacher_name << ','
+			<< new_subj.hours << ','
+			<< new_subj.semester << endl;
+	}
+	fout.close();
+}
+
+void subject::change_data_in_file(vector<subject> array, string type_sort) {
+	fstream fout;
+	fout.open(file, ios_base::out);
+	if (!fout.is_open())
+		cout << "Ошибка открытия файла." << endl;
+	else {
+		for (register int i = 0; i < array.size(); i++)
+		{
+			fout << array[i].code_of_subject << ','
+				<< array[i].name << ','
+				<< array[i].teacher_name << ','
+				<< array[i].hours << ','
+				<< array[i].semester << endl;
+		}
+		remove(file_subject);
+		char old_name[] = file, new_name[] = file_subject;
+		fout.close();
+		if (rename(old_name, new_name) == 0 && type_sort == "sort")
+			cout << "Вы успешно отсортировали данные." << endl;
+		else if (rename(old_name, new_name) == 0)
+			cout << "Вы успешно удалили запись." << endl;
+		else cout << "Ошибка в переименовании файлов." << endl;
+	}
+}
+
 vector<subject> subject::load_from_file() {
 	vector <subject> array;
 	ifstream fin;
@@ -12,7 +52,7 @@ vector<subject> subject::load_from_file() {
 	else {
 		struct subject buffer;
 		int i = 0;
-		while (fin >> buffer.code) {
+		while (fin >> buffer.code_of_subject) {
 			fin.ignore(1);
 			getline(fin, buffer.name, ',');
 			getline(fin, buffer.teacher_name, ',');
@@ -147,7 +187,7 @@ void subject::show_info_subj(string sort_type) {
 		<< setw(6) << "Часы"
 		<< setw(7) << "Семестр" << endl;
 	for (register int j = 0; j < array.size(); j++) {
-		cout << setw(13) << left << array[j].code << setw(20) << left << array[j].name
+		cout << setw(13) << left << array[j].code_of_subject << setw(20) << left << array[j].name
 			<< setw(20) << array[j].teacher_name
 			<< setw(6) << array[j].hours
 			<< setw(7) << array[j].semester << endl;
@@ -161,15 +201,15 @@ void subject::add_subj() {
 		subject buffer;
 		cout << "Введите новые данные по предмету." << endl;
 		cout << "Код предмета" << endl;
-		while (!(cin >> buffer.code) || cin.peek() != '\n' || buffer.code < 0) {
+		while (!(cin >> buffer.code_of_subject) || cin.peek() != '\n' || buffer.code_of_subject < 0) {
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			if (buffer.code < 0) cout << "Код предмета не может быть отрицательным." << endl;
+			if (buffer.code_of_subject < 0) cout << "Код предмета не может быть отрицательным." << endl;
 			else
 				cout << "Вы можете ввести только цифры." << endl;
 		}
 		for (register int i = 0; i < array.size(); i++)
-			if (buffer.code == array[i].code) {
+			if (buffer.code_of_subject == array[i].code_of_subject) {
 				flag = 1;
 				break;
 			}
@@ -234,21 +274,6 @@ void subject::add_subj() {
 	}
 }
 
-void subject::save_to_file(subject new_subj) {
-	fstream fout;
-	fout.open(file_subject, ios_base::app);
-	if (!fout.is_open())
-		cout << "Ошибка открытия файла" << endl;
-	else {
-		fout << new_subj.code << ','
-			<< new_subj.name << ','
-			<< new_subj.teacher_name << ','
-			<< new_subj.hours << ','
-			<< new_subj.semester << endl;
-	}
-	fout.close();
-}
-
 void subject::change_subj() {
 	vector<subject> array = load_from_file();
 	if (array.size() != 0) {
@@ -262,7 +287,7 @@ void subject::change_subj() {
 			cout << "Вы можете ввести только цифры." << endl;
 		}
 		for (register int i = 0; i < array.size(); i++)
-			if (buffer == array[i].code) {
+			if (buffer == array[i].code_of_subject) {
 				buffer = i;
 				flag = 0;
 				break;
@@ -272,15 +297,15 @@ void subject::change_subj() {
 			while (flag == 0) {
 				cout << "Введите новые данные по предмету." << endl;
 				cout << "Код предмета" << endl;
-				while (!(cin >> buf.code) || cin.peek() != '\n' || buf.code < 0) {
+				while (!(cin >> buf.code_of_subject) || cin.peek() != '\n' || buf.code_of_subject < 0) {
 					cin.clear();
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					if (buf.code < 0) cout << "Код предмета не может быть отрицательным." << endl;
+					if (buf.code_of_subject < 0) cout << "Код предмета не может быть отрицательным." << endl;
 					else
 						cout << "Вы можете ввести только цифры." << endl;
 				}
 				for (register int i = 0; i < array.size(); i++)
-					if (buf.code == array[i].code) {
+					if (buf.code_of_subject == array[i].code_of_subject) {
 						flag = 1;
 						break;
 					}
@@ -340,26 +365,7 @@ void subject::change_subj() {
 				}
 			}
 			array[buffer] = buf;
-			fstream fout;
-			fout.open(file, ios_base::out);
-			if (!fout.is_open())
-				cout << "Ошибка открытия файла." << endl;
-			else {
-				for (register int i = 0; i < array.size(); i++)
-				{
-					fout << array[i].code << ','
-						<< array[i].name << ','
-						<< array[i].teacher_name << ','
-						<< array[i].hours << ','
-						<< array[i].semester << endl;
-				}
-				remove(file_subject);
-				char old_name[] = file, new_name[] = file_subject;
-				fout.close();
-				if (rename(old_name, new_name) == 0)
-					cout << "Вы успешно изменили пароль." << endl;
-				else cout << "Ошибка в переименовании файлов." << endl;
-			}
+			change_data_in_file(array, "non_sort");
 		}
 		else cout << "Вы ввели неизвестный код предмета." << endl;
 	}
@@ -370,7 +376,7 @@ void subject::delete_subj_or_sort_subj(string type) {
 	vector<subject> array = load_from_file();
 	if (array.size() != 0) {
 		int flag = 0;
-		if (type != "sort") array = sort_array(array);
+		if (type == "sort") array = sort_array(array);
 		else {
 			show_info_subj("non_sorted");
 			int buffer;
@@ -381,37 +387,18 @@ void subject::delete_subj_or_sort_subj(string type) {
 				cout << "Вы можете ввести только цифры." << endl;
 			}
 			for (register int i = 0; i < array.size(); i++)
-				if (buffer == array[i].code) {
+				if (buffer == array[i].code_of_subject) {
 					array.erase(array.begin() + i);
 					flag = 1;
 					break;
 				}
-		}
-		if (flag == 0) cout << "Вы ввели неизвестный код предмета." << endl;
-		else {
-			fstream fout;
-			fout.open(file, ios_base::out);
-			if (!fout.is_open())
-				cout << "Ошибка открытия файла." << endl;
-			else {
-				for (register int i = 0; i < array.size(); i++)
-				{
-					fout << array[i].code << ','
-						<< array[i].name << ','
-						<< array[i].teacher_name << ','
-						<< array[i].hours << ','
-						<< array[i].semester << endl;
-				}
-				remove(file_subject);
-				char old_name[] = file, new_name[] = file_subject;
-				fout.close();
-				if (rename(old_name, new_name) == 0 || type == "sort")
-					cout << "Сортировка прошла успешно." << endl;
-				else if (rename(old_name, new_name) == 0)
-					cout << "Вы успешно удалили запись о предмете." << endl;
-				else cout << "Ошибка в переименовании файлов." << endl;
+			if (flag == 0) {
+				flag = -1;
+				cout << "Вы ввели неизвестный код предмета." << endl;
 			}
 		}
+		if (flag != -1)
+			change_data_in_file(array, type);
 	}
 	else cout << "Нет информации по предметам." << endl;
 }

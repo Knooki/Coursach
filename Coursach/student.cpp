@@ -1,6 +1,46 @@
 #include "main.h"
 #include "Classes.h"
 
+void student::save_to_file(student new_stud) {
+	fstream fout;
+	fout.open(file_student, ios_base::app);
+	if (!fout.is_open())
+		cout << "Ошибка открытия файла" << endl;
+	else {
+		fout << new_stud.code_of_student << ','
+			<< new_stud.full_name << ','
+			<< new_stud.birth_date << ','
+			<< new_stud.speciality << ','
+			<< new_stud.group << endl;
+	}
+	fout.close();
+}
+
+void student::change_data_in_file(vector<student> array, string type_sort) {
+	fstream fout;
+	fout.open(file, ios_base::out);
+	if (!fout.is_open())
+		cout << "Ошибка открытия файла." << endl;
+	else {
+		for (register int i = 0; i < array.size(); i++)
+		{
+			fout << array[i].code_of_student << ','
+				<< array[i].full_name << ','
+				<< array[i].birth_date << ','
+				<< array[i].speciality << ','
+				<< array[i].group << endl;
+		}
+		remove(file_student);
+		char old_name[] = file, new_name[] = file_student;
+		fout.close();
+		if (rename(old_name, new_name) == 0 && type_sort == "sort")
+			cout << "Вы успешно отсортировали данные." << endl;
+		else if (rename(old_name, new_name) == 0)
+			cout << "Вы успешно удалили запись." << endl;
+		else cout << "Ошибка в переименовании файлов." << endl;
+	}
+}
+
 vector<student> student::load_from_file() {
 	vector <student> array;
 	ifstream fin;
@@ -203,7 +243,7 @@ void student::add_stud() {
 		{
 			rewind(stdin);
 			getline(cin, buffer.birth_date, '\n');
-			if (check_date(buffer.birth_date))
+			if (!check_date(buffer.birth_date))
 				continue;
 			else break;
 		}
@@ -233,21 +273,6 @@ void student::add_stud() {
 		save_to_file(buffer);
 		flag = 1;
 	}
-}
-
-void student::save_to_file(student new_stud) {
-	fstream fout;
-	fout.open(file_student, ios_base::app);
-	if (!fout.is_open())
-		cout << "Ошибка открытия файла" << endl;
-	else {
-		fout << new_stud.code_of_student << ','
-			<< new_stud.full_name << ','
-			<< new_stud.birth_date << ','
-			<< new_stud.speciality << ','
-			<< new_stud.group << endl;
-	}
-	fout.close();
 }
 
 void student::change_stud() {
@@ -315,7 +340,7 @@ void student::change_stud() {
 				while (1)
 				{
 					getline(cin, buf.birth_date, '\n');
-					if (check_date(buf.birth_date))
+					if (!check_date(buf.birth_date))
 						continue;
 					else break;
 				}
@@ -340,37 +365,18 @@ void student::change_stud() {
 				}
 			}
 			array[buffer] = buf;
-			fstream fout;
-			fout.open(file, ios_base::out);
-			if (!fout.is_open())
-				cout << "Ошибка открытия файла." << endl;
-			else {
-				for (register int i = 0; i < array.size(); i++)
-				{
-					fout << array[i].code_of_student << ','
-						<< array[i].full_name << ','
-						<< array[i].birth_date << ','
-						<< array[i].speciality << ','
-						<< array[i].group << endl;
-				}
-				remove(file_student);
-				char old_name[] = file, new_name[] = file_student;
-				fout.close();
-				if (rename(old_name, new_name) == 0)
-					cout << "Вы успешно изменили пароль." << endl;
-				else cout << "Ошибка в переименовании файлов." << endl;
-			}
+			change_data_in_file(array, "non_sort");
 		}
 		else cout << "Вы ввели неизвестный код студента." << endl;
 	}
-	else cout << "Нет информации по предметам." << endl;
+	else cout << "Нет информации по студентам." << endl;
 }
 
 void student::delete_stud_or_sort_stud(string type) {
 	vector<student> array = load_from_file();
 	if (array.size() != 0) {
 		int flag = 0;
-		if (type != "sort") array = sort_array(array);
+		if (type == "sort") array = sort_array(array);
 		else {
 			show_info_stud("non_sorted");
 			int buffer;
@@ -386,32 +392,14 @@ void student::delete_stud_or_sort_stud(string type) {
 					flag = 1;
 					break;
 				}
-		}
-		if (flag == 0) cout << "Вы ввели неизвестный код студента." << endl;
-		else {
-			fstream fout;
-			fout.open(file, ios_base::out);
-			if (!fout.is_open())
-				cout << "Ошибка открытия файла." << endl;
-			else {
-				for (register int i = 0; i < array.size(); i++)
-				{
-					fout << array[i].code_of_student << ','
-						<< array[i].full_name << ','
-						<< array[i].birth_date << ','
-						<< array[i].speciality << ','
-						<< array[i].group << endl;
-				}
-				remove(file_student);
-				char old_name[] = file, new_name[] = file_student;
-				fout.close();
-				if (rename(old_name, new_name) == 0 || type == "sort")
-					cout << "Сортировка прошла успешно." << endl;
-				else if (rename(old_name, new_name) == 0)
-					cout << "Вы успешно изменили пароль." << endl;
-				else cout << "Ошибка в переименовании файлов." << endl;
+			if (flag == 0)
+			{
+				flag = -1;
+				cout << "Вы ввели неизвестный код студента." << endl;
 			}
 		}
+		if (flag != -1)
+			change_data_in_file(array, type);
 	}
 	else cout << "Нет информации по предметам." << endl;
 }

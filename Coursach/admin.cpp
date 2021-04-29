@@ -2,6 +2,8 @@
 #include "main.h"
 #include "Classes.h"
 
+// There aren't search and user_manage
+
 int admin::menu_admin() {
 	int sw;
 	cout << "Выберите опцию:" << endl;
