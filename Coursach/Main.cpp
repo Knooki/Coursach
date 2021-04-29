@@ -1,25 +1,30 @@
-//knooki     a1e4e860b0eebcfa323fa79c41a9989b4a9dfd95
-//venia11let 21a56638304140b3099acee719c3ab0b6ebc6c4b
+//knooki 1
+//venia11let
+//knukknakiknak 0
+//venia11let
+//knuks 0
+//venia11let
 #include "main.h"
 #include "Classes.h"
-//дружественные функции и классы friend
+
 int main() {
+	setlocale(LC_ALL, "Rus");
 	system("chcp 1251");
 	string* login = new string;
-	string* password = new string;
-	entrance person(login, password);
+	entrance person(login);
 	while (1) {
 		switch (person.entering()) {
+		case 2: break;
 		case -1: return (0);
 		case 0:
 		{
-			user student(login, password);
+			user student(login);
 			student.operation();
 		}
 		break;
 		case 1:
 		{
-			admin adm(login, password);
+			admin adm(login);
 			adm.operation();
 		}
 		break;
