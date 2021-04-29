@@ -12,7 +12,7 @@
 #include <ctime>
 #include "sha1.h"
 
-#define file_log_pas "file_log_pas.txt"
+#define file_authentication "authentication_data.txt"
 #define file "file.txt"
 #define file_student "student_data.txt"
 #define file_subject "subject_data.txt"
@@ -24,4 +24,5 @@ void show_info();
 void show_sorted_info();
 int switch_sort();
 bool check_date(string str);
+bool check_date(string str, int number_of_semester, int course_of_stud);
 bool is_repeat_operation();

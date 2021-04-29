@@ -11,7 +11,8 @@ void student::save_to_file(student new_stud) {
 			<< new_stud.full_name << ','
 			<< new_stud.birth_date << ','
 			<< new_stud.speciality << ','
-			<< new_stud.group << endl;
+			<< new_stud.group << ','
+			<< new_stud.course << endl;
 	}
 	fout.close();
 }
@@ -28,7 +29,8 @@ void student::change_data_in_file(vector<student> array, string type_sort) {
 				<< array[i].full_name << ','
 				<< array[i].birth_date << ','
 				<< array[i].speciality << ','
-				<< array[i].group << endl;
+				<< array[i].group << ','
+				<< array[i].course << endl;
 		}
 		remove(file_student);
 		char old_name[] = file, new_name[] = file_student;
@@ -57,7 +59,8 @@ vector<student> student::load_from_file() {
 			getline(fin, buffer.full_name, ',');
 			getline(fin, buffer.birth_date, ',');
 			getline(fin, buffer.speciality, ',');
-			getline(fin, buffer.group, '\n');
+			getline(fin, buffer.group, ',');
+			fin >> buffer.course;
 			array.push_back(buffer);
 			i++;
 		}
@@ -178,18 +181,23 @@ vector<student> student::sort_array(vector<student> arr) {
 
 void student::show_info_stud(string sort_type) {
 	vector<student> array = load_from_file();
-	if (sort_type == "sorted") array = sort_array(array);
-	cout << "Информация о студентах." << endl;
-	cout << "Код студента " << setw(40) << left << "Полное имя студента"
-		<< "Дата рождения "
-		<< "Специальность "
-		<< setw(7) << "Группа" << endl;
-	for (register int j = 0; j < array.size(); j++) {
-		cout << setw(13) << left << array[j].code_of_student << setw(40) << left << array[j].full_name
-			<< setw(14) << array[j].birth_date
-			<< setw(14) << array[j].speciality
-			<< setw(6) << array[j].group << endl;
+	if (array.size() != 0) {
+		if (sort_type == "sorted") array = sort_array(array);
+		cout << "Информация о студентах." << endl;
+		cout << "Код студента " << setw(40) << left << "Полное имя студента"
+			<< "Дата рождения "
+			<< "Специальность "
+			<< "Группа "
+			<< "Курс" << endl;
+		for (register int j = 0; j < array.size(); j++) {
+			cout << setw(13) << left << array[j].code_of_student << setw(40) << left << array[j].full_name
+				<< setw(14) << array[j].birth_date
+				<< setw(13) << array[j].speciality
+				<< setw(7) << array[j].group
+				<< array[j].course << endl;
+		}
 	}
+	else cout << "Нет данных о студентах." << endl;
 }
 
 void student::add_stud() {
@@ -243,7 +251,7 @@ void student::add_stud() {
 		{
 			rewind(stdin);
 			getline(cin, buffer.birth_date, '\n');
-			if (!check_date(buffer.birth_date))
+			if (!check_date(buffer.birth_date, -123))
 				continue;
 			else break;
 		}
@@ -261,6 +269,9 @@ void student::add_stud() {
 		}
 		cout << "Введите группу студента:" << endl;
 		while (1) {
+			time_t now = time(0);
+			struct tm local;
+			localtime_s(&local, &now);
 			rewind(stdin);
 			getline(cin, buffer.group, '\n');
 			if (buffer.group.size() != 6)
@@ -268,7 +279,28 @@ void student::add_stud() {
 				cout << "Группа должна быть 6-тизначным числом." << endl;
 				continue;
 			}
-			else break;
+			int course = int(buffer.group[0]);
+			if (local.tm_mon + 1 > 8)
+				if (course < ((local.tm_year + 1900) - 3) % 10 || course >(local.tm_year + 1900) % 10)
+				{
+					cout << "Студент не мог поступить в году, который написан в грууппе" << endl;
+					continue;
+				}
+				else if (((local.tm_year + 1900) - 3) % 10 == course) buffer.course = 4;
+				else if (((local.tm_year + 1900) - 2) % 10 == course) buffer.course = 3;
+				else if (((local.tm_year + 1900) - 1) % 10 == course) buffer.course = 2;
+				else if ((local.tm_year + 1900) % 10 == course) buffer.course = 1;
+			if (local.tm_mon + 1 < 9)
+				if (course < (local.tm_year + 1900) - 4 || course >(local.tm_year + 1900) - 1)
+				{
+					cout << "Студент не мог поступить в году, который написан в грууппе" << endl;
+					continue;
+				}
+				else if (((local.tm_year + 1900) - 4) % 10 == course) buffer.course = 4;
+				else if (((local.tm_year + 1900) - 3) % 10 == course) buffer.course = 3;
+				else if (((local.tm_year + 1900) - 2) % 10 == course) buffer.course = 2;
+				else if (((local.tm_year + 1900) - 1) % 10 == course) buffer.course = 1;
+			break;
 		}
 		save_to_file(buffer);
 		flag = 1;
@@ -340,7 +372,7 @@ void student::change_stud() {
 				while (1)
 				{
 					getline(cin, buf.birth_date, '\n');
-					if (!check_date(buf.birth_date))
+					if (!check_date(buf.birth_date, -123))
 						continue;
 					else break;
 				}
@@ -358,10 +390,44 @@ void student::change_stud() {
 				cout << "Группа:" << endl;
 				while (1)
 				{
+					time_t now = time(0);
+					struct tm local;
+					localtime_s(&local, &now);
 					rewind(stdin);
 					getline(cin, buf.group, '\n');
-					if (buf.group.size() != 6) cout << "Группа должна быть 6-тизначным числом." << endl;
-					else break;
+					if (buf.group.size() != 6)
+					{
+						cout << "Группа должна быть 6-тизначным числом." << endl;
+						continue;
+					}
+					int course = int(buf.group[0]);
+					if (local.tm_mon + 1 > 8)
+						if (course < (local.tm_year + 1900) - 3)
+						{
+							cout << "Этот курс уже закончил обучение" << endl;
+							continue;
+						}
+						else if (((local.tm_year + 1900) - 3) % 10 == course) buf.course = 4;
+						else if (((local.tm_year + 1900) - 2) % 10 == course) buf.course = 3;
+						else if (((local.tm_year + 1900) - 1) % 10 == course) buf.course = 2;
+						else if ((local.tm_year + 1900) % 10 == course) buf.course = 1;
+					if (local.tm_mon + 1 < 9)
+						if (course < (local.tm_year + 1900) - 4)
+						{
+							cout << "Этот курс уже закончил обучение" << endl;
+							continue;
+						}
+						else if (((local.tm_year + 1900) - 4) % 10 == course) buf.course = 4;
+						else if (((local.tm_year + 1900) - 3) % 10 == course) buf.course = 3;
+						else if (((local.tm_year + 1900) - 2) % 10 == course) buf.course = 2;
+						else if (((local.tm_year + 1900) - 1) % 10 == course) buf.course = 1;
+					if (array[buffer].group[0] != buf.group[0])
+					{
+						accounting acc;
+						acc.delete_all_info_about_student(buf.code_of_student);
+						cout << "Весь учет данного студента удален, так как вы изменили его курс." << endl;
+					}
+					break;
 				}
 			}
 			array[buffer] = buf;

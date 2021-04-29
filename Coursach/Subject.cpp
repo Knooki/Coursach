@@ -11,7 +11,7 @@ void subject::save_to_file(subject new_subj) {
 			<< new_subj.name << ','
 			<< new_subj.teacher_name << ','
 			<< new_subj.hours << ','
-			<< new_subj.semester << endl;
+			<< new_subj.number_of_semester << endl;
 	}
 	fout.close();
 }
@@ -28,7 +28,7 @@ void subject::change_data_in_file(vector<subject> array, string type_sort) {
 				<< array[i].name << ','
 				<< array[i].teacher_name << ','
 				<< array[i].hours << ','
-				<< array[i].semester << endl;
+				<< array[i].number_of_semester << endl;
 		}
 		remove(file_subject);
 		char old_name[] = file, new_name[] = file_subject;
@@ -58,7 +58,7 @@ vector<subject> subject::load_from_file() {
 			getline(fin, buffer.teacher_name, ',');
 			fin >> buffer.hours;
 			fin.ignore(1);
-			fin >> buffer.semester;
+			fin >> buffer.number_of_semester;
 			fin.ignore(numeric_limits<streamsize>::max(), '\n');
 			array.push_back(buffer);
 			i++;
@@ -153,7 +153,7 @@ vector<subject> subject::sort_array(vector<subject> arr) {
 		if (switch_sort())
 			for (register int i = 0; i < arr.size(); i++) {
 				for (register int j = 0; j < arr.size() - i - 1; j++) {
-					if (arr[j].semester > arr[j + 1].semester) {
+					if (arr[j].number_of_semester > arr[j + 1].number_of_semester) {
 						temp = arr[j];
 						arr[j] = arr[j + 1];
 						arr[j + 1] = temp;
@@ -163,7 +163,7 @@ vector<subject> subject::sort_array(vector<subject> arr) {
 		else
 			for (register int i = 0; i < arr.size(); i++) {
 				for (register int j = 0; j < arr.size() - i - 1; j++) {
-					if (arr[j].semester < arr[j + 1].semester) {
+					if (arr[j].number_of_semester < arr[j + 1].number_of_semester) {
 						temp = arr[j];
 						arr[j] = arr[j + 1];
 						arr[j + 1] = temp;
@@ -180,18 +180,21 @@ vector<subject> subject::sort_array(vector<subject> arr) {
 
 void subject::show_info_subj(string sort_type) {
 	vector<subject> array = load_from_file();
-	if (sort_type == "sorted") array = sort_array(array);
-	cout << "Информация о предметах." << endl;
-	cout << "Код предмета " << setw(20) << left << "Название предмета"
-		<< setw(20) << "ФИО Преподавателя"
-		<< setw(6) << "Часы"
-		<< setw(7) << "Семестр" << endl;
-	for (register int j = 0; j < array.size(); j++) {
-		cout << setw(13) << left << array[j].code_of_subject << setw(20) << left << array[j].name
-			<< setw(20) << array[j].teacher_name
-			<< setw(6) << array[j].hours
-			<< setw(7) << array[j].semester << endl;
+	if (array.size() != 0) {
+		if (sort_type == "sorted") array = sort_array(array);
+		cout << "Информация о предметах." << endl;
+		cout << "Код предмета " << setw(20) << left << "Название предмета"
+			<< setw(20) << "ФИО Преподавателя"
+			<< setw(6) << "Часы"
+			<< setw(7) << "Семестр" << endl;
+		for (register int j = 0; j < array.size(); j++) {
+			cout << setw(13) << left << array[j].code_of_subject << setw(20) << left << array[j].name
+				<< setw(20) << array[j].teacher_name
+				<< setw(6) << array[j].hours
+				<< setw(7) << array[j].number_of_semester << endl;
+		}
 	}
+	else cout << "Нет данных о предметах." << endl;
 }
 
 void subject::add_subj() {
@@ -262,11 +265,11 @@ void subject::add_subj() {
 				cout << "Вы можете ввести только цифры." << endl;
 		}
 		cout << "Какой по счету семестр:" << endl;
-		while (!(cin >> buffer.semester) || cin.peek() != '\n' || buffer.semester > 8 || buffer.semester < 1)
+		while (!(cin >> buffer.number_of_semester) || cin.peek() != '\n' || buffer.number_of_semester > 8 || buffer.number_of_semester < 1)
 		{
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			if (buffer.semester > 8 || buffer.semester < 1) cout << "Всего может быть только 8 семестров." << endl;
+			if (buffer.number_of_semester > 8 || buffer.number_of_semester < 1) cout << "Всего может быть только 8 семестров." << endl;
 			else cout << "Вы можете ввести только цифры." << endl;
 		}
 		save_to_file(buffer);
@@ -356,11 +359,11 @@ void subject::change_subj() {
 						cout << "Вы можете ввести только цифры." << endl;
 				}
 				cout << "Какой по счету семестр:" << endl;
-				while (!(cin >> buf.semester) || cin.peek() != '\n' || buf.semester > 8 || buf.semester < 1)
+				while (!(cin >> buf.number_of_semester) || cin.peek() != '\n' || buf.number_of_semester > 8 || buf.number_of_semester < 1)
 				{
 					cin.clear();
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					if (buf.semester > 8 || buf.semester < 1) cout << "Всего может быть только 8 семестров." << endl;
+					if (buf.number_of_semester > 8 || buf.number_of_semester < 1) cout << "Всего может быть только 8 семестров." << endl;
 					else cout << "Вы можете ввести только цифры." << endl;
 				}
 			}

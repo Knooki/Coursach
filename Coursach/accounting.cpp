@@ -44,6 +44,8 @@ void accounting::change_data_in_file(vector<accounting> array, string type_sort)
 		if (rename(old_name, new_name) == 0)
 			if (rename(old_name, new_name) == 0 && type_sort == "sort")
 				cout << "Вы успешно отсортировали данные." << endl;
+			else if (rename(old_name, new_name) == 0 && type_sort == "student")
+				cout << "Данные о студенте успешно удалены." << endl;
 			else if (rename(old_name, new_name) == 0)
 				cout << "Вы успешно удалили запись." << endl;
 			else cout << "Ошибка в переименовании файлов." << endl;
@@ -158,6 +160,7 @@ void accounting::show_info(string sort_type) {
 		<< setw(20) << "Предмет"
 		<< "Дата сдачи "
 		<< "Оценка "
+		<< "Семестр "
 		<< "Код записи" << endl;
 	for (register int k = 0; k < stud.size(); k++)
 	{
@@ -173,6 +176,7 @@ void accounting::show_info(string sort_type) {
 						cout << setw(20) << left << subj[g].name
 							<< setw(11) << left << acc[j].date
 							<< setw(7) << left << acc[j].mark
+							<< setw(8) << left << subj[g].number_of_semester
 							<< acc[j].code_of_acc << endl;
 						cout << setw(53) << "";
 					}
@@ -192,6 +196,7 @@ void accounting::add_info() {
 		vector<subject> subj;
 		subj = sub.load_from_file();
 		cout << "Введите новую запись о сдаче предмета." << endl;
+		st.show_info_stud("non_sorted");
 		cout << "Код студента:" << endl;
 		while (!(cin >> buffer.st.code_of_student) || cin.peek() != '\n' || buffer.st.code_of_student < 0) {
 			cin.clear();
@@ -204,7 +209,10 @@ void accounting::add_info() {
 		while (i < stud.size())
 		{
 			if (buffer.st.code_of_student == stud[i].code_of_student)
+			{
+				buffer.st.course = stud[i].course;
 				break;
+			}
 			i++;
 		}
 		if (i == stud.size()) {
@@ -222,6 +230,7 @@ void accounting::add_info() {
 				continue;
 			}
 		}
+		sub.show_info_subj("non_sorted");
 		cout << "Код предмета:" << endl;
 		while (!(cin >> buffer.sub.code_of_subject) || cin.peek() != '\n' || buffer.sub.code_of_subject < 0) {
 			cin.clear();
@@ -241,6 +250,22 @@ void accounting::add_info() {
 			cout << "Вы ввели несуществующий код предмета." << endl;
 			continue;
 		}
+		time_t now = time(0);
+		struct tm local;
+		localtime_s(&local, &now);
+		int current_semester = 0;
+		if (local.tm_mon + 1 > 8)
+			current_semester = 1;
+		else if (local.tm_mon + 1 < 6)
+			current_semester = 0;
+		else if (local.tm_mon > 5 && local.tm_mon < 9)
+			current_semester = -1;
+		if (subj[i].number_of_semester > (buffer.st.course * 2 - 1) - current_semester)
+		{
+			cout << "Этот студент еще не мог сдавать этот предмет." << endl;
+			flag = 0;
+			continue;
+		}
 		else {
 			for (i = 0; i < array.size(); i++)
 				if (buffer.sub.code_of_subject == array[i].sub.code_of_subject)
@@ -254,7 +279,7 @@ void accounting::add_info() {
 		{
 			rewind(stdin);
 			getline(cin, buffer.date, '\n');
-			if (!check_date(buffer.date))
+			if (!check_date(buffer.date, buffer.sub.code_of_subject))
 				continue;
 			else break;
 		}
@@ -333,16 +358,15 @@ void accounting::change_info() {
 					cout << "Вы ввели несуществующий код студента." << endl;
 					continue;
 				}
-				else {
-					for (i = 0; i < array.size(); i++)
-						if (buffer.st.code_of_student == array[i].st.code_of_student)
-							flag++;
-					if (flag >= subj.size())
-					{
-						cout << "У этого студента сданы все предметы." << endl;
-						flag = 1;
-						continue;
-					}
+				int number_of_student = i;
+				for (i = 0; i < array.size(); i++)
+					if (buffer.st.code_of_student == array[i].st.code_of_student)
+						flag++;
+				if (flag >= subj.size())
+				{
+					cout << "У этого студента сданы все предметы." << endl;
+					flag = 1;
+					continue;
 				}
 				cout << "Код предмета:" << endl;
 				while (!(cin >> buffer.sub.code_of_subject) || cin.peek() != '\n' || buffer.sub.code_of_subject < 0) {
@@ -363,6 +387,23 @@ void accounting::change_info() {
 					cout << "Вы ввели несуществующий код предмета." << endl;
 					continue;
 				}
+				int number_of_subject = i;
+				time_t now = time(0);
+				struct tm local;
+				localtime_s(&local, &now);
+				int current_semester = 0;
+				if (local.tm_mon + 1 > 8)
+					current_semester = 1;
+				else if (local.tm_mon + 1 < 6)
+					current_semester = 0;
+				else if (local.tm_mon > 5 && local.tm_mon < 9)
+					current_semester = -1;
+				if (subj[i].number_of_semester > (buffer.st.course * 2 - 1) - current_semester)
+				{
+					cout << "Этот студент еще не мог сдавать этот предмет." << endl;
+					flag = 0;
+					continue;
+				}
 				else {
 					for (i = 0; i < array.size(); i++)
 						if (buffer.sub.code_of_subject == array[i].sub.code_of_subject)
@@ -376,7 +417,7 @@ void accounting::change_info() {
 				{
 					rewind(stdin);
 					getline(cin, buffer.date, '\n');
-					if (!check_date(buffer.date))
+					if (!check_date(buffer.date, subj[number_of_subject].number_of_semester, stud[number_of_student].course))
 						continue;
 					else break;
 				}
@@ -508,4 +549,20 @@ void accounting::delete_info_or_sort_info(string type) {
 			change_data_in_file(array, type);
 	}
 	else cout << "Нет информации по предметам." << endl;
+}
+
+void accounting::delete_all_info_about_student(int code_of_student) {
+	vector<accounting> array;
+	array = load_from_file();
+	if (array.size() != 0) {
+		int flag = 0;
+		for (register int i = 0; i < array.size(); i++)
+			if (code_of_student == array[i].st.code_of_student)
+			{
+				array.erase(array.begin() + i);
+				flag++;
+			}
+		if (flag != 0)
+			change_data_in_file(array, "student");
+	}
 }

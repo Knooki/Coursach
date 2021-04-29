@@ -58,9 +58,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="file_log_pas.txt">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
     <Text Include="accounting_data.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
@@ -68,6 +65,9 @@
       <Filter>Файлы ресурсов</Filter>
     </Text>
     <Text Include="subject_data.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="authentication_data.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
   </ItemGroup>

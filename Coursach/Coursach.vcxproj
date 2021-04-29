@@ -157,7 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="accounting_data.txt" />
-    <Text Include="file_log_pas.txt" />
+    <Text Include="authentication_data.txt" />
     <Text Include="student_data.txt" />
     <Text Include="subject_data.txt" />
   </ItemGroup>

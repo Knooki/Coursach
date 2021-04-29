@@ -57,11 +57,16 @@ int entrance::entering() {
 					if (login == _login[i])
 					{
 						cout << "Этот логин уже занят." << endl;
-						system("pause");
-						break;
+						if (is_repeat_operation())
+							break;
+						else {
+							i = counter + 1;
+							break;
+						}
 					}
 					i++;
 				}
+				if (i > counter) return (2);
 				if (i == counter) break;
 			}
 			cout << "Введите пароль." << endl;
@@ -73,8 +78,9 @@ int entrance::entering() {
 				*log = login;
 				cout << "Вы успешно зарегестрировались." << endl;
 				counter++;
-				system("pause");
-				return (0);
+				if (is_repeat_operation())
+					return (0);
+				else return (-1);
 			}
 			else cout << "Ошибка регистрации." << endl;
 			system("pause");
@@ -87,7 +93,7 @@ int entrance::entering() {
 }
 
 int entrance::load_from_file() {
-	ifstream fin(file_log_pas, ios_base::in);
+	ifstream fin(file_authentication, ios_base::in);
 	if (!fin.is_open()) {
 		cout << "Ошибка открытия файла." << endl;
 		return(0);
@@ -112,7 +118,7 @@ int entrance::load_from_file() {
 
 bool entrance::save_to_file(string login, string password, int type) {
 	ofstream fout;
-	fout.open(file_log_pas, ios_base::app);
+	fout.open(file_authentication, ios_base::app);
 	if (!fout.is_open()) {
 		cout << "Ошибка открытия файла." << endl;
 		return false;
@@ -161,8 +167,8 @@ void entrance::change_pas(string* login) {
 							fout << _type[i] << endl;
 						}
 					}
-					remove(file_log_pas);
-					char old_name[] = file, new_name[] = file_log_pas;
+					remove(file_authentication);
+					char old_name[] = file, new_name[] = file_authentication;
 					fout.close();
 					if (rename(old_name, new_name) == 0) {
 						cout << "Вы успешно изменили пароль." << endl;

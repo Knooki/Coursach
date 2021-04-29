@@ -22,8 +22,9 @@ int user::menu_user() {
 }
 
 void user::operation() {
-	cout << "¬ы успешно вошли под правами простого пользовател€." << endl;
 	while (1) {
+		system("cls");
+		cout << "ћеню простого пользовател€." << endl;
 		switch (menu_user()) {
 		case 1:
 			show_info();

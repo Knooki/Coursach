@@ -41,43 +41,40 @@ void show_info() {
 
 void show_sorted_info() {
 	int sw;
-	do
+	cout << "Выбериет опцию:" << endl;
+	cout << "1)Сортировка и просмотр данных о студентах." << endl;
+	cout << "2)Сортировка и просмотр данных о предметах." << endl;
+	cout << "3)Сортировка и просмотр об успеваемости студентов." << endl;
+	cout << "4)Выход." << endl;
+	while (!(cin >> sw) || cin.peek() != '\n') {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Вы можете ввести только цифры" << endl;
+	}
+	switch (sw) {
+	case 1:
 	{
-		cout << "Выбериет опцию:" << endl;
-		cout << "1)Сортировка и просмотр данных о студентах." << endl;
-		cout << "2)Сортировка и просмотр данных о предметах." << endl;
-		cout << "3)Сортировка и просмотр об успеваемости студентов." << endl;
-		cout << "4)Выход." << endl;
-		while (!(cin >> sw) || cin.peek() != '\n') {
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Вы можете ввести только цифры" << endl;
-		}
-		switch (sw) {
-		case 1:
-		{
-			student st;
-			st.show_info_stud("sorted");
-		}
+		student st;
+		st.show_info_stud("sorted");
+	}
+	break;
+	case 2:
+	{
+		subject sub;
+		sub.show_info_subj("sorted");
+	}
+	break;
+	case 3:
+	{
+		accounting acc;
+		acc.show_info("sorted");
+	}
+	break;
+	case 4: return;
+	default:
+		cout << "Вы ввели неизвестную опцию." << endl;
 		break;
-		case 2:
-		{
-			subject sub;
-			sub.show_info_subj("sorted");
-		}
-		break;
-		case 3:
-		{
-			accounting acc;
-			acc.show_info("sorted");
-		}
-		break;
-		case 4: return;
-		default:
-			cout << "Вы ввели неизвестную опцию." << endl;
-			break;
-		}
-	} while (is_repeat_operation());
+	}
 }
 
 int switch_sort() {
@@ -182,6 +179,36 @@ bool check_date(string str) {
 		if (flag == 0) return true;
 		else return false;
 	}
+}
+
+bool check_date(string str, int number_of_semester, int course_of_stud) {
+	if (check_date(str)) {
+		string date, month, year;
+		date = str.substr(0, 2);
+		month = str.substr(3, 2);
+		year = str.substr(6, 4);
+		int da, mo, ye;
+		da = stoi(date);
+		mo = stoi(month);
+		ye = stoi(year);
+		int flag = 0;
+		time_t now = time(0);
+		struct tm local;
+		localtime_s(&local, &now);
+		int pos_year, pos_month, pos_day;
+		int current_semester = 0;
+		if (local.tm_mon + 1 > 8)
+			current_semester = 1;
+		else if (local.tm_mon + 1 < 6)
+			current_semester = 0;
+		else if (local.tm_mon > 5 && local.tm_mon < 9)
+			current_semester = -1;
+		фылв
+			//if (number_of_semester > (course_of_stud * 2 - 1) - current_semester)
+		// надо сделать рамки для дат, когда можно сдать экзамен
+		// мейби сделать как сессии, то есть в инете чекнуть в какие месяцы сессии и по этим месяцам ограничить
+	}
+	else return false;
 }
 
 bool is_repeat_operation() {

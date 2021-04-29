@@ -1,5 +1,6 @@
 #pragma once
 #include "main.h"
+
 class entrance {
 private:
 	vector<string> _login, _password;
@@ -48,7 +49,7 @@ struct subject {
 	string name;
 	string teacher_name;
 	int hours;
-	int semester;
+	int number_of_semester;
 	vector<subject> load_from_file();
 	vector<subject> sort_array(vector<subject> arr);
 	void save_to_file(subject new_subj);
@@ -65,6 +66,7 @@ struct student {
 	string birth_date;
 	string speciality;
 	string group;
+	int course;
 	vector<student> load_from_file();
 	vector<student> sort_array(vector<student> array);
 	vector<student> sort_array_of_accounting(vector<student> array_of_stud);
@@ -90,4 +92,5 @@ struct accounting {
 	void change_info();
 	void delete_info_or_sort_info(string type);
 	void show_info_about_three();
+	void delete_all_info_about_student(int code_of_student);
 };
