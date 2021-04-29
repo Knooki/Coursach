@@ -68,7 +68,7 @@ int entrance::entering() {
 			rewind(stdin);
 			getline(cin, password);
 			password = sha1(password);
-			if (save_to_file(login, password, 1))
+			if (save_to_file(login, password, 0))
 			{
 				*log = login;
 				cout << "Вы успешно зарегестрировались." << endl;

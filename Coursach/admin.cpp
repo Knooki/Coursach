@@ -26,40 +26,43 @@ int admin::menu_admin() {
 }
 
 void admin::operation() {
-	cout << "Вы успешно вошли под правами админа." << endl;
-	switch (menu_admin()) {
-	case 1:
-		add_data();
+	do {
+		system("cls");
+		cout << "Меню админа." << endl;
+		switch (menu_admin()) {
+		case 1:
+			add_data();
+			break;
+		case 2:
+			change_data();
+			break;
+		case 3:
+			delete_data();
+			break;
+		case 4:
+			sort_data();
+			break;
+		case 5:
+			show_info();
+			break;
+		case 6:
+			break;
+		case 7:
+			show_sorted_info();
+			break;
+		case 8:
+			break;
+		case 9:
+		{
+			entrance ad(login);
+			ad.change_pas(login);
+		}
 		break;
-	case 2:
-		change_data();
-		break;
-	case 3:
-		delete_data();
-		break;
-	case 4:
-		sort_data();
-		break;
-	case 5:
-		show_info();
-		break;
-	case 6:
-		break;
-	case 7:
-		show_sorted_info();
-		break;
-	case 8:
-		break;
-	case 9:
-	{
-		entrance ad(login);
-		ad.change_pas(login);
-	}
-	break;
-	case 10:
-		return;
-	default: cout << "Вы ввели несуществующую опцию." << endl;
-	}
+		case 10:
+			return;
+		default: cout << "Вы ввели несуществующую опцию." << endl;
+		}
+	} while (is_repeat_operation());
 }
 
 void admin::sort_data() {

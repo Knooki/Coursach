@@ -3,43 +3,40 @@
 
 void show_info() {
 	int sw;
-	do
+	cout << "Выбериет опцию:" << endl;
+	cout << "1)Просмотр данных о студентах." << endl;
+	cout << "2)Просмотр данных о предметах." << endl;
+	cout << "3)Просмотр данных об успеваемости студентов." << endl;
+	cout << "4)Выход." << endl;
+	while (!(cin >> sw) || cin.peek() != '\n') {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Вы можете ввести только цифры" << endl;
+	}
+	switch (sw) {
+	case 1:
 	{
-		cout << "Выбериет опцию:" << endl;
-		cout << "1)Просмотр данных о студентах." << endl;
-		cout << "2)Просмотр данных о предметах." << endl;
-		cout << "3)Просмотр данных об успеваемости студентов." << endl;
-		cout << "4)Выход." << endl;
-		while (!(cin >> sw) || cin.peek() != '\n') {
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Вы можете ввести только цифры" << endl;
-		}
-		switch (sw) {
-		case 1:
-		{
-			student st;
-			st.show_info_stud("non_sorted");
-		}
+		student st;
+		st.show_info_stud("non_sorted");
+	}
+	break;
+	case 2:
+	{
+		subject sub;
+		sub.show_info_subj("non_sorted");
+	}
+	break;
+	case 3:
+	{
+		accounting acc;
+		acc.show_info("non_sorted");
+	}
+	break;
+	case 4: return;
+	default:
+		cout << "Вы ввели неизвестную опцию." << endl;
 		break;
-		case 2:
-		{
-			subject sub;
-			sub.show_info_subj("non_sorted");
-		}
-		break;
-		case 3:
-		{
-			accounting acc;
-			acc.show_info("non_sorted");
-		}
-		break;
-		case 4: return;
-		default:
-			cout << "Вы ввели неизвестную опцию." << endl;
-			break;
-		}
-	} while (is_repeat_operation());
+	}
 }
 
 void show_sorted_info() {

@@ -3,7 +3,9 @@
 
 struct student_account {
 	student st;
+	subject sub;
 	vector<int> marks;
+	int amount_of_negative_marks;
 	float average_score;
 };
 
@@ -95,6 +97,8 @@ vector<student> student::sort_array_of_accounting(vector<student> array_of_stud)
 		student_account tmp;
 		for (register int i = 0; i < array_of_stud.size(); i++)
 		{
+			tmp.average_score = 0;
+			tmp.marks.clear();
 			for (register int j = 0; j < array_of_acc.size(); j++)
 				if (array_of_stud[i].code_of_student == array_of_acc[j].st.code_of_student)
 				{
@@ -104,6 +108,8 @@ vector<student> student::sort_array_of_accounting(vector<student> array_of_stud)
 			for (register int j = 0; j < tmp.marks.size(); j++)
 				tmp.average_score += tmp.marks[j];
 			tmp.average_score = tmp.average_score / tmp.marks.size();
+			tmp.st.code_of_student = array_of_stud[i].code_of_student;
+			tmp.st.full_name = array_of_stud[i].full_name;
 			stud_acc.push_back(tmp);
 		}
 		switch (switch_sort())
@@ -111,7 +117,7 @@ vector<student> student::sort_array_of_accounting(vector<student> array_of_stud)
 		case 1:
 			for (register int i = 0; i < stud_acc.size(); i++) {
 				for (register int j = 0; j < stud_acc.size() - i - 1; j++) {
-					if (stud_acc[j].marks > stud_acc[j + 1].marks) {
+					if (stud_acc[j].average_score > stud_acc[j + 1].average_score) {
 						tmp = stud_acc[j];
 						stud_acc[j] = stud_acc[j + 1];
 						stud_acc[j + 1] = tmp;
@@ -122,7 +128,7 @@ vector<student> student::sort_array_of_accounting(vector<student> array_of_stud)
 		case 2:
 			for (register int i = 0; i < stud_acc.size(); i++) {
 				for (register int j = 0; j < stud_acc.size() - i - 1; j++) {
-					if (stud_acc[j].marks < stud_acc[j + 1].marks) {
+					if (stud_acc[j].average_score < stud_acc[j + 1].average_score) {
 						tmp = stud_acc[j];
 						stud_acc[j] = stud_acc[j + 1];
 						stud_acc[j + 1] = tmp;
@@ -167,11 +173,12 @@ void accounting::show_info(string sort_type) {
 						cout << setw(20) << left << subj[g].name
 							<< setw(11) << left << acc[j].date
 							<< setw(7) << left << acc[j].mark
-							<< acc[j].code_of_acc;
+							<< acc[j].code_of_acc << endl;
 						cout << setw(53) << "";
 					}
 		}
 	}
+	cout << "\r";
 }
 
 void accounting::add_info() {
@@ -410,6 +417,54 @@ void accounting::change_info() {
 void accounting::show_info_about_three() {
 	vector<accounting> array;
 	array = load_from_file();
+	if (array.size() != 0) {
+		vector<subject> subj;
+		subj = sub.load_from_file();
+		vector<student_account> stud_acc;
+		student_account tmp;
+		for (register int i = 0; i < subj.size(); i++)
+		{
+			tmp.average_score = 0;
+			tmp.marks.clear();
+			for (register int j = 0; j < array.size(); j++)
+				if (subj[i].code_of_subject == array[j].sub.code_of_subject)
+				{
+					tmp.sub = subj[i];
+					tmp.marks.push_back(array[j].mark);
+				}
+			for (register int j = 0; j < tmp.marks.size(); j++)
+				tmp.average_score += tmp.marks[j];
+			tmp.average_score = tmp.average_score / tmp.marks.size();
+			tmp.sub.name = subj[i].name;
+			tmp.sub.teacher_name = subj[i].teacher_name;
+			tmp.amount_of_negative_marks = 0;
+			for (register int j = 0; j < tmp.marks.size(); j++)
+				if (tmp.marks[j] < 4)
+					tmp.amount_of_negative_marks++;
+			stud_acc.push_back(tmp);
+		}
+		for (register int i = 0; i < stud_acc.size(); i++) {
+			for (register int j = 0; j < stud_acc.size() - i - 1; j++) {
+				if (stud_acc[j].average_score > stud_acc[j + 1].average_score) {
+					tmp = stud_acc[j];
+					stud_acc[j] = stud_acc[j + 1];
+					stud_acc[j + 1] = tmp;
+				}
+			}
+		}
+		cout << "Информация о трех предметах с наименьшим средним баллом." << endl;
+		cout << "Код предмета " << setw(20) << left << "Название предмета"
+			<< setw(20) << "ФИО Преподавателя"
+			<< "Кол-во отр-ных оценок "
+			<< "Средний балл" << endl;
+		for (register int j = 0; j < stud_acc.size(); j++) {
+			cout << setw(13) << left << stud_acc[j].sub.code_of_subject << setw(20) << left << stud_acc[j].sub.name
+				<< setw(20) << stud_acc[j].sub.teacher_name
+				<< setw(22) << stud_acc[j].amount_of_negative_marks
+				<< fixed << setprecision(2) << stud_acc[j].average_score << endl;
+		}
+	}
+	else cout << "Нет данных об учете студентов." << endl;
 }
 
 void accounting::delete_info_or_sort_info(string type) {

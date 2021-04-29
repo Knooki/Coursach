@@ -30,6 +30,8 @@ void user::operation() {
 			break;
 		case 2:
 		{
+			accounting acc;
+			acc.show_info_about_three();
 		}
 		break;
 		case 3:
@@ -38,6 +40,7 @@ void user::operation() {
 		break;
 		case 4:
 			show_sorted_info();
+			break;
 		case 5:
 		{
 			entrance us(login);
