@@ -61,5 +61,14 @@
     <Text Include="file_log_pas.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
+    <Text Include="accounting_data.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="student_data.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="subject_data.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
 </Project>

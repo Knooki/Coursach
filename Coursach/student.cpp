@@ -26,8 +26,119 @@ vector<student> student::load_from_file() {
 	return(array);
 }
 
-void student::show_info_stud() {
+vector<student> student::sort_array(vector<student> arr) {
+	int sw, sw_type;
+	cout << "Выберите опцию:" << endl;
+	cout << "1)Отсортировать по ФИО студента." << endl;
+	cout << "2)Отсортировать по дате рождения студента." << endl;
+	cout << "3)Отсортировать по специальности студента." << endl;
+	cout << "4)Отсортировать по группе студента." << endl;
+	cout << "5)Выход." << endl;
+	while (!(cin >> sw) || cin.peek() != '\n') {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Ошибка. Вы можете ввести только цифры." << endl;
+	}
+	student temp;
+	switch (sw) {
+	case 1:
+		if (switch_sort())
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].full_name > arr[j + 1].full_name) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		else
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].full_name < arr[j + 1].full_name) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		return (arr);
+	case 2:
+		if (switch_sort())
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].birth_date > arr[j + 1].birth_date) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		else
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].birth_date < arr[j + 1].birth_date) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		return (arr);
+	case 3:
+		if (switch_sort())
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].speciality > arr[j + 1].speciality) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		else
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].speciality < arr[j + 1].speciality) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		return (arr);
+	case 4:
+		if (switch_sort())
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].group > arr[j + 1].group) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		else
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].group < arr[j + 1].group) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		return (arr);
+	case 5:
+		return (arr);
+	default:
+		cout << "Вы ввели неизвестную опцию." << endl;
+	}
+}
+
+void student::show_info_stud(string sort_type) {
 	vector<student> array = load_from_file();
+	if (sort_type == "sorted") array = sort_array(array);
 	cout << "Информация о студентах." << endl;
 	cout << "Код студента " << setw(40) << left << "Полное имя студента"
 		<< "Дата рождения "
@@ -142,7 +253,7 @@ void student::save_to_file(student new_stud) {
 void student::change_stud() {
 	vector<student> array = load_from_file();
 	if (array.size() != 0) {
-		show_info_stud();
+		show_info_stud("non_sorted");
 		int buffer;
 		int flag = 1;
 		cout << "Введите код студента, который хотите поменять." << endl;
@@ -255,24 +366,27 @@ void student::change_stud() {
 	else cout << "Нет информации по предметам." << endl;
 }
 
-void student::delete_stud() {
+void student::delete_stud_or_sort_stud(string type) {
 	vector<student> array = load_from_file();
 	if (array.size() != 0) {
-		show_info_stud();
-		int buffer;
 		int flag = 0;
-		cout << "Введите код студента, который хотите удалить." << endl;
-		while (!(cin >> buffer) || cin.peek() != '\n') {
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Вы можете ввести только цифры." << endl;
-		}
-		for (register int i = 0; i < array.size(); i++)
-			if (buffer == array[i].code_of_student) {
-				array.erase(array.begin() + i);
-				flag = 1;
-				break;
+		if (type != "sort") array = sort_array(array);
+		else {
+			show_info_stud("non_sorted");
+			int buffer;
+			cout << "Введите код студента, который хотите удалить." << endl;
+			while (!(cin >> buffer) || cin.peek() != '\n') {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Вы можете ввести только цифры." << endl;
 			}
+			for (register int i = 0; i < array.size(); i++)
+				if (buffer == array[i].code_of_student) {
+					array.erase(array.begin() + i);
+					flag = 1;
+					break;
+				}
+		}
 		if (flag == 0) cout << "Вы ввели неизвестный код студента." << endl;
 		else {
 			fstream fout;
@@ -291,7 +405,9 @@ void student::delete_stud() {
 				remove(file_student);
 				char old_name[] = file, new_name[] = file_student;
 				fout.close();
-				if (rename(old_name, new_name) == 0)
+				if (rename(old_name, new_name) == 0 || type == "sort")
+					cout << "Сортировка прошла успешно." << endl;
+				else if (rename(old_name, new_name) == 0)
 					cout << "Вы успешно изменили пароль." << endl;
 				else cout << "Ошибка в переименовании файлов." << endl;
 			}

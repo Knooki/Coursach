@@ -28,8 +28,119 @@ vector<subject> subject::load_from_file() {
 	return(array);
 }
 
-void subject::show_info_subj() {
+vector<subject> subject::sort_array(vector<subject> arr) {
+	int sw;
+	cout << "Выберите опцию:" << endl;
+	cout << "1)Отсортировать по названию предмета." << endl;
+	cout << "2)Отсортировать ФИО преподавателя." << endl;
+	cout << "3)Отсортировать по количеству часов." << endl;
+	cout << "4)Отсортировать по семестру." << endl;
+	cout << "5)Выход." << endl;
+	while (!(cin >> sw) || cin.peek() != '\n') {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Ошибка. Вы можете ввести только цифры." << endl;
+	}
+	subject temp;
+	switch (sw) {
+	case 1:
+		if (switch_sort())
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].name > arr[j + 1].name) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		else
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].name < arr[j + 1].name) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		return (arr);
+	case 2:
+		if (switch_sort())
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].teacher_name > arr[j + 1].teacher_name) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		else
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].teacher_name < arr[j + 1].teacher_name) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		return (arr);
+	case 3:
+		if (switch_sort())
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].hours > arr[j + 1].hours) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		else
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].hours < arr[j + 1].hours) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		return (arr);
+	case 4:
+		if (switch_sort())
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].semester > arr[j + 1].semester) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		else
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].semester < arr[j + 1].semester) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		return (arr);
+	case 5:
+		return (arr);
+	default:
+		cout << "Вы ввели неизвестную опцию." << endl;
+	}
+}
+
+void subject::show_info_subj(string sort_type) {
 	vector<subject> array = load_from_file();
+	if (sort_type == "sorted") array = sort_array(array);
 	cout << "Информация о предметах." << endl;
 	cout << "Код предмета " << setw(20) << left << "Название предмета"
 		<< setw(20) << "ФИО Преподавателя"
@@ -141,7 +252,7 @@ void subject::save_to_file(subject new_subj) {
 void subject::change_subj() {
 	vector<subject> array = load_from_file();
 	if (array.size() != 0) {
-		show_info_subj();
+		show_info_subj("non_sorted");
 		int buffer;
 		int flag = 1;
 		cout << "Введите код предмета, который хотите поменять." << endl;
@@ -255,25 +366,28 @@ void subject::change_subj() {
 	else cout << "Нет информации по предметам." << endl;
 }
 
-void subject::delete_subj() {
+void subject::delete_subj_or_sort_subj(string type) {
 	vector<subject> array = load_from_file();
 	if (array.size() != 0) {
-		show_info_subj();
-		int buffer;
 		int flag = 0;
-		cout << "Введите код предмета, который хотите удалить." << endl;
-		while (!(cin >> buffer) || cin.peek() != '\n') {
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Вы можете ввести только цифры." << endl;
-		}
-		for (register int i = 0; i < array.size(); i++)
-			if (buffer == array[i].code) {
-				array.erase(array.begin() + i);
-				flag = 1;
-				break;
+		if (type != "sort") array = sort_array(array);
+		else {
+			show_info_subj("non_sorted");
+			int buffer;
+			cout << "Введите код предмета, который хотите удалить." << endl;
+			while (!(cin >> buffer) || cin.peek() != '\n') {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Вы можете ввести только цифры." << endl;
 			}
-		if (flag = 0) cout << "Вы ввели неизвестный код предмета." << endl;
+			for (register int i = 0; i < array.size(); i++)
+				if (buffer == array[i].code) {
+					array.erase(array.begin() + i);
+					flag = 1;
+					break;
+				}
+		}
+		if (flag == 0) cout << "Вы ввели неизвестный код предмета." << endl;
 		else {
 			fstream fout;
 			fout.open(file, ios_base::out);
@@ -291,7 +405,9 @@ void subject::delete_subj() {
 				remove(file_subject);
 				char old_name[] = file, new_name[] = file_subject;
 				fout.close();
-				if (rename(old_name, new_name) == 0)
+				if (rename(old_name, new_name) == 0 || type == "sort")
+					cout << "Сортировка прошла успешно." << endl;
+				else if (rename(old_name, new_name) == 0)
 					cout << "Вы успешно удалили запись о предмете." << endl;
 				else cout << "Ошибка в переименовании файлов." << endl;
 			}

@@ -23,6 +23,7 @@ private:
 	void add_data();
 	void change_data();
 	void delete_data();
+	void sort_data();
 	void user_manage();
 public:
 	admin(string* login) {
@@ -48,10 +49,12 @@ struct accounting {
 	int code_of_subject;
 	string date;
 	int mark;
-	void show_info();
+	vector<accounting> load_from_file();
+	void show_info(string sort_type);
 	void add_info();
 	void change_info();
-	void delete_info();
+	void delete_info_or_sort_info(string type);
+	void show_info_about_three();
 };
 
 struct subject {
@@ -61,11 +64,12 @@ struct subject {
 	int hours;
 	int semester;
 	vector<subject> load_from_file();
+	vector<subject> sort_array(vector<subject> arr);
 	void save_to_file(subject new_subj);
-	void show_info_subj();
+	void show_info_subj(string sort_type);
 	void add_subj();
 	void change_subj();
-	void delete_subj();
+	void delete_subj_or_sort_subj(string type);
 };
 
 struct student {
@@ -75,9 +79,10 @@ struct student {
 	string speciality;
 	string group;
 	vector<student> load_from_file();
+	vector<student> sort_array(vector<student> array);
 	void save_to_file(student new_stud);
-	void show_info_stud();
+	void show_info_stud(string sort_type);
 	void add_stud();
 	void change_stud();
-	void delete_stud();
+	void delete_stud_or_sort_stud(string type);
 };

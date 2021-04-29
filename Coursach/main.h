@@ -20,5 +20,8 @@
 
 using namespace std;
 
+void show_info();
+void show_sorted_info();
+int switch_sort();
 bool check_date(string str);
 bool is_repeat_operation();

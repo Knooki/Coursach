@@ -1,6 +1,102 @@
 #include "main.h"
 #include "Classes.h"
 
+void show_info() {
+	int sw;
+	do
+	{
+		cout << "Выбериет опцию:" << endl;
+		cout << "1)Просмотр данных о студентах." << endl;
+		cout << "2)Просмотр данных о предметах." << endl;
+		cout << "3)Просмотр данных об успеваемости студентов." << endl;
+		cout << "4)Выход." << endl;
+		while (!(cin >> sw) || cin.peek() != '\n') {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Вы можете ввести только цифры" << endl;
+		}
+		switch (sw) {
+		case 1:
+		{
+			student st;
+			st.show_info_stud("non_sorted");
+		}
+		break;
+		case 2:
+		{
+			subject sub;
+			sub.show_info_subj("non_sorted");
+		}
+		break;
+		case 3:
+		{
+			accounting acc;
+			acc.show_info("non_sorted");
+		}
+		break;
+		case 4: return;
+		default:
+			cout << "Вы ввели неизвестную опцию." << endl;
+			break;
+		}
+	} while (is_repeat_operation());
+}
+
+void show_sorted_info() {
+	int sw;
+	do
+	{
+		cout << "Выбериет опцию:" << endl;
+		cout << "1)Сортировка и просмотр данных о студентах." << endl;
+		cout << "2)Сортировка и просмотр данных о предметах." << endl;
+		cout << "3)Сортировка и просмотр об успеваемости студентов." << endl;
+		cout << "4)Выход." << endl;
+		while (!(cin >> sw) || cin.peek() != '\n') {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Вы можете ввести только цифры" << endl;
+		}
+		switch (sw) {
+		case 1:
+		{
+			student st;
+			st.show_info_stud("sorted");
+		}
+		break;
+		case 2:
+		{
+			subject sub;
+			sub.show_info_subj("sorted");
+		}
+		break;
+		case 3:
+		{
+			accounting acc;
+			acc.show_info("sorted");
+		}
+		break;
+		case 4: return;
+		default:
+			cout << "Вы ввели неизвестную опцию." << endl;
+			break;
+		}
+	} while (is_repeat_operation());
+}
+
+int switch_sort() {
+	int sw;
+	cout << "Выбериет опцию:" << endl;
+	cout << "1)В алфавитном порядке//по возврастанию." << endl;
+	cout << "2)Не в алфавитном порядке//по убыванию." << endl;
+	cout << "3)Выход." << endl;
+	while (!(cin >> sw) || cin.peek() != '\n') {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Вы можете ввести только цифры." << endl;
+	}
+	return sw;
+}
+
 bool check_date(string str) {
 	if (str.size() != 10) {
 		cout << "Дата дожна быть длиной 10 символов." << endl;
