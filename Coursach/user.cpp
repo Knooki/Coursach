@@ -2,7 +2,7 @@
 #include "main.h"
 #include "Classes.h"
 
-//there aren't search show_info_about_three
+//there aren't search
 
 int user::menu_user() {
 	int sw;

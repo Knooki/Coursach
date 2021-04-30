@@ -195,24 +195,58 @@ bool check_date(string str, int number_of_semester, int course_of_stud) {
 		time_t now = time(0);
 		struct tm local;
 		localtime_s(&local, &now);
-		int pos_year, pos_month, pos_day;
+		int possible_year, possible_month, possible_day;
 		int current_semester = 0;
 		if (local.tm_mon + 1 > 8)
-			current_semester = 1;
-		else if (local.tm_mon + 1 < 6)
-			current_semester = 0;
-		else if (local.tm_mon > 5 && local.tm_mon < 9)
-			current_semester = -1;
-		фылв
-			//if (number_of_semester > (course_of_stud * 2 - 1) - current_semester)
-		// надо сделать рамки для дат, когда можно сдать экзамен
-		// мейби сделать как сессии, то есть в инете чекнуть в какие месяцы сессии и по этим месяцам ограничить
+			current_semester = 1;//первый сем
+		else if (local.tm_mon + 1 < 7)
+			current_semester = 0;//второй сем
+		else if (local.tm_mon > 6 && local.tm_mon < 9)
+			current_semester = -1; //каникулы
+		switch ((course_of_stud * 2) - current_semester - number_of_semester) {
+		case 0:
+		case 1:
+			possible_year = (local.tm_year + 1900);
+			break;
+		case 2:
+		case 3:
+			possible_year = (local.tm_year + 1900) - 1;
+			break;
+		case 4:
+		case 5:
+			possible_year = (local.tm_year + 1900) - 2;
+			break;
+		case 6:
+		case 7:
+			possible_year = (local.tm_year + 1900) - 3;
+			break;
+		}
+		if (ye != possible_year)
+		{
+			cout << "Введенный студент данного курса, не мог сдавать предмет данного семестра в введенном вами году." << endl;
+			return (false);
+		}
+		if (number_of_semester % 2 == 1)
+		{
+			if (mo != 1)
+			{
+				cout << "Сессия в нечетных семестрах проходит в январе(01)." << endl;
+				return false;
+			}
+		}
+		else
+			if (mo != 6)
+			{
+				cout << "Сессия в четных семестрах проходит в июне(06)." << endl;
+				return false;
+			}
+		return true;
 	}
 	else return false;
 }
 
 bool is_repeat_operation() {
 	cout << "Чтобы продолжить нажмите любую клавишу." << endl;
-	cout << "Чтобы вернуться нажмите esc." << endl;
+	cout << "Чтобы вернуться в меню уровня ниже нажмите esc." << endl;
 	return(_getch() != 27);
 }

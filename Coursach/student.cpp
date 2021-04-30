@@ -192,12 +192,13 @@ void student::show_info_stud(string sort_type) {
 		for (register int j = 0; j < array.size(); j++) {
 			cout << setw(13) << left << array[j].code_of_student << setw(40) << left << array[j].full_name
 				<< setw(14) << array[j].birth_date
-				<< setw(13) << array[j].speciality
+				<< setw(14) << array[j].speciality
 				<< setw(7) << array[j].group
 				<< array[j].course << endl;
 		}
 	}
 	else cout << "Нет данных о студентах." << endl;
+	system("pause");
 }
 
 void student::add_stud() {
@@ -251,7 +252,7 @@ void student::add_stud() {
 		{
 			rewind(stdin);
 			getline(cin, buffer.birth_date, '\n');
-			if (!check_date(buffer.birth_date, -123))
+			if (!check_date(buffer.birth_date))
 				continue;
 			else break;
 		}
@@ -279,27 +280,27 @@ void student::add_stud() {
 				cout << "Группа должна быть 6-тизначным числом." << endl;
 				continue;
 			}
-			int course = int(buffer.group[0]);
+			int course = buffer.group[0] - '0';
 			if (local.tm_mon + 1 > 8)
-				if (course < ((local.tm_year + 1900) - 3) % 10 || course >(local.tm_year + 1900) % 10)
-				{
-					cout << "Студент не мог поступить в году, который написан в грууппе" << endl;
-					continue;
-				}
-				else if (((local.tm_year + 1900) - 3) % 10 == course) buffer.course = 4;
+				if (((local.tm_year + 1900) - 3) % 10 == course) buffer.course = 4;
 				else if (((local.tm_year + 1900) - 2) % 10 == course) buffer.course = 3;
 				else if (((local.tm_year + 1900) - 1) % 10 == course) buffer.course = 2;
 				else if ((local.tm_year + 1900) % 10 == course) buffer.course = 1;
-			if (local.tm_mon + 1 < 9)
-				if (course < (local.tm_year + 1900) - 4 || course >(local.tm_year + 1900) - 1)
+				else
 				{
 					cout << "Студент не мог поступить в году, который написан в грууппе" << endl;
 					continue;
 				}
-				else if (((local.tm_year + 1900) - 4) % 10 == course) buffer.course = 4;
+			if (local.tm_mon + 1 < 9)
+				if (((local.tm_year + 1900) - 4) % 10 == course) buffer.course = 4;
 				else if (((local.tm_year + 1900) - 3) % 10 == course) buffer.course = 3;
 				else if (((local.tm_year + 1900) - 2) % 10 == course) buffer.course = 2;
 				else if (((local.tm_year + 1900) - 1) % 10 == course) buffer.course = 1;
+				else
+				{
+					cout << "Студент не мог поступить в году, который написан в грууппе" << endl;
+					continue;
+				}
 			break;
 		}
 		save_to_file(buffer);
@@ -372,7 +373,7 @@ void student::change_stud() {
 				while (1)
 				{
 					getline(cin, buf.birth_date, '\n');
-					if (!check_date(buf.birth_date, -123))
+					if (!check_date(buf.birth_date))
 						continue;
 					else break;
 				}
@@ -400,27 +401,27 @@ void student::change_stud() {
 						cout << "Группа должна быть 6-тизначным числом." << endl;
 						continue;
 					}
-					int course = int(buf.group[0]);
+					int course = buf.group[0] - '0';
 					if (local.tm_mon + 1 > 8)
-						if (course < (local.tm_year + 1900) - 3)
-						{
-							cout << "Этот курс уже закончил обучение" << endl;
-							continue;
-						}
-						else if (((local.tm_year + 1900) - 3) % 10 == course) buf.course = 4;
+						if (((local.tm_year + 1900) - 3) % 10 == course) buf.course = 4;
 						else if (((local.tm_year + 1900) - 2) % 10 == course) buf.course = 3;
 						else if (((local.tm_year + 1900) - 1) % 10 == course) buf.course = 2;
 						else if ((local.tm_year + 1900) % 10 == course) buf.course = 1;
-					if (local.tm_mon + 1 < 9)
-						if (course < (local.tm_year + 1900) - 4)
+						else
 						{
-							cout << "Этот курс уже закончил обучение" << endl;
+							cout << "Студент не мог поступить в году, который написан в грууппе" << endl;
 							continue;
 						}
-						else if (((local.tm_year + 1900) - 4) % 10 == course) buf.course = 4;
+					if (local.tm_mon + 1 < 9)
+						if (((local.tm_year + 1900) - 4) % 10 == course) buf.course = 4;
 						else if (((local.tm_year + 1900) - 3) % 10 == course) buf.course = 3;
 						else if (((local.tm_year + 1900) - 2) % 10 == course) buf.course = 2;
 						else if (((local.tm_year + 1900) - 1) % 10 == course) buf.course = 1;
+						else
+						{
+							cout << "Студент не мог поступить в году, который написан в грууппе" << endl;
+							continue;
+						}
 					if (array[buffer].group[0] != buf.group[0])
 					{
 						accounting acc;
@@ -436,6 +437,7 @@ void student::change_stud() {
 		else cout << "Вы ввели неизвестный код студента." << endl;
 	}
 	else cout << "Нет информации по студентам." << endl;
+	system("pause");
 }
 
 void student::delete_stud_or_sort_stud(string type) {
@@ -468,4 +470,5 @@ void student::delete_stud_or_sort_stud(string type) {
 			change_data_in_file(array, type);
 	}
 	else cout << "Нет информации по предметам." << endl;
+	system("pause");
 }

@@ -1,6 +1,10 @@
 #pragma once
 #include "main.h"
 
+//добавляем проверки на имена,
+//
+//
+//
 class entrance {
 private:
 	vector<string> _login, _password;
@@ -93,4 +97,12 @@ struct accounting {
 	void delete_info_or_sort_info(string type);
 	void show_info_about_three();
 	void delete_all_info_about_student(int code_of_student);
+};
+
+struct student_account {
+	student st;
+	subject sub;
+	vector<int> marks;
+	int amount_of_negative_marks;
+	float average_score;
 };

@@ -195,6 +195,7 @@ void subject::show_info_subj(string sort_type) {
 		}
 	}
 	else cout << "Нет данных о предметах." << endl;
+	system("pause");
 }
 
 void subject::add_subj() {
@@ -233,16 +234,6 @@ void subject::add_subj() {
 			}
 			else break;
 		}
-		for (register int i = 0; i < array.size(); i++)
-			if (buffer.name == array[i].name) {
-				flag = 1;
-				break;
-			}
-		if (flag == 1) {
-			flag = 0;
-			cout << "Такое название предмета уже введено." << endl;
-			continue;
-		}
 		cout << "ФИО преподавателя:" << endl;
 		while (1)
 		{
@@ -264,6 +255,7 @@ void subject::add_subj() {
 			else
 				cout << "Вы можете ввести только цифры." << endl;
 		}
+
 		cout << "Какой по счету семестр:" << endl;
 		while (!(cin >> buffer.number_of_semester) || cin.peek() != '\n' || buffer.number_of_semester > 8 || buffer.number_of_semester < 1)
 		{
@@ -272,6 +264,14 @@ void subject::add_subj() {
 			if (buffer.number_of_semester > 8 || buffer.number_of_semester < 1) cout << "Всего может быть только 8 семестров." << endl;
 			else cout << "Вы можете ввести только цифры." << endl;
 		}
+		for (register int i = 0; i < array.size(); i++)
+			if (buffer.name == array[i].name)
+				if (buffer.number_of_semester == array[i].number_of_semester)
+				{
+					cout << "Этот предмет уже записан. Не совпадает семестр." << endl;
+					flag = 0;
+					continue;
+				}
 		save_to_file(buffer);
 		flag = 1;
 	}
@@ -328,16 +328,6 @@ void subject::change_subj() {
 					}
 					else break;
 				}
-				for (register int i = 0; i < array.size(); i++)
-					if (buf.name == array[i].name) {
-						flag = 1;
-						break;
-					}
-				if (flag == 1) {
-					flag = 0;
-					cout << "Такое название предмета уже введено." << endl;
-					continue;
-				}
 				cout << "ФИО преподавателя:" << endl;
 				while (1)
 				{
@@ -366,6 +356,14 @@ void subject::change_subj() {
 					if (buf.number_of_semester > 8 || buf.number_of_semester < 1) cout << "Всего может быть только 8 семестров." << endl;
 					else cout << "Вы можете ввести только цифры." << endl;
 				}
+				for (register int i = 0; i < array.size(); i++)
+					if (buf.name == array[i].name)
+						if (buf.number_of_semester == array[i].number_of_semester)
+						{
+							cout << "Этот предмет уже записан. Не совпадает семестр." << endl;
+							flag = 0;
+							continue;
+						}
 			}
 			array[buffer] = buf;
 			change_data_in_file(array, "non_sort");
@@ -373,6 +371,7 @@ void subject::change_subj() {
 		else cout << "Вы ввели неизвестный код предмета." << endl;
 	}
 	else cout << "Нет информации по предметам." << endl;
+	system("pause");
 }
 
 void subject::delete_subj_or_sort_subj(string type) {
@@ -404,4 +403,5 @@ void subject::delete_subj_or_sort_subj(string type) {
 			change_data_in_file(array, type);
 	}
 	else cout << "Нет информации по предметам." << endl;
+	system("pause");
 }

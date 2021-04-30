@@ -62,13 +62,13 @@ void admin::operation() {
 			return;
 		default: cout << "Вы ввели несуществующую опцию." << endl;
 		}
-	} while (is_repeat_operation());
+	} while (1);
 }
 
 void admin::sort_data() {
 	int sw;
-	do
-	{
+	while (1) {
+		system("cls");
 		cout << "Выбериет опцию:" << endl;
 		cout << "1)Сортировка данных о студентах." << endl;
 		cout << "2)Сортировка данных о предметах." << endl;
@@ -103,120 +103,129 @@ void admin::sort_data() {
 			cout << "Вы ввели неизвестную опцию." << endl;
 			break;
 		}
-	} while (is_repeat_operation());
+	}
 }
 
 void admin::add_data() {
 	int sw;
-	cout << "Выберите опцию." << endl;
-	cout << "1)Дабавить нового студента." << endl;
-	cout << "2)Добавить новый предмет." << endl;
-	cout << "3)Добавить новый учет о сдаче." << endl;
-	cout << "4)Выход" << endl;
-	while (!(cin >> sw) || cin.peek() != '\n') {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Ошибка. Вы можете ввести только цифры." << endl;
-	}
-	switch (sw) {
-	case 1:
-	{
-		student st;
-		st.add_stud();
-	}
-	break;
-	case 2:
-	{
-		subject sub;
-		sub.add_subj();
-	}
-	break;
-	case 3:
-	{
-		accounting acc;
-		acc.add_info();
-	}
-	break;
-	case 4:
-		return;
-	default: cout << "Вы ввели неизвестную опцию." << endl;
+	while (1) {
+		system("cls");
+		cout << "Выберите опцию." << endl;
+		cout << "1)Дабавить нового студента." << endl;
+		cout << "2)Добавить новый предмет." << endl;
+		cout << "3)Добавить новый учет о сдаче." << endl;
+		cout << "4)Выход в меню админа." << endl;
+		while (!(cin >> sw) || cin.peek() != '\n') {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Ошибка. Вы можете ввести только цифры." << endl;
+		}
+		switch (sw) {
+		case 1:
+		{
+			student st;
+			st.add_stud();
+		}
 		break;
+		case 2:
+		{
+			subject sub;
+			sub.add_subj();
+		}
+		break;
+		case 3:
+		{
+			accounting acc;
+			acc.add_info();
+		}
+		break;
+		case 4:
+			return;
+		default: cout << "Вы ввели неизвестную опцию." << endl;
+			break;
+		}
 	}
 }
 
 void admin::change_data() {
 	int sw;
-	cout << "Выберите опцию." << endl;
-	cout << "1)Поменять данные о студентах." << endl;
-	cout << "2)Поменять данные о предметах." << endl;
-	cout << "3)Поменять данные об учете сдачи." << endl;
-	cout << "4)Выход" << endl;
-	while (!(cin >> sw) || cin.peek() != '\n') {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Ошибка. Вы можете ввести только цифры." << endl;
-	}
-	switch (sw) {
-	case 1:
-	{
-		student st;
-		st.change_stud();
-	}
-	break;
-	case 2:
-	{
-		subject sub;
-		sub.change_subj();
-	}
-	break;
-	case 3:
-	{
-		accounting acc;
-		acc.change_info();
-	}
-	break;
-	case 4:
-		return;
-	default: cout << "Вы ввели неизвестную опцию." << endl;
+	while (1) {
+		system("cls");
+		cout << "Выберите опцию." << endl;
+		cout << "1)Поменять данные о студентах." << endl;
+		cout << "2)Поменять данные о предметах." << endl;
+		cout << "3)Поменять данные об учете сдачи." << endl;
+		cout << "4)Выход в меню админа." << endl;
+		while (!(cin >> sw) || cin.peek() != '\n') {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Ошибка. Вы можете ввести только цифры." << endl;
+		}
+		switch (sw) {
+		case 1:
+		{
+			student st;
+			st.change_stud();
+		}
 		break;
+		case 2:
+		{
+			subject sub;
+			sub.change_subj();
+		}
+		break;
+		case 3:
+		{
+			accounting acc;
+			acc.change_info();
+		}
+		break;
+		case 4:
+			return;
+		default: cout << "Вы ввели неизвестную опцию." << endl;
+			break;
+		}
 	}
 }
 
 void admin::delete_data() {
 	int sw;
-	cout << "Выберите опцию." << endl;
-	cout << "1)Удалить данные о студентах." << endl;
-	cout << "2)Удалить данные о предметах." << endl;
-	cout << "3)Удалить данные об учете сдачи." << endl;
-	cout << "4)Выход" << endl;
-	while (!(cin >> sw) || cin.peek() != '\n') {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Ошибка. Вы можете ввести только цифры." << endl;
-	}
-	switch (sw) {
-	case 1:
-	{
-		student st;
-		st.delete_stud_or_sort_stud("delete");
-	}
-	break;
-	case 2:
-	{
-		subject sub;
-		sub.delete_subj_or_sort_subj("delete");
-	}
-	break;
-	case 3:
-	{
-		accounting acc;
-		acc.delete_info_or_sort_info("delete");
-	}
-	break;
-	case 4:
-		return;
-	default: cout << "Вы ввели неизвестную опцию." << endl;
+	while (1) {
+		system("cls");
+		cout << "Выберите опцию." << endl;
+		cout << "1)Удалить данные о студентах." << endl;
+		cout << "2)Удалить данные о предметах." << endl;
+		cout << "3)Удалить данные об учете сдачи." << endl;
+		cout << "4)Выход в меню админа" << endl;
+		while (!(cin >> sw) || cin.peek() != '\n') {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Ошибка. Вы можете ввести только цифры." << endl;
+		}
+		switch (sw) {
+		case 1:
+		{
+			student st;
+			st.delete_stud_or_sort_stud("delete");
+		}
 		break;
+		case 2:
+		{
+			subject sub;
+			sub.delete_subj_or_sort_subj("delete");
+		}
+		break;
+		case 3:
+		{
+			accounting acc;
+			acc.delete_info_or_sort_info("delete");
+		}
+		break;
+		case 4:
+			return;
+		default: cout << "Вы ввели неизвестную опцию." << endl;
+			break;
+		}
 	}
 }
 
