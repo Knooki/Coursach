@@ -158,6 +158,7 @@
   <ItemGroup>
     <Text Include="accounting_data.txt" />
     <Text Include="authentication_data.txt" />
+    <Text Include="Not_working.txt" />
     <Text Include="student_data.txt" />
     <Text Include="subject_data.txt" />
   </ItemGroup>

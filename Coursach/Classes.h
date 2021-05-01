@@ -1,10 +1,6 @@
 #pragma once
 #include "main.h"
 
-//добавляем проверки на имена,
-//
-//
-//
 class entrance {
 private:
 	vector<string> _login, _password;
@@ -17,7 +13,7 @@ public:
 	entrance(string* log) {
 		this->log = log;
 	}
-	void change_pas(string* login);
+	bool change_pas(string* login);
 	int entering();
 };
 

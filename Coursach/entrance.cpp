@@ -26,7 +26,20 @@ int entrance::entering() {
 		string login, password;
 		switch (entr_menu()) {
 		case 1:
+		{
+			int amount = 1;
 			do {
+				if (amount % 4 == 0)
+				{
+					int c = clock() + 30000;
+					while (clock() < c)
+					{
+						system("cls");
+						int _c = clock();
+						cout << "Программа приостановлена из-за превышения попыток ввода." << endl;
+						cout << "До возобновления программы осталось: " << (c - _c) / 1000 << " с" << endl;
+					}
+				}
 				system("cls");
 				cout << "Введите логин." << endl;
 				rewind(stdin);
@@ -43,8 +56,9 @@ int entrance::entering() {
 						return(_type[i]);
 					}
 				cout << "Вы ввели неверный логин или пароль." << endl;
+				amount++;
 			} while (is_repeat_operation());
-			break;
+			break; }
 		case 2:
 			while (1) {
 				system("cls");
@@ -124,7 +138,6 @@ bool entrance::save_to_file(string login, string password, int type) {
 		return false;
 	}
 	else {
-		fout << endl;
 		fout << login << ',';
 		fout << password << ',';
 		fout << type;
@@ -133,7 +146,7 @@ bool entrance::save_to_file(string login, string password, int type) {
 	}
 }
 
-void entrance::change_pas(string* login) {
+bool entrance::change_pas(string* login) {
 	int counter = load_from_file();
 	int i = 0;
 	while (i < counter) {
@@ -155,17 +168,9 @@ void entrance::change_pas(string* login) {
 				else {
 					_password[i] = sha1(_password[i]);
 					for (register int j = 0; j < counter; j++) {
-						if (j == counter - 1)
-						{
-							fout << _login[i] << ',';
-							fout << _password[i] << ',';
-							fout << _type[i];
-						}
-						else {
-							fout << _login[i] << ',';
-							fout << _password[i] << ',';
-							fout << _type[i] << endl;
-						}
+						fout << _login[i] << ',';
+						fout << _password[i] << ',';
+						fout << _type[i] << endl;
 					}
 					remove(file_authentication);
 					char old_name[] = file, new_name[] = file_authentication;
@@ -173,14 +178,15 @@ void entrance::change_pas(string* login) {
 					if (rename(old_name, new_name) == 0) {
 						cout << "Вы успешно изменили пароль." << endl;
 						system("pause");
-						break;
+						return true;
 					}
 					else cout << "Ошибка в переименовании файлов." << endl;
 				}
 			}
 			else {
 				cout << "Вы ввели неверный пароль." << endl;
-				if (is_repeat_operation()) return;
+				system("pause");
+				return false;
 			}
 		}
 		else i++;

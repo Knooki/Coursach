@@ -55,7 +55,8 @@ void admin::operation() {
 		case 9:
 		{
 			entrance ad(login);
-			ad.change_pas(login);
+			if (!ad.change_pas(login))
+				return;
 		}
 		break;
 		case 10:
@@ -111,7 +112,7 @@ void admin::add_data() {
 	while (1) {
 		system("cls");
 		cout << "Выберите опцию." << endl;
-		cout << "1)Дабавить нового студента." << endl;
+		cout << "1)Добавить нового студента." << endl;
 		cout << "2)Добавить новый предмет." << endl;
 		cout << "3)Добавить новый учет о сдаче." << endl;
 		cout << "4)Выход в меню админа." << endl;

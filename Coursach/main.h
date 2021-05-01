@@ -10,6 +10,7 @@
 #include <cstdio>
 #include <locale.h>
 #include <ctime>
+#include <time.h>
 #include "sha1.h"
 
 #define file_authentication "authentication_data.txt"
@@ -23,6 +24,7 @@ using namespace std;
 void show_info();
 void show_sorted_info();
 int switch_sort();
-bool check_date(string str);
+bool check_date(string str, string type);
 bool check_date(string str, int number_of_semester, int course_of_stud);
+bool is_russian_alpha(char c);
 bool is_repeat_operation();

@@ -45,7 +45,8 @@ void user::operation() {
 		case 5:
 		{
 			entrance us(login);
-			us.change_pas(login);
+			if (!us.change_pas(login))
+				return;
 		}
 		break;
 		case 6:

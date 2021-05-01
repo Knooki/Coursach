@@ -35,11 +35,12 @@ void student::change_data_in_file(vector<student> array, string type_sort) {
 		remove(file_student);
 		char old_name[] = file, new_name[] = file_student;
 		fout.close();
-		if (rename(old_name, new_name) == 0 && type_sort == "sort")
+		if (rename(old_name, new_name) != 0)
+			cout << "Ошибка в переименовании файлов." << endl;
+		else if (type_sort == "sort")
 			cout << "Вы успешно отсортировали данные." << endl;
-		else if (rename(old_name, new_name) == 0)
+		else
 			cout << "Вы успешно удалили запись." << endl;
-		else cout << "Ошибка в переименовании файлов." << endl;
 	}
 }
 
@@ -235,30 +236,37 @@ void student::add_stud() {
 				cout << "Имя студента не должно превышать 40 символов." << endl;
 				continue;
 			}
-			else break;
-		}
-		for (register int i = 0; i < array.size(); i++)
-			if (buffer.full_name == array[i].full_name) {
-				flag = 1;
-				break;
+			for (register int i = 0; i < buffer.full_name.size(); i++)
+				if (!is_russian_alpha(buffer.full_name[i])) {
+					cout << "Пожaлуйста, используйте только русские буквы." << endl;
+					flag = 1;
+					break;
+				}
+			for (register int i = 0; i < array.size(); i++)
+				if (buffer.full_name == array[i].full_name) {
+					flag = 1;
+					cout << "Такое имя студента уже введено." << endl;
+					break;
+				}
+			if (flag == 1) {
+				flag = 0;
+				continue;
 			}
-		if (flag == 1) {
-			flag = 0;
-			cout << "Такое имя студента уже введено." << endl;
-			continue;
+			break;
 		}
 		cout << "Введите дату рождения (пример 01.01.2001):" << endl;
 		while (1)
 		{
 			rewind(stdin);
 			getline(cin, buffer.birth_date, '\n');
-			if (!check_date(buffer.birth_date))
+			if (!check_date(buffer.birth_date, "stud"))
 				continue;
 			else break;
 		}
 		cout << "Введите специальность:" << endl;
 		while (1)
 		{
+			flag = 0;
 			rewind(stdin);
 			getline(cin, buffer.speciality, '\n');
 			if (buffer.speciality.size() > 14)
@@ -266,10 +274,21 @@ void student::add_stud() {
 				cout << "Специальность не должна превышать 14 символов." << endl;
 				continue;
 			}
-			else break;
+			for (register int i = 0; i < buffer.speciality.size(); i++)
+				if (!is_russian_alpha(buffer.speciality[i]) && buffer.speciality[i] != '(' && buffer.speciality[i] != ')') {
+					cout << "Пожaлуйста, используйте русские буквы и круглые скобки." << endl;
+					flag = 1;
+					break;
+				}
+			if (flag == 1) {
+				flag = 0;
+				continue;
+			}
+			break;
 		}
 		cout << "Введите группу студента:" << endl;
 		while (1) {
+			flag = 0;
 			time_t now = time(0);
 			struct tm local;
 			localtime_s(&local, &now);
@@ -280,27 +299,41 @@ void student::add_stud() {
 				cout << "Группа должна быть 6-тизначным числом." << endl;
 				continue;
 			}
+			for (register int i = 0; i < buffer.group.size(); i++) {
+				if (!isdigit(buffer.group[i]))
+				{
+					cout << "В группе могут быть только цифры." << endl;
+					flag = 1;
+					break;
+				}
+			}
+			if (flag == 1) {
+				flag = 0;
+				continue;
+			}
 			int course = buffer.group[0] - '0';
 			if (local.tm_mon + 1 > 8)
-				if (((local.tm_year + 1900) - 3) % 10 == course) buffer.course = 4;
-				else if (((local.tm_year + 1900) - 2) % 10 == course) buffer.course = 3;
-				else if (((local.tm_year + 1900) - 1) % 10 == course) buffer.course = 2;
-				else if ((local.tm_year + 1900) % 10 == course) buffer.course = 1;
-				else
+			{
+				buffer.course = ((local.tm_year + 1900) + 1 - course) % 10;
+				if (buffer.course < 1 || buffer.course > 4)
 				{
-					cout << "Студент не мог поступить в году, который написан в грууппе" << endl;
+					cout << "Студент не мог поступить в году, который написан в группе" << endl;
 					continue;
 				}
-			if (local.tm_mon + 1 < 9)
-				if (((local.tm_year + 1900) - 4) % 10 == course) buffer.course = 4;
-				else if (((local.tm_year + 1900) - 3) % 10 == course) buffer.course = 3;
-				else if (((local.tm_year + 1900) - 2) % 10 == course) buffer.course = 2;
-				else if (((local.tm_year + 1900) - 1) % 10 == course) buffer.course = 1;
-				else
+			}
+			else
+			{
+				buffer.course = ((local.tm_year + 1900) - course) % 10;
+				if (buffer.course < 1 || buffer.course > 4)
 				{
-					cout << "Студент не мог поступить в году, который написан в грууппе" << endl;
+					cout << "Студент не мог поступить в году, который написан в группе" << endl;
 					continue;
 				}
+			}
+			if (flag == 1) {
+				flag = 0;
+				continue;
+			}
 			break;
 		}
 		save_to_file(buffer);
@@ -328,7 +361,7 @@ void student::change_stud() {
 			}
 		student buf;
 		if (flag == 0) {
-			while (flag == 0) {
+			while (1) {
 				cout << "Введите новые данные о студенте." << endl;
 				cout << "Код студента" << endl;
 				while (!(cin >> buf.code_of_student) || cin.peek() != '\n' || buf.code_of_student < 0) {
@@ -339,58 +372,75 @@ void student::change_stud() {
 						cout << "Вы можете ввести только цифры." << endl;
 				}
 				for (register int i = 0; i < array.size(); i++)
-					if (buf.code_of_student == array[i].code_of_student) {
+					if (buf.code_of_student == array[i].code_of_student && buf.code_of_student != array[buffer].code_of_student) {
 						flag = 1;
 						break;
 					}
 				if (flag == 1) {
-					flag = 0;
 					cout << "Такой код студента уже введен." << endl;
 					continue;
 				}
 				cout << "Полное имя студента:" << endl;
 				while (1)
 				{
+					rewind(stdin);
 					getline(cin, buf.full_name, '\n');
 					if (buf.full_name.size() > 40)
 					{
 						cout << "Имя студента не должно превышать 40 символов." << endl;
 						continue;
 					}
-					else break;
+					for (register int i = 0; i < buf.full_name.size(); i++)
+						if (!is_russian_alpha(buf.full_name[i])) {
+							cout << "Пожaлуйста, используйте только русские буквы." << endl;
+							flag = 1;
+							break;
+						}
+					for (register int i = 0; i < array.size(); i++)
+						if (buf.full_name == array[i].full_name && buf.full_name != array[buffer].full_name) {
+							flag = 1;
+							cout << "Такое имя студента уже введено." << endl;
+							break;
+						}
+					if (flag == 1)
+						continue;
+					break;
 				}
-				for (register int i = 0; i < array.size(); i++)
-					if (buf.full_name == array[i].full_name) {
-						flag = 1;
-						break;
-					}
-				if (flag == 1) {
-					flag = 0;
-					cout << "Такое имя студента уже введено." << endl;
-					continue;
-				}
-				cout << "Дата рождения (Пример 01.01.2001):" << endl;
+				cout << "Введите дату рождения (пример 01.01.2001):" << endl;
 				while (1)
 				{
+					rewind(stdin);
 					getline(cin, buf.birth_date, '\n');
-					if (!check_date(buf.birth_date))
+					if (!check_date(buf.birth_date, "stud"))
 						continue;
 					else break;
 				}
-				cout << "Специальность:" << endl;
+				cout << "Введите специальность:" << endl;
 				while (1)
 				{
+					flag = 0;
+					rewind(stdin);
 					getline(cin, buf.speciality, '\n');
 					if (buf.speciality.size() > 14)
 					{
 						cout << "Специальность не должна превышать 14 символов." << endl;
 						continue;
 					}
-					else break;
+					for (register int i = 0; i < buf.speciality.size(); i++)
+						if (!is_russian_alpha(buf.speciality[i]) && buf.speciality[i] != '(' && buf.speciality[i] != ')') {
+							cout << "Пожaлуйста, используйте русские буквы и круглые скобки." << endl;
+							flag = 1;
+							break;
+						}
+					if (flag == 1) {
+						flag = 0;
+						continue;
+					}
+					break;
 				}
-				cout << "Группа:" << endl;
-				while (1)
-				{
+				cout << "Введите группу студента:" << endl;
+				while (1) {
+					flag = 0;
 					time_t now = time(0);
 					struct tm local;
 					localtime_s(&local, &now);
@@ -401,35 +451,55 @@ void student::change_stud() {
 						cout << "Группа должна быть 6-тизначным числом." << endl;
 						continue;
 					}
+					for (register int i = 0; i < buf.group.size(); i++) {
+						if (!isdigit(buf.group[i]))
+						{
+							cout << "В группе могут быть только цифры." << endl;
+							flag = 1;
+							break;
+						}
+					}
+					if (flag == 1) {
+						continue;
+					}
 					int course = buf.group[0] - '0';
 					if (local.tm_mon + 1 > 8)
-						if (((local.tm_year + 1900) - 3) % 10 == course) buf.course = 4;
-						else if (((local.tm_year + 1900) - 2) % 10 == course) buf.course = 3;
-						else if (((local.tm_year + 1900) - 1) % 10 == course) buf.course = 2;
-						else if ((local.tm_year + 1900) % 10 == course) buf.course = 1;
-						else
-						{
-							cout << "Студент не мог поступить в году, который написан в грууппе" << endl;
-							continue;
-						}
-					if (local.tm_mon + 1 < 9)
-						if (((local.tm_year + 1900) - 4) % 10 == course) buf.course = 4;
-						else if (((local.tm_year + 1900) - 3) % 10 == course) buf.course = 3;
-						else if (((local.tm_year + 1900) - 2) % 10 == course) buf.course = 2;
-						else if (((local.tm_year + 1900) - 1) % 10 == course) buf.course = 1;
-						else
-						{
-							cout << "Студент не мог поступить в году, который написан в грууппе" << endl;
-							continue;
-						}
-					if (array[buffer].group[0] != buf.group[0])
 					{
-						accounting acc;
-						acc.delete_all_info_about_student(buf.code_of_student);
-						cout << "Весь учет данного студента удален, так как вы изменили его курс." << endl;
+						buf.course = ((local.tm_year + 1900) + 1 - course) % 10;
+						if (buf.course < 1 || buf.course > 4)
+						{
+							cout << "Студент не мог поступить в году, который написан в группе" << endl;
+							continue;
+						}
+					}
+					else
+					{
+						buf.course = ((local.tm_year + 1900) - course) % 10;
+						if (buf.course < 1 || buf.course > 4)
+						{
+							cout << "Студент не мог поступить в году, который написан в группе" << endl;
+							continue;
+						}
 					}
 					break;
 				}
+				if (array[buffer].group[0] != buf.group[0])
+				{
+					accounting acc;
+					acc.delete_all_info_about_student(buf.code_of_student);
+					cout << "Весь учет данного студента удален, так как вы изменили его курс." << endl;
+				}
+				else if (array[buffer].code_of_student != buf.code_of_student)
+				{
+					accounting acc;
+					vector<accounting> account;
+					account = acc.load_from_file();
+					for (register int i = 0; i < account.size(); i++)
+						if (account[i].st.code_of_student == array[buffer].code_of_student)
+							account[i].st.code_of_student = buf.code_of_student;
+					cout << "Код данного студента в учете отметок успешно заменен на новый." << endl;
+				}
+				break;
 			}
 			array[buffer] = buf;
 			change_data_in_file(array, "non_sort");

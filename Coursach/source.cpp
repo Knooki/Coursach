@@ -91,7 +91,7 @@ int switch_sort() {
 	return sw;
 }
 
-bool check_date(string str) {
+bool check_date(string str, string type) {
 	if (str.size() != 10) {
 		cout << "Дата дожна быть длиной 10 символов." << endl;
 		return false;
@@ -121,6 +121,13 @@ bool check_date(string str) {
 				flag++;
 				break;
 			}
+			if (type == "stud")
+				if (ye > local.tm_year + 1900 - 15)
+				{
+					cout << "Студент не может быть настолько молод." << endl;
+					flag++;
+					break;
+				}
 			if (mo > 12 || mo == 0) {
 				cout << "Неверное количество месяцев." << endl;
 				flag++;
@@ -182,45 +189,25 @@ bool check_date(string str) {
 }
 
 bool check_date(string str, int number_of_semester, int course_of_stud) {
-	if (check_date(str)) {
-		string date, month, year;
-		date = str.substr(0, 2);
+	if (check_date(str, "sub")) {
+		string month, year;
 		month = str.substr(3, 2);
 		year = str.substr(6, 4);
-		int da, mo, ye;
-		da = stoi(date);
+		int mo, ye;
 		mo = stoi(month);
 		ye = stoi(year);
-		int flag = 0;
 		time_t now = time(0);
 		struct tm local;
 		localtime_s(&local, &now);
-		int possible_year, possible_month, possible_day;
+		int possible_year, possible_month;
 		int current_semester = 0;
 		if (local.tm_mon + 1 > 8)
 			current_semester = 1;//первый сем
 		else if (local.tm_mon + 1 < 7)
 			current_semester = 0;//второй сем
-		else if (local.tm_mon > 6 && local.tm_mon < 9)
+		else
 			current_semester = -1; //каникулы
-		switch ((course_of_stud * 2) - current_semester - number_of_semester) {
-		case 0:
-		case 1:
-			possible_year = (local.tm_year + 1900);
-			break;
-		case 2:
-		case 3:
-			possible_year = (local.tm_year + 1900) - 1;
-			break;
-		case 4:
-		case 5:
-			possible_year = (local.tm_year + 1900) - 2;
-			break;
-		case 6:
-		case 7:
-			possible_year = (local.tm_year + 1900) - 3;
-			break;
-		}
+		possible_year = (local.tm_year + 1900) + 1 - course_of_stud + number_of_semester / 2 + current_semester;
 		if (ye != possible_year)
 		{
 			cout << "Введенный студент данного курса, не мог сдавать предмет данного семестра в введенном вами году." << endl;
@@ -243,6 +230,10 @@ bool check_date(string str, int number_of_semester, int course_of_stud) {
 		return true;
 	}
 	else return false;
+}
+
+bool is_russian_alpha(char c) {
+	return (c >= 'А' && c <= 'я' || c == ' ' || c == 'Ё' || c == 'ё');
 }
 
 bool is_repeat_operation() {

@@ -1,6 +1,8 @@
 #include "main.h"
 #include "Classes.h"
 
+//можно добавить вариативности посреедством показывания учета за прошлый год, только о первых курсах, за все года, 2 года назад и тд
+
 void accounting::save_to_file(accounting new_acc) {
 	fstream fout;
 	fout.open(file_accounting, ios_base::app);

@@ -70,5 +70,8 @@
     <Text Include="authentication_data.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
+    <Text Include="Not_working.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
 </Project>
