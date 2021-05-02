@@ -1,0 +1,117 @@
+﻿  accounting.cpp
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(27,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(94,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(98,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(104,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(114,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(115,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(125,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(126,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(136,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(162,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(167,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(170,33): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(212,13): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(226,18): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(229,13): warning C4018: >=: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(245,13): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(272,18): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(275,33): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(309,18): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(342,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(361,14): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(375,19): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(378,14): warning C4018: >=: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(394,14): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(421,19): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(424,34): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(461,19): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(491,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(495,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(501,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(507,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(512,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(513,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(528,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(548,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(549,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(563,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(587,30): warning C4018: <: несоответствие типов со знаком и без знака
+  admin.cpp
+  entrance.cpp
+  Main.cpp
+  sha1.cpp
+C:\Users\user\source\repos\Coursach\Coursach\sha1.cpp(70,12): warning C4309: аргумент: усечение константного значения
+C:\Users\user\source\repos\Coursach\Coursach\sha1.cpp(90,26): warning C4244: =: преобразование "SHA1::uint64" в "SHA1::uint32", возможна потеря данных
+C:\Users\user\source\repos\Coursach\Coursach\sha1.cpp(253,26): warning C4244: аргумент: преобразование "std::streamsize" в "const unsigned int", возможна потеря данных
+  source.cpp
+C:\Users\user\source\repos\Coursach\Coursach\source.cpp(230,97): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+  student.cpp
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(26,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(78,29): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(86,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(87,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(99,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(100,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(128,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(129,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(138,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(139,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(155,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(156,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(165,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(166,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(177,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(178,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(187,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(188,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(217,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(243,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(263,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(269,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(301,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(326,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(380,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(398,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(417,33): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(423,33): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(453,33): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(478,33): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(521,33): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(551,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\student.cpp(558,33): warning C4018: <: несоответствие типов со знаком и без знака
+  subject.cpp
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(25,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(89,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(90,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(99,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(100,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(111,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(112,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(121,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(122,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(133,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(134,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(143,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(144,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(155,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(156,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(165,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(166,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(195,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(220,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(272,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(297,30): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(315,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(369,32): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(404,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\user\source\repos\Coursach\Coursach\subject.cpp(411,33): warning C4018: <: несоответствие типов со знаком и без знака
+  user.cpp
+  Создание кода
+  Previous IPDB not found, fall back to full compilation.
+C:\Users\user\source\repos\Coursach\Coursach\entrance.cpp(200): warning C4715: entrance::change_pas: значение возвращается не при всех путях выполнения
+C:\Users\user\source\repos\Coursach\Coursach\entrance.cpp(108): warning C4715: entrance::entering: значение возвращается не при всех путях выполнения
+C:\Users\user\source\repos\Coursach\Coursach\accounting.cpp(141): warning C4715: student::sort_array_of_accounting: значение возвращается не при всех путях выполнения
+  All 786 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Создание кода завершено
+  Coursach.vcxproj -> C:\Users\user\source\repos\Coursach\Release\Coursach.exe
