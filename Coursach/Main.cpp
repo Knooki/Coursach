@@ -12,6 +12,7 @@ int main() {
 	system("chcp 1251");
 	string* login = new string;
 	entrance person(login);
+	handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	while (1) {
 		switch (person.entering()) {
 		case 2: break;

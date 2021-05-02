@@ -144,7 +144,6 @@
     <ClCompile Include="entrance.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="sha1.cpp" />
-    <ClCompile Include="past.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="student.cpp" />
     <ClCompile Include="subject.cpp" />

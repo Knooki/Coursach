@@ -16,7 +16,7 @@ int user::menu_user() {
 	while (!(cin >> sw) || cin.peek() != '\n') {
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Ошибка. Вы можете ввести только цифры." << endl;
+		error_message("Ошибка. Вы можете ввести только цифры.");
 	}
 	return (sw);
 }
@@ -51,6 +51,9 @@ void user::operation() {
 		break;
 		case 6:
 			return;
+		default:
+			error_message("Вы ввели несуществующую опцию.");
+			break;
 		}
 	}
 }

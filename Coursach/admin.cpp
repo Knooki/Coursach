@@ -20,7 +20,7 @@ int admin::menu_admin() {
 	while (!(cin >> sw) || cin.peek() != '\n') {
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Ошибка. Вы можете ввести только цифры." << endl;
+		error_message("Ошибка. Вы можете ввести только цифры.");
 	}
 	return(sw);
 }
@@ -61,7 +61,7 @@ void admin::operation() {
 		break;
 		case 10:
 			return;
-		default: cout << "Вы ввели несуществующую опцию." << endl;
+		default: error_message("Вы ввели несуществующую опцию.");
 		}
 	} while (1);
 }
@@ -78,7 +78,7 @@ void admin::sort_data() {
 		while (!(cin >> sw) || cin.peek() != '\n') {
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Вы можете ввести только цифры" << endl;
+			error_message("Вы можете ввести только цифры");
 		}
 		switch (sw) {
 		case 1:
@@ -101,7 +101,7 @@ void admin::sort_data() {
 		break;
 		case 4: return;
 		default:
-			cout << "Вы ввели неизвестную опцию." << endl;
+			error_message("Вы ввели неизвестную опцию.");
 			break;
 		}
 	}
@@ -119,7 +119,7 @@ void admin::add_data() {
 		while (!(cin >> sw) || cin.peek() != '\n') {
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Ошибка. Вы можете ввести только цифры." << endl;
+			error_message("Ошибка. Вы можете ввести только цифры.");
 		}
 		switch (sw) {
 		case 1:
@@ -142,7 +142,7 @@ void admin::add_data() {
 		break;
 		case 4:
 			return;
-		default: cout << "Вы ввели неизвестную опцию." << endl;
+		default: error_message("Вы ввели неизвестную опцию.");
 			break;
 		}
 	}
@@ -160,7 +160,7 @@ void admin::change_data() {
 		while (!(cin >> sw) || cin.peek() != '\n') {
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Ошибка. Вы можете ввести только цифры." << endl;
+			error_message("Ошибка. Вы можете ввести только цифры.");
 		}
 		switch (sw) {
 		case 1:
@@ -183,7 +183,7 @@ void admin::change_data() {
 		break;
 		case 4:
 			return;
-		default: cout << "Вы ввели неизвестную опцию." << endl;
+		default: error_message("Вы ввели неизвестную опцию.");
 			break;
 		}
 	}
@@ -201,7 +201,7 @@ void admin::delete_data() {
 		while (!(cin >> sw) || cin.peek() != '\n') {
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Ошибка. Вы можете ввести только цифры." << endl;
+			error_message("Ошибка. Вы можете ввести только цифры.");
 		}
 		switch (sw) {
 		case 1:
@@ -224,7 +224,7 @@ void admin::delete_data() {
 		break;
 		case 4:
 			return;
-		default: cout << "Вы ввели неизвестную опцию." << endl;
+		default: error_message("Вы ввели неизвестную опцию.");
 			break;
 		}
 	}

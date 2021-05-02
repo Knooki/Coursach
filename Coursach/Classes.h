@@ -70,6 +70,7 @@ struct student {
 	vector<student> load_from_file();
 	vector<student> sort_array(vector<student> array);
 	vector<student> sort_array_of_accounting(vector<student> array_of_stud);
+	vector<student> sort_date(vector<student> array, int type);
 	void save_to_file(student new_stud);
 	void change_data_in_file(vector<student> array, string type_sort);
 	void show_info_stud(string sort_type);

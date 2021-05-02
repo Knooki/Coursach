@@ -10,7 +10,7 @@ int entrance::entr_menu() {
 	while (!(cin >> sw) || cin.peek() != '\n') {
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Ошибка. Вы можете ввести только цифры." << endl;
+		error_message("Ошибка. Вы можете ввести только цифры.");
 	}
 	return (sw);
 }
@@ -18,7 +18,7 @@ int entrance::entr_menu() {
 int entrance::entering() {
 	int counter = load_from_file();
 	if (counter == 0) {
-		cout << "Нет учетных записей." << endl;
+		error_message("Ошибка.Нет учетных записей.");
 		return(-1);
 	}
 	else {
@@ -55,7 +55,7 @@ int entrance::entering() {
 						*log = _login[i];
 						return(_type[i]);
 					}
-				cout << "Вы ввели неверный логин или пароль." << endl;
+				error_message("Вы ввели неверный логин или пароль.");
 				amount++;
 			} while (is_repeat_operation());
 			break; }
@@ -70,7 +70,7 @@ int entrance::entering() {
 				while (i < counter) {
 					if (login == _login[i])
 					{
-						cout << "Этот логин уже занят." << endl;
+						error_message("Этот логин уже занят.");
 						if (is_repeat_operation())
 							break;
 						else {
@@ -90,18 +90,19 @@ int entrance::entering() {
 			if (save_to_file(login, password, 0))
 			{
 				*log = login;
-				cout << "Вы успешно зарегестрировались." << endl;
+				complete_message("Вы успешно зарегестрировались.");
 				counter++;
 				if (is_repeat_operation())
 					return (0);
 				else return (-1);
 			}
-			else cout << "Ошибка регистрации." << endl;
+			else
+				error_message("Ошибка регистрации.");
 			system("pause");
 			break;
 		case 3:
 			return(-1);
-		default: cout << "Вы ввели неизвестную опцию." << endl;
+		default: error_message("Вы ввели неизвестную опцию.");
 		}
 	}
 }
@@ -109,7 +110,7 @@ int entrance::entering() {
 int entrance::load_from_file() {
 	ifstream fin(file_authentication, ios_base::in);
 	if (!fin.is_open()) {
-		cout << "Ошибка открытия файла." << endl;
+		error_message("Ошибка открытия файла.");
 		return(0);
 	}
 	else {
@@ -134,7 +135,7 @@ bool entrance::save_to_file(string login, string password, int type) {
 	ofstream fout;
 	fout.open(file_authentication, ios_base::app);
 	if (!fout.is_open()) {
-		cout << "Ошибка открытия файла." << endl;
+		error_message("Ошибка открытия файла.");
 		return false;
 	}
 	else {
@@ -163,7 +164,7 @@ bool entrance::change_pas(string* login) {
 				fout.open(file, ios_base::out);
 				if (!fout.is_open())
 				{
-					cout << "Ошибка открытия файла." << endl;
+					error_message("Ошибка открытия файла.");
 				}
 				else {
 					_password[i] = sha1(_password[i]);
@@ -176,20 +177,24 @@ bool entrance::change_pas(string* login) {
 					char old_name[] = file, new_name[] = file_authentication;
 					fout.close();
 					if (rename(old_name, new_name) == 0) {
-						cout << "Вы успешно изменили пароль." << endl;
+						complete_message("Вы успешно изменили пароль.");
 						system("pause");
 						return true;
 					}
-					else cout << "Ошибка в переименовании файлов." << endl;
+					else error_message("Ошибка в переименовании файлов.");
 				}
 			}
 			else {
-				cout << "Вы ввели неверный пароль." << endl;
+				error_message("Вы ввели неверный пароль.");
 				system("pause");
 				return false;
 			}
+			break;
 		}
-		else i++;
+		i++;
 	}
-	if (i == counter) cout << "Произошла ошибка в изменении пароля." << endl;
+	if (i == counter) {
+		error_message("Произошла ошибка в изменении пароля.");
+		return false;
+	}
 }

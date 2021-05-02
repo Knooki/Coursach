@@ -12,6 +12,8 @@
 #include <ctime>
 #include <time.h>
 #include "sha1.h"
+#define NOMINMAX
+#include <Windows.h>
 
 #define file_authentication "authentication_data.txt"
 #define file "file.txt"
@@ -20,7 +22,10 @@
 #define file_accounting "accounting_data.txt"
 
 using namespace std;
+static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
+void error_message(string message);
+void complete_message(string message);
 void show_info();
 void show_sorted_info();
 int switch_sort();
