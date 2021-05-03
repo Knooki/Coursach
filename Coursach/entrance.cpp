@@ -19,11 +19,12 @@ int entrance::entering() {
 	int counter = load_from_file();
 	if (counter == 0) {
 		error_message("Ошибка.Нет учетных записей.");
-		return(-1);
+		return (-1);
 	}
 	else {
 		counter = load_from_file();
-		string login, password;
+		string login, password, group;
+		int type;
 		switch (entr_menu()) {
 		case 1:
 		{
@@ -53,6 +54,7 @@ int entrance::entering() {
 					if (login == _login[i] && password == _password[i])
 					{
 						*log = _login[i];
+						*gr = _group[i];
 						return(_type[i]);
 					}
 				error_message("Вы ввели неверный логин или пароль.");
@@ -60,6 +62,7 @@ int entrance::entering() {
 			} while (is_repeat_operation());
 			break; }
 		case 2:
+		{
 			while (1) {
 				system("cls");
 				cout << "Введите логин." << endl;
@@ -87,24 +90,30 @@ int entrance::entering() {
 			rewind(stdin);
 			getline(cin, password);
 			password = sha1(password);
-			if (save_to_file(login, password, 0))
+			vector<student> stud;
+			student::add_stud();
+			stud = student::load_from_file();
+			group = stud.back().get_group();
+			if (save_to_file(login, password, 0, group))
 			{
 				*log = login;
+				*gr = group;
 				complete_message("Вы успешно зарегестрировались.");
 				counter++;
 				if (is_repeat_operation())
 					return (0);
 				else return (-1);
 			}
-			else
-				error_message("Ошибка регистрации.");
+			error_message("Ошибка регистрации.");
 			system("pause");
-			break;
+		}
+		break;
 		case 3:
 			return(-1);
 		default: error_message("Вы ввели неизвестную опцию.");
 		}
 	}
+	return(2);
 }
 
 int entrance::load_from_file() {
@@ -122,8 +131,10 @@ int entrance::load_from_file() {
 			getline(fin, buffer, ',');
 			_password.push_back(buffer);
 			fin >> buf;
-			fin.ignore(numeric_limits<streamsize>::max(), '\n');
 			_type.push_back(buf);
+			fin.ignore(1);
+			getline(fin, buffer, '\n');
+			_group.push_back(buffer);
 			i++;
 		}
 		return (i);
@@ -131,7 +142,29 @@ int entrance::load_from_file() {
 	}
 }
 
-bool entrance::save_to_file(string login, string password, int type) {
+void entrance::change_data_in_file() {
+	ofstream fout;
+	fout.open(file, ios_base::app);
+	if (!fout.is_open())
+		error_message("Ошибка открытия файла.");
+	else {
+		for (register int i = 0; i < _login.size(); i++) {
+			fout << _login[i] << ',';
+			fout << _password[i] << ',';
+			fout << _type[i] << ',';
+			fout << _group[i] << endl;
+		}
+		remove(file_authentication);
+		char old_name[] = file, new_name[] = file_authentication;
+		fout.close();
+		if (rename(old_name, new_name) != 0)
+			error_message("Ошибка в переименовании файлов.");
+		else
+			complete_message("Аккаунты пользователей с удаленной группой удалены.");
+	}
+}
+
+bool entrance::save_to_file(string login, string password, int type, string group) {
 	ofstream fout;
 	fout.open(file_authentication, ios_base::app);
 	if (!fout.is_open()) {
@@ -141,7 +174,8 @@ bool entrance::save_to_file(string login, string password, int type) {
 	else {
 		fout << login << ',';
 		fout << password << ',';
-		fout << type;
+		fout << type << ',';
+		fout << group << endl;
 		fout.close();
 		return true;
 	}
@@ -197,4 +231,17 @@ bool entrance::change_pas(string* login) {
 		error_message("Произошла ошибка в изменении пароля.");
 		return false;
 	}
+}
+
+void entrance::delete_users_with_group(string group) {
+	int amount = load_from_file();
+	for (register int j = 0; j < amount; j++)
+		if (_group[j] == group)
+		{
+			_login.erase(_login.begin() + j);
+			_password.erase(_login.begin() + j);
+			_type.erase(_type.begin() + j);
+			_group.erase(_group.begin() + j);
+		}
+	change_data_in_file();
 }

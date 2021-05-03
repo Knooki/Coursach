@@ -1,6 +1,19 @@
 #include "main.h"
 #include "Classes.h"
 
+static string facult[10] = {
+	"ФДПиПО",
+	"ФКП",
+	"ФИТУ",
+	"ВФ",
+	"ФРЭ",
+	"ФКСиС",
+	"ФИК",
+	"ИЭФ",
+	"ИИТ",
+	"ФИНО"
+};
+
 void student::save_to_file(student new_stud) {
 	fstream fout;
 	fout.open(file_student, ios_base::app);
@@ -12,6 +25,7 @@ void student::save_to_file(student new_stud) {
 			<< new_stud.birth_date << ','
 			<< new_stud.speciality << ','
 			<< new_stud.group << ','
+			<< new_stud.faculty << ','
 			<< new_stud.course << endl;
 	}
 	fout.close();
@@ -30,6 +44,7 @@ void student::change_data_in_file(vector<student> array, string type_sort) {
 				<< array[i].birth_date << ','
 				<< array[i].speciality << ','
 				<< array[i].group << ','
+				<< array[i].faculty << ','
 				<< array[i].course << endl;
 		}
 		remove(file_student);
@@ -61,6 +76,7 @@ vector<student> student::load_from_file() {
 			getline(fin, buffer.birth_date, ',');
 			getline(fin, buffer.speciality, ',');
 			getline(fin, buffer.group, ',');
+			getline(fin, buffer.faculty, ',');
 			fin >> buffer.course;
 			array.push_back(buffer);
 			i++;
@@ -110,6 +126,7 @@ vector<student> student::sort_date(vector<student> array, int type) {
 
 vector<student> student::sort_array(vector<student> arr) {
 	int sw;
+	system("cls");
 	cout << "Выберите опцию:" << endl;
 	cout << "1)Отсортировать по ФИО студента." << endl;
 	cout << "2)Отсортировать по дате рождения студента." << endl;
@@ -202,9 +219,10 @@ vector<student> student::sort_array(vector<student> arr) {
 	}
 }
 
-void student::show_info_stud(string sort_type) {
+void student::show_info_stud(string group, string sort_type) {
 	vector<student> array = load_from_file();
 	if (array.size() != 0) {
+		system("cls");
 		if (sort_type == "sorted") array = sort_array(array);
 		cout << "Информация о студентах." << endl;
 		SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
@@ -212,14 +230,33 @@ void student::show_info_stud(string sort_type) {
 			<< "Дата рождения "
 			<< "Специальность "
 			<< "Группа "
+			<< "Факультет "
 			<< "Курс" << endl;
 		SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
 		for (register int j = 0; j < array.size(); j++) {
-			cout << setw(13) << left << array[j].code_of_student << setw(40) << left << array[j].full_name
-				<< setw(14) << array[j].birth_date
-				<< setw(14) << array[j].speciality
-				<< setw(7) << array[j].group
-				<< array[j].course << endl;
+			if (group != "admin")
+			{
+				string stream_of_study, stream_of_study_1;
+				stream_of_study = group.substr(0, 4);
+				stream_of_study_1 = array[j].group.substr(0, 4);
+				if (stream_of_study == stream_of_study_1)
+				{
+					cout << setw(13) << left << array[j].code_of_student << setw(40) << left << array[j].full_name
+						<< setw(14) << array[j].birth_date
+						<< setw(14) << array[j].speciality
+						<< setw(7) << array[j].group
+						<< setw(10) << array[j].faculty
+						<< array[j].course << endl;
+				}
+			}
+			else {
+				cout << setw(13) << left << array[j].code_of_student << setw(40) << left << array[j].full_name
+					<< setw(14) << array[j].birth_date
+					<< setw(14) << array[j].speciality
+					<< setw(7) << array[j].group
+					<< setw(10) << array[j].faculty
+					<< array[j].course << endl;
+			}
 		}
 	}
 	else error_message("Нет данных о студентах.");
@@ -231,6 +268,7 @@ void student::add_stud() {
 	while (flag == 0) {
 		vector<student> array = load_from_file();
 		student buffer;
+		system("cls");
 		cout << "Введите новые данные о студенте." << endl;
 		cout << "Код студента:" << endl;
 		while (!(cin >> buffer.code_of_student) || cin.peek() != '\n' || buffer.code_of_student < 0) {
@@ -358,6 +396,7 @@ void student::add_stud() {
 				flag = 0;
 				continue;
 			}
+			buffer.faculty = facult[(buffer.group[1] - '0')];
 			break;
 		}
 		save_to_file(buffer);
@@ -368,7 +407,8 @@ void student::add_stud() {
 void student::change_stud() {
 	vector<student> array = load_from_file();
 	if (array.size() != 0) {
-		show_info_stud("non_sorted");
+		system("cls");
+		show_info_stud("admin", "non_sorted");
 		int buffer;
 		int flag = 1;
 		cout << "Введите код студента, который хотите поменять." << endl;
@@ -519,10 +559,11 @@ void student::change_stud() {
 					vector<accounting> account;
 					account = acc.load_from_file();
 					for (register int i = 0; i < account.size(); i++)
-						if (account[i].st.code_of_student == array[buffer].code_of_student)
-							account[i].st.code_of_student = buf.code_of_student;
+						if (account[i].get_code_of_student() == array[buffer].code_of_student)
+							account[i].code_of_student = buf.code_of_student;
 					complete_message("Код данного студента в учете отметок успешно заменен на новый.");
 				}
+				buf.faculty = facult[(buf.group[1] - '0')];
 				break;
 			}
 			array[buffer] = buf;
@@ -540,7 +581,8 @@ void student::delete_stud_or_sort_stud(string type) {
 		int flag = 0;
 		if (type == "sort") array = sort_array(array);
 		else {
-			show_info_stud("non_sorted");
+			system("cls");
+			show_info_stud("admin", "non_sorted");
 			int buffer;
 			cout << "Введите код студента, который хотите удалить." << endl;
 			while (!(cin >> buffer) || cin.peek() != '\n') {
@@ -550,13 +592,24 @@ void student::delete_stud_or_sort_stud(string type) {
 			}
 			for (register int i = 0; i < array.size(); i++)
 				if (buffer == array[i].code_of_student) {
+					buffer = 0;
+					for (register int j = 0; j < array.size(); j++) {
+						if (array[i].group == array[j].group)
+							buffer++;
+					}
+					if (buffer == 1)
+					{
+						entrance del;
+						del.delete_users_with_group(array[i].group);
+						cout << "Так как студент, которого вы удалили был единственным из группы, то все пользователи этой группы удалены." << endl;
+					}
 					array.erase(array.begin() + i);
 					flag = 1;
 					accounting account;
 					vector<accounting> acc;
 					acc = account.load_from_file();
 					for (register int j = 0; j < acc.size(); j++)
-						if (acc[j].st.code_of_student == buffer)
+						if (acc[j].get_code_of_student() == buffer)
 							acc.erase(acc.begin() + j);
 					cout << "Так как вы удалили данные о студенте, то весь учет об этом студенте тоже удален." << endl;
 					account.change_data_in_file(acc, "");

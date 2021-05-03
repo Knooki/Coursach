@@ -9,8 +9,8 @@ void accounting::save_to_file(accounting new_acc) {
 	if (!fout.is_open())
 		error_message("Ошибка открытия файла");
 	else {
-		fout << new_acc.st.code_of_student << ','
-			<< new_acc.sub.code_of_subject << ','
+		fout << new_acc.code_of_student << ','
+			<< new_acc.code_of_subject << ','
 			<< new_acc.date << ','
 			<< new_acc.mark << ','
 			<< new_acc.code_of_acc << endl;
@@ -26,8 +26,8 @@ void accounting::change_data_in_file(vector<accounting> array, string type_sort)
 	else {
 		for (register int i = 0; i < array.size(); i++)
 		{
-			fout << array[i].st.code_of_student << ','
-				<< array[i].sub.code_of_subject << ','
+			fout << array[i].code_of_student << ','
+				<< array[i].code_of_subject << ','
 				<< array[i].date << ','
 				<< array[i].mark << ','
 				<< array[i].code_of_acc << endl;
@@ -53,10 +53,10 @@ vector<accounting> accounting::load_from_file() {
 	fin.open(file_accounting, ios_base::in);
 	if (!fin.is_open()) error_message("Ошибка открытия файла.");
 	else
-		while (fin >> buffer.st.code_of_student)
+		while (fin >> buffer.code_of_student)
 		{
 			fin.ignore(1);
-			fin >> buffer.sub.code_of_subject;
+			fin >> buffer.code_of_subject;
 			fin.ignore(1);
 			getline(fin, buffer.date, ',');
 			fin >> buffer.mark;
@@ -68,88 +68,144 @@ vector<accounting> accounting::load_from_file() {
 	return(acc);
 }
 
-vector<student> student::sort_array_of_accounting(vector<student> array_of_stud)
+vector<student> accounting::sort_array_of_accounting(vector<student> array_of_stud)
 {
 	vector<accounting> array_of_acc;
 	accounting acc;
 	array_of_acc = acc.load_from_file();
-	int sw;
-	cout << "Выберите опцию:" << endl;
-	cout << "1)Отсортировать по информации студентов." << endl;
-	cout << "2)Отсортировать по успеваемости студентов." << endl;
-	while (!(cin >> sw) || cin.peek() != '\n') {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		error_message("Ошибка. Вы можете ввести только цифры.");
-	}
-	switch (sw)
+	if (array_of_acc.size() != 0)
 	{
-	case 1:
-		array_of_stud = sort_array(array_of_stud);
-		return (array_of_stud);
-	case 2:
-	{
-		vector<student_account> stud_acc;
-		student_account tmp;
-		for (register int i = 0; i < array_of_stud.size(); i++)
-		{
-			tmp.average_score = 0;
-			tmp.marks.clear();
-			for (register int j = 0; j < array_of_acc.size(); j++)
-				if (array_of_stud[i].code_of_student == array_of_acc[j].st.code_of_student)
-				{
-					tmp.st = array_of_stud[i];
-					tmp.marks.push_back(array_of_acc[j].mark);
-				}
-			for (register int j = 0; j < tmp.marks.size(); j++)
-				tmp.average_score += tmp.marks[j];
-			tmp.average_score = tmp.average_score / tmp.marks.size();
-			tmp.st.code_of_student = array_of_stud[i].code_of_student;
-			tmp.st.full_name = array_of_stud[i].full_name;
-			stud_acc.push_back(tmp);
+		system("cls");
+		int sw;
+		cout << "Выберите опцию:" << endl;
+		cout << "1)Отсортировать по информации студентов." << endl;
+		cout << "2)Отсортировать по успеваемости студентов." << endl;
+		cout << "3)Отсортировать по учебным годам." << endl;
+		cout << "4)Выход." << endl;
+		while (!(cin >> sw) || cin.peek() != '\n') {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			error_message("Ошибка. Вы можете ввести только цифры.");
 		}
-		switch (switch_sort())
+		switch (sw)
 		{
 		case 1:
-			for (register int i = 0; i < stud_acc.size(); i++) {
-				for (register int j = 0; j < stud_acc.size() - i - 1; j++) {
-					if (stud_acc[j].average_score > stud_acc[j + 1].average_score) {
-						tmp = stud_acc[j];
-						stud_acc[j] = stud_acc[j + 1];
-						stud_acc[j + 1] = tmp;
-					}
-				}
-			}
-			break;
+			array_of_stud = student::sort_array(array_of_stud);
+			return (array_of_stud);
 		case 2:
-			for (register int i = 0; i < stud_acc.size(); i++) {
-				for (register int j = 0; j < stud_acc.size() - i - 1; j++) {
-					if (stud_acc[j].average_score < stud_acc[j + 1].average_score) {
-						tmp = stud_acc[j];
-						stud_acc[j] = stud_acc[j + 1];
-						stud_acc[j + 1] = tmp;
+		{
+			vector<student_account> stud_acc;
+			student_account tmp;
+			for (register int i = 0; i < array_of_stud.size(); i++)
+			{
+				tmp.average_score = 0;
+				tmp.marks.clear();
+				for (register int j = 0; j < array_of_acc.size(); j++)
+					if (array_of_stud[i].get_code_of_student() == array_of_acc[j].code_of_student)
+					{
+						tmp.code_of_student = array_of_stud[i].get_code_of_student();
+						tmp.full_name = array_of_stud[i].get_full_name();
+						tmp.marks.push_back(array_of_acc[j].mark);
+					}
+				for (register int j = 0; j < tmp.marks.size(); j++)
+					tmp.average_score += tmp.marks[j];
+				tmp.average_score = tmp.average_score / tmp.marks.size();
+				tmp.code_of_student = array_of_stud[i].get_code_of_student();
+				tmp.full_name = array_of_stud[i].get_full_name();
+				stud_acc.push_back(tmp);
+			}
+			student temp;
+			switch (switch_sort())
+			{
+			case 1:
+				for (register int i = 0; i < stud_acc.size(); i++) {
+					for (register int j = 0; j < stud_acc.size() - i - 1; j++) {
+						if (stud_acc[j].average_score > stud_acc[j + 1].average_score) {
+							tmp = stud_acc[j];
+							stud_acc[j] = stud_acc[j + 1];
+							stud_acc[j + 1] = tmp;
+							temp = array_of_stud[j];
+							array_of_stud[j] = array_of_stud[j + 1];
+							array_of_stud[j + 1] = temp;
+						}
 					}
 				}
+				break;
+			case 2:
+				for (register int i = 0; i < stud_acc.size(); i++) {
+					for (register int j = 0; j < stud_acc.size() - i - 1; j++) {
+						if (stud_acc[j].average_score < stud_acc[j + 1].average_score) {
+							tmp = stud_acc[j];
+							stud_acc[j] = stud_acc[j + 1];
+							stud_acc[j + 1] = tmp;
+							temp = array_of_stud[j];
+							array_of_stud[j] = array_of_stud[j + 1];
+							array_of_stud[j + 1] = temp;
+						}
+					}
+				}
+				break;
 			}
+			return(array_of_stud);
+		}
+		case 3: {
+			//string year, month;
+			//vector<int> amount_of_month;
+			//for (register int i = 0; i < array_of_acc.size(); i++)
+			//{
+			//	month = array_of_acc[i].date.substr(3, 2);
+			//	year = array_of_acc[i].date.substr(6, 4);
+			//	//надо сделать сортировку по учебным годам ......
+			//		amount_of_month.push_back(stoi(year) * 12 + stoi(month));
+			//}
+			//switch (switch_sort())
+			//{
+			//	if (type == 1)
+			//		for (register int i = 0; i < amount_of_days.size(); i++) {
+			//			for (register int j = 0; j < amount_of_days.size() - i - 1; j++) {
+			//				if (amount_of_days[j] > amount_of_days[j + 1]) {
+			//					temp = amount_of_days[j];
+			//					amount_of_days[j] = amount_of_days[j + 1];
+			//					amount_of_days[j + 1] = temp;
+			//					tmp = array[j];
+			//					array[j] = array[j + 1];
+			//					array[j + 1] = tmp;
+			//				}
+			//			}
+			//		}
+			//	else
+			//		for (register int i = 0; i < amount_of_days.size(); i++) {
+			//			for (register int j = 0; j < amount_of_days.size() - i - 1; j++) {
+			//				if (amount_of_days[j] < amount_of_days[j + 1]) {
+			//					tmp = array[j];
+			//					array[j] = array[j + 1];
+			//					array[j + 1] = tmp;
+			//				}
+			//			}
+			//		}
+			//}
+		}
+			  break;
+		case 4:
+			return(array_of_stud);
+		default: error_message("Вы ввели неизвестную опцию");
 			break;
 		}
-		for (register int i = 0; i < array_of_stud.size(); i++)
-			array_of_stud[i] = stud_acc[i].st;
-		return(array_of_stud);
 	}
-	}
+	else error_message("Нет данных об учете студентов");
 }
 
-void accounting::show_info(string sort_type) {
+void accounting::show_info(string group, string sort_type) {
 	vector<accounting> acc;
 	acc = load_from_file();
 	if (acc.size() != 0) {
+		system("cls");
 		vector<student> stud;
-		stud = st.load_from_file();
+		stud = student::load_from_file();
 		vector<subject> subj;
-		subj = sub.load_from_file();
+		subj = subject::load_from_file();
 		if (sort_type == "sorted")
-			stud = st.sort_array_of_accounting(stud);
+			stud = sort_array_of_accounting(stud);
 		cout << "Таблица успеваемости студентов." << endl;
 		SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
 		cout << "Код студента " << setw(40) << left << "Имя Студента"
@@ -161,22 +217,50 @@ void accounting::show_info(string sort_type) {
 		SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
 		for (register int k = 0; k < stud.size(); k++)
 		{
-			cout << "\r";
-			cout << setw(13) << left << stud[k].code_of_student
-				<< setw(40) << left << stud[k].full_name;
-			for (register int j = 0; j < acc.size(); j++)
+			if (group != "admin")
 			{
-				if (stud[k].code_of_student == acc[j].st.code_of_student)
-					for (register int g = 0; g < subj.size(); g++)
-						if (acc[j].sub.code_of_subject == subj[g].code_of_subject)
-						{
-							cout << setw(20) << left << subj[g].name
-								<< setw(11) << left << acc[j].date
-								<< setw(7) << left << acc[j].mark
-								<< setw(8) << left << subj[g].number_of_semester
-								<< acc[j].code_of_acc << endl;
-							cout << setw(53) << "";
-						}
+				string stream_of_study, stream_of_study_1;
+				stream_of_study = group.substr(0, 4);
+				stream_of_study_1 = stud[k].get_group().substr(0, 4);
+				if (stream_of_study == stream_of_study_1)
+				{
+					cout << "\r";
+					cout << setw(13) << left << stud[k].get_code_of_student()
+						<< setw(40) << left << stud[k].get_full_name();
+					for (register int j = 0; j < acc.size(); j++)
+					{
+						if (stud[k].get_code_of_student() == acc[j].code_of_student)
+							for (register int g = 0; g < subj.size(); g++)
+								if (acc[j].code_of_subject == subj[g].get_code_of_subject())
+								{
+									cout << setw(20) << left << subj[g].get_name()
+										<< setw(11) << left << acc[j].date
+										<< setw(7) << left << acc[j].mark
+										<< setw(8) << left << subj[g].get_number_of_semester()
+										<< acc[j].code_of_acc << endl;
+									cout << setw(53) << "";
+								}
+					}
+				}
+			}
+			else {
+				cout << "\r";
+				cout << setw(13) << left << stud[k].get_code_of_student()
+					<< setw(40) << left << stud[k].get_full_name();
+				for (register int j = 0; j < acc.size(); j++)
+				{
+					if (stud[k].get_code_of_student() == acc[j].code_of_student)
+						for (register int g = 0; g < subj.size(); g++)
+							if (acc[j].code_of_subject == subj[g].get_code_of_subject())
+							{
+								cout << setw(20) << left << subj[g].get_name()
+									<< setw(11) << left << acc[j].date
+									<< setw(7) << left << acc[j].mark
+									<< setw(8) << left << subj[g].get_number_of_semester()
+									<< acc[j].code_of_acc << endl;
+								cout << setw(53) << "";
+							}
+				}
 			}
 		}
 		cout << "\r";
@@ -186,34 +270,33 @@ void accounting::show_info(string sort_type) {
 }
 
 void accounting::add_info() {
-	system("cls");
 	int flag = 0;
 	vector<accounting> array = load_from_file();
 	accounting buffer;
 	vector<student> stud;
-	stud = st.load_from_file();
+	stud = student::load_from_file();
 	vector<subject> subj;
-	subj = sub.load_from_file();
+	subj = subject::load_from_file();
 	if (stud.size() != 0 && subj.size() != 0)
 		while (1) {
 			system("cls");
-			show_info("non_sorted");
+			show_info("admin", "non_sorted");
 			cout << "Введите новую запись о сдаче предмета." << endl;
-			st.show_info_stud("non_sorted");
+			student::show_info_stud("admin", "non_sorted");
 			cout << "Код студента:" << endl;
-			while (!(cin >> buffer.st.code_of_student) || cin.peek() != '\n' || buffer.st.code_of_student < 0) {
+			while (!(cin >> buffer.code_of_student) || cin.peek() != '\n' || buffer.code_of_student < 0) {
 				cin.clear();
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				if (buffer.st.code_of_student < 0) error_message("Код студента не может быть отрицательным.");
+				if (buffer.code_of_student < 0) error_message("Код студента не может быть отрицательным.");
 				else
 					error_message("Вы можете ввести только цифры.");
 			}
 			int i = 0;
 			while (i < stud.size())
 			{
-				if (buffer.st.code_of_student == stud[i].code_of_student)
+				if (buffer.code_of_student == stud[i].get_code_of_student())
 				{
-					buffer.st.course = stud[i].course;
+					buffer.course = stud[i].get_course();
 					break;
 				}
 				i++;
@@ -224,7 +307,7 @@ void accounting::add_info() {
 			}
 			int number_of_student = i;
 			for (i = 0; i < array.size(); i++)
-				if (buffer.st.code_of_student == array[i].st.code_of_student)
+				if (buffer.code_of_student == array[i].code_of_student)
 					flag++;
 			if (flag >= subj.size())
 			{
@@ -232,19 +315,19 @@ void accounting::add_info() {
 				flag = 1;
 				continue;
 			}
-			sub.show_info_subj("non_sorted");
+			subject::show_info_subj("non_sorted");
 			cout << "Код предмета:" << endl;
-			while (!(cin >> buffer.sub.code_of_subject) || cin.peek() != '\n' || buffer.sub.code_of_subject < 0) {
+			while (!(cin >> buffer.code_of_subject) || cin.peek() != '\n' || buffer.code_of_subject < 0) {
 				cin.clear();
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				if (buffer.sub.code_of_subject < 0) error_message("Код предмета не может быть отрицательным.");
+				if (buffer.code_of_subject < 0) error_message("Код предмета не может быть отрицательным.");
 				else
 					error_message("Вы можете ввести только цифры.");
 			}
 			i = 0;
 			while (i < subj.size())
 			{
-				if (buffer.sub.code_of_subject == subj[i].code_of_subject)
+				if (buffer.code_of_subject == subj[i].get_code_of_subject())
 					break;
 				i++;
 			}
@@ -263,17 +346,16 @@ void accounting::add_info() {
 				current_semester = 0;//второй сем
 			else if (local.tm_mon > 6 && local.tm_mon < 9)
 				current_semester = -1; //каникулы
-			if (subj[i].number_of_semester > (buffer.st.course * 2 - 1) - current_semester)
-			{
+			if (subj[i].get_number_of_semester() > (buffer.course * 2 - 1) - current_semester) {
 				error_message("Этот студент еще не мог сдавать этот предмет.");
 				flag = 0;
 				continue;
 			}
 			for (i = 0; i < array.size(); i++)
-				if (buffer.st.code_of_student == array[i].st.code_of_student)
+				if (buffer.code_of_student == array[i].get_code_of_student())
 				{
 					for (register int j = 0; j < array.size(); j++)
-						if (buffer.sub.code_of_subject == array[j].sub.code_of_subject)
+						if (buffer.code_of_subject == array[j].code_of_subject)
 						{
 							error_message("У этого студента уже есть оценка по этому предмету.");
 							flag = 1;
@@ -288,7 +370,7 @@ void accounting::add_info() {
 			{
 				rewind(stdin);
 				getline(cin, buffer.date, '\n');
-				if (!check_date(buffer.date, subj[number_of_subject].number_of_semester, stud[number_of_student].course))
+				if (!check_date(buffer.date, subj[number_of_subject].get_number_of_semester(), stud[number_of_student].get_course()))
 					continue;
 				else break;
 			}
@@ -322,15 +404,15 @@ void accounting::add_info() {
 }
 
 void accounting::change_info() {
-	system("cls");
 	vector<accounting> array = load_from_file();
 	accounting buffer;
 	vector<student> stud;
-	stud = st.load_from_file();
+	stud = student::load_from_file();
 	vector<subject> subj;
-	subj = sub.load_from_file();
+	subj = subject::load_from_file();
 	if (array.size() != 0 && stud.size() != 0 && subj.size() != 0) {
-		show_info("non_sorted");
+		system("cls");
+		show_info("admin", "non_sorted");
 		int buf;
 		int flag = 1;
 		cout << "Введите код записи, которую хотите поменять." << endl;
@@ -350,19 +432,19 @@ void accounting::change_info() {
 				system("cls");
 				cout << "Введите новую запись о сдаче предмета." << endl;
 				cout << "Код студента:" << endl;
-				while (!(cin >> buffer.st.code_of_student) || cin.peek() != '\n' || buffer.st.code_of_student < 0) {
+				while (!(cin >> buffer.code_of_student) || cin.peek() != '\n' || buffer.code_of_student < 0) {
 					cin.clear();
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					if (buffer.st.code_of_student < 0) error_message("Код студента не может быть отрицательным.");
+					if (buffer.code_of_student < 0) error_message("Код студента не может быть отрицательным.");
 					else
 						error_message("Вы можете ввести только цифры.");
 				}
 				int i = 0;
 				while (i < stud.size())
 				{
-					if (buffer.st.code_of_student == stud[i].code_of_student)
+					if (buffer.code_of_student == stud[i].get_code_of_student())
 					{
-						buffer.st.course = stud[i].course;
+						buffer.course = stud[i].get_course();
 						break;
 					}
 					i++;
@@ -373,7 +455,7 @@ void accounting::change_info() {
 				}
 				int number_of_student = i;
 				for (i = 0; i < array.size(); i++)
-					if (buffer.st.code_of_student == array[i].st.code_of_student)
+					if (buffer.code_of_student == array[i].get_code_of_student())
 						flag++;
 				if (flag >= subj.size() - 1)
 				{
@@ -381,19 +463,19 @@ void accounting::change_info() {
 					flag = 1;
 					continue;
 				}
-				sub.show_info_subj("non_sorted");
+				subject::show_info_subj("non_sorted");
 				cout << "Код предмета:" << endl;
-				while (!(cin >> buffer.sub.code_of_subject) || cin.peek() != '\n' || buffer.sub.code_of_subject < 0) {
+				while (!(cin >> buffer.code_of_subject) || cin.peek() != '\n' || buffer.get_code_of_subject() < 0) {
 					cin.clear();
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					if (buffer.sub.code_of_subject < 0) error_message("Код предмета не может быть отрицательным.");
+					if (buffer.code_of_subject < 0) error_message("Код предмета не может быть отрицательным.");
 					else
 						error_message("Вы можете ввести только цифры.");
 				}
 				i = 0;
 				while (i < subj.size())
 				{
-					if (buffer.sub.code_of_subject == subj[i].code_of_subject)
+					if (buffer.code_of_subject == subj[i].get_code_of_subject())
 						break;
 					i++;
 				}
@@ -412,19 +494,19 @@ void accounting::change_info() {
 					current_semester = 0;//второй сем
 				else if (local.tm_mon > 6 && local.tm_mon < 9)
 					current_semester = -1; //каникулы
-				if (subj[i].number_of_semester > (buffer.st.course * 2 - 1) - current_semester)
+				if (subj[i].get_number_of_semester() > (buffer.course * 2 - 1) - current_semester)
 				{
 					error_message("Этот студент еще не мог сдавать этот предмет.");
 					flag = 0;
 					continue;
 				}
 				for (i = 0; i < array.size(); i++)
-					if (buffer.st.code_of_student == array[i].st.code_of_student)
+					if (buffer.code_of_student == array[i].code_of_student)
 					{
 						for (register int j = 0; j < array.size(); j++)
 						{
-							if (buffer.sub.code_of_subject == array[buf].sub.code_of_subject) continue;
-							if (buffer.sub.code_of_subject == array[j].sub.code_of_subject)
+							if (buffer.code_of_subject == array[buf].code_of_subject) continue;
+							if (buffer.code_of_subject == array[j].code_of_subject)
 							{
 								error_message("У этого студента уже есть оценка по этому предмету.");
 								flag = 1;
@@ -440,7 +522,7 @@ void accounting::change_info() {
 				{
 					rewind(stdin);
 					getline(cin, buffer.date, '\n');
-					if (!check_date(buffer.date, subj[number_of_subject].number_of_semester, stud[number_of_student].course))
+					if (!check_date(buffer.date, subj[number_of_subject].get_number_of_semester(), stud[number_of_student].get_course()))
 						continue;
 					else break;
 				}
@@ -484,25 +566,28 @@ void accounting::show_info_about_three() {
 	vector<accounting> array;
 	array = load_from_file();
 	if (array.size() != 0) {
+		system("cls");
 		vector<subject> subj;
-		subj = sub.load_from_file();
+		subj = subject::load_from_file();
 		vector<student_account> stud_acc;
 		student_account tmp;
-		for (register int i = 0; i < subj.size(); i++)
+		for (register int i = 0; i < subj.size() && i < 3; i++)
 		{
 			tmp.average_score = 0;
 			tmp.marks.clear();
 			for (register int j = 0; j < array.size(); j++)
-				if (subj[i].code_of_subject == array[j].sub.code_of_subject)
+				if (subj[i].get_code_of_subject() == array[j].code_of_subject)
 				{
-					tmp.sub = subj[i];
+					tmp.name_of_subject = subj[i].get_name();
+					tmp.teacher_name = subj[i].get_teacher_name();
 					tmp.marks.push_back(array[j].mark);
 				}
 			for (register int j = 0; j < tmp.marks.size(); j++)
 				tmp.average_score += tmp.marks[j];
 			tmp.average_score = tmp.average_score / tmp.marks.size();
-			tmp.sub.name = subj[i].name;
-			tmp.sub.teacher_name = subj[i].teacher_name;
+			tmp.code_of_subject = subj[i].get_code_of_subject();
+			tmp.name_of_subject = subj[i].get_name();
+			tmp.teacher_name = subj[i].get_teacher_name();
 			tmp.amount_of_negative_marks = 0;
 			for (register int j = 0; j < tmp.marks.size(); j++)
 				if (tmp.marks[j] < 4)
@@ -526,8 +611,8 @@ void accounting::show_info_about_three() {
 			<< "Средний балл" << endl;
 		SetConsoleTextAttribute(handle, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
 		for (register int j = 0; j < stud_acc.size(); j++) {
-			cout << setw(13) << left << stud_acc[j].sub.code_of_subject << setw(20) << left << stud_acc[j].sub.name
-				<< setw(20) << stud_acc[j].sub.teacher_name
+			cout << setw(13) << left << stud_acc[j].code_of_subject << setw(20) << left << stud_acc[j].name_of_subject
+				<< setw(20) << stud_acc[j].teacher_name
 				<< setw(22) << stud_acc[j].amount_of_negative_marks
 				<< fixed << setprecision(2) << stud_acc[j].average_score << endl;
 		}
@@ -538,21 +623,22 @@ void accounting::show_info_about_three() {
 void accounting::delete_info_or_sort_info(string type) {
 	vector<accounting> array = load_from_file();
 	if (array.size() != 0) {
+		system("cls");
 		int flag = 0;
 		if (type == "sort")
 		{
 			vector<student> stud;
-			stud = st.load_from_file();
-			stud = st.sort_array_of_accounting(stud);
+			stud = student::load_from_file();
+			stud = sort_array_of_accounting(stud);
 			vector<accounting> tmp;
 			for (register int k = 0; k < stud.size(); k++)
 				for (register int j = 0; j < array.size(); j++)
-					if (stud[k].code_of_student == array[j].st.code_of_student)
+					if (stud[k].get_code_of_student() == array[j].code_of_student)
 						tmp.push_back(array[j]);
 			array = tmp;
 		}
 		else {
-			show_info("non_sorted");
+			show_info("admin", "non_sorted");
 			int buffer;
 			cout << "Введите код записи, которую хотите удалить." << endl;
 			while (!(cin >> buffer) || cin.peek() != '\n') {
@@ -585,7 +671,7 @@ void accounting::delete_all_info_about_student(int code_of_student) {
 	if (array.size() != 0) {
 		int flag = 0;
 		for (register int i = 0; i < array.size(); i++)
-			if (code_of_student == array[i].st.code_of_student)
+			if (code_of_student == array[i].code_of_student)
 			{
 				array.erase(array.begin() + i);
 				flag++;

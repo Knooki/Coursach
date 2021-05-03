@@ -1,7 +1,7 @@
 #include "main.h"
 #include "Classes.h"
 
-void show_info() {
+void show_info(string type) {
 	int sw;
 	system("cls");
 	cout << "Выбериет опцию:" << endl;
@@ -18,7 +18,7 @@ void show_info() {
 	case 1:
 	{
 		student st;
-		st.show_info_stud("non_sorted");
+		st.show_info_stud(type, "non_sorted");
 	}
 	break;
 	case 2:
@@ -30,7 +30,7 @@ void show_info() {
 	case 3:
 	{
 		accounting acc;
-		acc.show_info("non_sorted");
+		acc.show_info(type, "non_sorted");
 	}
 	break;
 	case 4: return;
@@ -41,7 +41,7 @@ void show_info() {
 	}
 }
 
-void show_sorted_info() {
+void show_sorted_info(string type) {
 	int sw;
 	system("cls");
 	cout << "Выбериет опцию:" << endl;
@@ -58,7 +58,7 @@ void show_sorted_info() {
 	case 1:
 	{
 		student st;
-		st.show_info_stud("sorted");
+		st.show_info_stud(type, "sorted");
 	}
 	break;
 	case 2:
@@ -70,7 +70,7 @@ void show_sorted_info() {
 	case 3:
 	{
 		accounting acc;
-		acc.show_info("sorted");
+		acc.show_info(type, "sorted");
 	}
 	break;
 	case 4: return;

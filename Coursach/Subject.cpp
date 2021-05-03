@@ -70,6 +70,7 @@ vector<subject> subject::load_from_file() {
 }
 
 vector<subject> subject::sort_array(vector<subject> arr) {
+	system("cls");
 	int sw;
 	cout << "Выберите опцию:" << endl;
 	cout << "1)Отсортировать по названию предмета." << endl;
@@ -184,6 +185,7 @@ vector<subject> subject::sort_array(vector<subject> arr) {
 void subject::show_info_subj(string sort_type) {
 	vector<subject> array = load_from_file();
 	if (array.size() != 0) {
+		system("cls");
 		if (sort_type == "sorted") array = sort_array(array);
 		cout << "Информация о предметах." << endl;
 		SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
@@ -206,6 +208,7 @@ void subject::show_info_subj(string sort_type) {
 void subject::add_subj() {
 	int flag = 0;
 	while (flag == 0) {
+		system("cls");
 		vector<subject> array = load_from_file();
 		subject buffer;
 		cout << "Введите новые данные по предмету." << endl;
@@ -285,6 +288,7 @@ void subject::add_subj() {
 void subject::change_subj() {
 	vector<subject> array = load_from_file();
 	if (array.size() != 0) {
+		system("cls");
 		show_info_subj("non_sorted");
 		int buffer;
 		int flag = 1;
@@ -390,6 +394,7 @@ void subject::change_subj() {
 void subject::delete_subj_or_sort_subj(string type) {
 	vector<subject> array = load_from_file();
 	if (array.size() != 0) {
+		system("cls");
 		int flag = 0;
 		if (type == "sort") array = sort_array(array);
 		else {
@@ -409,7 +414,7 @@ void subject::delete_subj_or_sort_subj(string type) {
 					vector<accounting> acc;
 					acc = account.load_from_file();
 					for (register int j = 0; j < acc.size(); j++)
-						if (buffer == acc[i].sub.code_of_subject)
+						if (buffer == acc[i].get_code_of_subject())
 							acc.erase(acc.begin() + j);
 					cout << "Так как вы удалили данные о предмете, весь учет этого предмета тоже удален." << endl;
 					account.change_data_in_file(acc, " ");

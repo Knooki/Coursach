@@ -27,7 +27,7 @@ void user::operation() {
 		cout << "Меню простого пользователя." << endl;
 		switch (menu_user()) {
 		case 1:
-			show_info();
+			show_info(*group);
 			break;
 		case 2:
 		{
@@ -40,11 +40,11 @@ void user::operation() {
 		}
 		break;
 		case 4:
-			show_sorted_info();
+			show_sorted_info(*group);
 			break;
 		case 5:
 		{
-			entrance us(login);
+			entrance us;
 			if (!us.change_pas(login))
 				return;
 		}

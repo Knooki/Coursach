@@ -43,18 +43,18 @@ void admin::operation() {
 			sort_data();
 			break;
 		case 5:
-			show_info();
+			show_info("admin");
 			break;
 		case 6:
 			break;
 		case 7:
-			show_sorted_info();
+			show_sorted_info("admin");
 			break;
 		case 8:
 			break;
 		case 9:
 		{
-			entrance ad(login);
+			entrance ad;
 			if (!ad.change_pas(login))
 				return;
 		}

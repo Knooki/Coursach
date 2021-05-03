@@ -20,14 +20,15 @@
 #define file_student "student_data.txt"
 #define file_subject "subject_data.txt"
 #define file_accounting "accounting_data.txt"
+#define file_faculty "faculty_data.txt"
 
 using namespace std;
 static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 void error_message(string message);
 void complete_message(string message);
-void show_info();
-void show_sorted_info();
+void show_info(string type);
+void show_sorted_info(string type);
 int switch_sort();
 bool check_date(string str, string type);
 bool check_date(string str, int number_of_semester, int course_of_stud);
