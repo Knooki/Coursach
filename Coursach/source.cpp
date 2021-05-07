@@ -96,6 +96,43 @@ int switch_sort() {
 	return sw;
 }
 
+void search_info(string group) {
+	int sw;
+	system("cls");
+	cout << "Выберите опцию" << endl;
+	cout << "1)Поиск студентов" << endl;
+	cout << "2)Поиск предметов" << endl;
+	cout << "3)Поиск данных учета" << endl;
+	cout << "4)Выход" << endl;
+	while (!(cin >> sw) || cin.peek() != '\n') {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		error_message("Вы можете вводить только цифры");
+	}
+	switch (sw) {
+	case 1: {
+		student st;
+		st.search_student(group);
+	}
+		  break;
+	case 2:
+	{
+		subject sub;
+		sub.search_subject();
+	}
+	break;
+	case 3:
+	{
+		accounting acc;
+		acc.search_info(group);
+	}
+	break;
+	default:
+		error_message("Вы ввели неизвестную опцию");
+	}
+	system("pause");
+}
+
 void error_message(string message) {
 	SetConsoleTextAttribute(handle, FOREGROUND_RED);
 	cout << message << endl;

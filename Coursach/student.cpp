@@ -51,11 +51,13 @@ void student::change_data_in_file(vector<student> array, string type_sort) {
 		char old_name[] = file, new_name[] = file_student;
 		fout.close();
 		if (rename(old_name, new_name) != 0)
-			cout << "Ошибка в переименовании файлов." << endl;
+			error_message("Ошибка в переименовании файлов.");
 		else if (type_sort == "sort")
-			cout << "Вы успешно отсортировали данные." << endl;
+			complete_message("Вы успешно отсортировали данные.");
+		else if (type_sort == "delete")
+			complete_message("Вы успешно удалили запись.");
 		else
-			cout << "Вы успешно удалили запись." << endl;
+			complete_message("Вы успешно изменили запись");
 	}
 }
 
@@ -222,7 +224,6 @@ vector<student> student::sort_array(vector<student> arr) {
 void student::show_info_stud(string group, string sort_type) {
 	vector<student> array = load_from_file();
 	if (array.size() != 0) {
-		system("cls");
 		if (sort_type == "sorted") array = sort_array(array);
 		cout << "Информация о студентах." << endl;
 		SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
@@ -236,10 +237,7 @@ void student::show_info_stud(string group, string sort_type) {
 		for (register int j = 0; j < array.size(); j++) {
 			if (group != "admin")
 			{
-				string stream_of_study, stream_of_study_1;
-				stream_of_study = group.substr(0, 4);
-				stream_of_study_1 = array[j].group.substr(0, 4);
-				if (stream_of_study == stream_of_study_1)
+				if (array[j].group.compare(0, 4, group, 0, 4) == 0)
 				{
 					cout << setw(13) << left << array[j].code_of_student << setw(40) << left << array[j].full_name
 						<< setw(14) << array[j].birth_date
@@ -261,6 +259,218 @@ void student::show_info_stud(string group, string sort_type) {
 	}
 	else error_message("Нет данных о студентах.");
 	system("pause");
+}
+
+void student::search_student(string group) {
+	vector<student> array;
+	array = load_from_file();
+	int buffer;
+	string string_buffer;
+	vector<student> array_to_show;
+	if (array.size() != 0) {
+		buffer = search_menu(group);
+		if (buffer < 3)
+			switch (buffer) {
+			case 1:
+				cout << "Введите искомый код студента" << endl;
+				while (!(cin >> buffer) || cin.peek() != '\n' || buffer < 0) {
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					if (buffer < 0) error_message("Код студента не может быть отрицательным.");
+					else
+						error_message("Вы можете ввести только цифры.");
+				}
+				for (register int i = 0; i < array.size(); i++)
+				{
+					if (group == "admin")
+					{
+						if (buffer == array[i].code_of_student)
+							array_to_show.push_back(array[i]);
+					}
+					else
+						if (array[i].group.compare(0, 4, group, 0, 4) == 0)
+							if (buffer == array[i].code_of_student)
+								array_to_show.push_back(array[i]);
+				}
+				break;
+			case 2:
+				cout << "Введите искомые ФИО студента" << endl;
+				while (1) {
+					buffer = 1;
+					rewind(stdin);
+					getline(cin, string_buffer, '\n');
+					if (string_buffer.size() > 40)
+					{
+						error_message("Имя студента не должно превышать 40 символов.");
+						continue;
+					}
+					for (register int i = 0; i < string_buffer.size(); i++)
+						if (!is_russian_alpha(string_buffer[i])) {
+							error_message("Пожaлуйста, используйте только русские буквы.");
+							buffer = -1;
+							break;
+						}
+					if (buffer == -1)
+						continue;
+					for (register int i = 0; i < array.size(); i++)
+					{
+						if (group == "admin")
+						{
+							if (string_buffer == array[i].full_name)
+								array_to_show.push_back(array[i]);
+						}
+						else
+							if (array[i].group.compare(0, 4, group, 0, 4) == 0)
+								if (string_buffer == array[i].full_name)
+									array_to_show.push_back(array[i]);
+					}
+					break;
+				}
+				break;
+			default: error_message("Вы ввели неизвестную опцию");
+				break;
+			}
+		else
+			switch (buffer) {
+			case 3:
+				cout << "Введите искомую специальность." << endl;
+				while (1) {
+					buffer = 1;
+					rewind(stdin);
+					getline(cin, string_buffer, '\n');
+					if (string_buffer.size() > 14)
+					{
+						error_message("Специальность не должно превышать 14 символов.");
+						continue;
+					}
+					for (register int i = 0; i < string_buffer.size(); i++)
+						if (!is_russian_alpha(string_buffer[i]) && string_buffer[i] != ')' && string_buffer[i] != '(') {
+							error_message("Пожaлуйста, используйте только русские буквы.");
+							buffer = -1;
+							break;
+						}
+					if (buffer == -1)
+						continue;
+					for (register int i = 0; i < array.size(); i++)
+					{
+						if (string_buffer == array[i].speciality)
+							array_to_show.push_back(array[i]);
+					}
+					break;
+				}
+				break;
+			case 4:
+				cout << "Введите искомую группу." << endl;
+				while (1) {
+					buffer = 1;
+					rewind(stdin);
+					getline(cin, string_buffer, '\n');
+					if (string_buffer.size() != 6)
+					{
+						error_message("Группа должна быть 6-тизначным числом.");
+						continue;
+					}
+					for (register int i = 0; i < string_buffer.size(); i++) {
+						if (!isdigit(string_buffer[i]))
+						{
+							error_message("В группе могут быть только цифры.");
+							buffer = -1;
+							break;
+						}
+					}
+					if (buffer == -1)
+						continue;
+					for (register int i = 0; i < array.size(); i++)
+					{
+						if (string_buffer == array[i].group)
+							array_to_show.push_back(array[i]);
+					}
+					break;
+				}
+				break;
+			case 5:
+				cout << "Введите искомый факультет." << endl;
+				while (1) {
+					rewind(stdin);
+					getline(cin, string_buffer, '\n');
+					buffer = -1;
+					for (register int i = 0; i < 10; i++)
+						if (string_buffer == facult[i])
+						{
+							buffer = 1;
+							break;
+						}
+					if (buffer != 1)
+					{
+						error_message("Нет такого факультета, который вы ввели.");
+						continue;
+					}
+					for (register int i = 0; i < array.size(); i++)
+					{
+						if (string_buffer == array[i].faculty)
+							array_to_show.push_back(array[i]);
+					}
+					break;
+				}
+				break;
+			case 6:
+				cout << "Введите искомый курс." << endl;
+				while (!(cin >> buffer) || cin.peek() != '\n' || buffer > 4 || buffer < 1) {
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					if (buffer > 4 || buffer < 1)
+						error_message("Курс может быть от 1 до 4");
+					else
+						error_message("Вы можете ввести только цифры");
+				}
+				for (register int i = 0; i < array.size(); i++)
+					if (buffer == array[i].course)
+						array_to_show.push_back(array[i]);
+				break;
+			default:
+				error_message("Вы ввели неизвестную опцию");
+				break;
+			}
+		if (array_to_show.size() == 0) {
+			error_message("Нет студентов с искомыми данными");
+			return;
+		}
+		cout << "Код студента " << setw(40) << left << "Полное имя студента"
+			<< "Дата рождения "
+			<< "Специальность "
+			<< "Группа "
+			<< "Факультет "
+			<< "Курс" << endl;
+		for (register int i = 0; i < array_to_show.size(); i++) {
+			cout << setw(13) << left << array_to_show[i].code_of_student << setw(40) << left << array_to_show[i].full_name
+				<< setw(14) << array_to_show[i].birth_date
+				<< setw(14) << array_to_show[i].speciality
+				<< setw(7) << array_to_show[i].group
+				<< setw(10) << array_to_show[i].faculty
+				<< array_to_show[i].course << endl;
+		}
+	}
+	else error_message("Нет данных о студентах.");
+}
+
+int student::search_menu(string group) {
+	int sw;
+	cout << "Выберите опцию." << endl;
+	cout << "1)Поиск по коду студента" << endl;
+	cout << "2)Поиск по ФИО студента" << endl;
+	if (group == "admin")
+	{
+		cout << "3)Поиск по специальности" << endl;
+		cout << "4)Поиск по группе" << endl;
+		cout << "5)Поиск по факультету" << endl;
+		cout << "6)Поиск по курсу" << endl;
+	}
+	while (!(cin >> sw) || cin.peek() != '\n') {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		error_message("Вы можете ввести только цифры");
+	}
+	return(sw);
 }
 
 void student::add_stud() {
@@ -369,10 +579,8 @@ void student::add_stud() {
 					break;
 				}
 			}
-			if (flag == 1) {
-				flag = 0;
+			if (flag == 1)
 				continue;
-			}
 			int course = buffer.group[0] - '0';
 			if (local.tm_mon + 1 > 8)
 			{

@@ -14,7 +14,7 @@ int admin::menu_admin() {
 	cout << "5)Просмотр данных в табличной форме." << endl;
 	cout << "6)Поиск данных." << endl;
 	cout << "7)Показ данных в отсортированном виде(файлы не меняются)." << endl;
-	cout << "8)Управление пользователями." << endl;
+	cout << "8)Удалить пользователей из определенной группы." << endl;
 	cout << "9)Изменение пароля." << endl;
 	cout << "10)Выход в меню 1-го уровня." << endl;
 	while (!(cin >> sw) || cin.peek() != '\n') {
@@ -46,6 +46,7 @@ void admin::operation() {
 			show_info("admin");
 			break;
 		case 6:
+			search_info("admin");
 			break;
 		case 7:
 			show_sorted_info("admin");
@@ -231,4 +232,29 @@ void admin::delete_data() {
 }
 
 void admin::user_manage() {
+	string string_buffer;
+	rewind(stdin);
+	cout << "Введите группу" << endl;
+	while (1) {
+		int flag = 1;
+		getline(cin, string_buffer, '\n');
+		if (string_buffer.size() != 6)
+		{
+			error_message("Группа должна быть 6-тизначным числом.");
+			continue;
+		}
+		for (register int i = 0; i < string_buffer.size(); i++) {
+			if (!isdigit(string_buffer[i]))
+			{
+				error_message("В группе могут быть только цифры.");
+				flag = -1;
+				break;
+			}
+		}
+		if (flag == -1)
+			continue;
+		entrance delete_users;
+		delete_users.delete_users_with_group(string_buffer);
+		break;
+	}
 }

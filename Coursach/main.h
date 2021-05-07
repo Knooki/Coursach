@@ -30,6 +30,7 @@ void complete_message(string message);
 void show_info(string type);
 void show_sorted_info(string type);
 int switch_sort();
+void search_info(string group);
 bool check_date(string str, string type);
 bool check_date(string str, int number_of_semester, int course_of_stud);
 bool is_russian_alpha(char c);

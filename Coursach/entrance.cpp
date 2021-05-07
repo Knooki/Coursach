@@ -91,9 +91,38 @@ int entrance::entering() {
 			getline(cin, password);
 			password = sha1(password);
 			vector<student> stud;
-			student::add_stud();
 			stud = student::load_from_file();
-			group = stud.back().get_group();
+			while (1) {
+				cout << "Введите ваше полное имя." << endl;
+				string full_name;
+				rewind(stdin);
+				getline(cin, full_name, '\n');
+				if (full_name.size() > 40)
+				{
+					error_message("Имя студента не должно превышать 40 символов.");
+					continue;
+				}
+				for (register int i = 0; i < full_name.size(); i++)
+					if (!is_russian_alpha(full_name[i])) {
+						error_message("Пожaлуйста, используйте только русские буквы.");
+						full_name = "error";
+						break;
+					}
+				if (full_name == "error")
+					continue;
+				for (register int i = 0; i < stud.size(); i++)
+					if (full_name == stud[i].get_full_name()) {
+						group = stud[i].get_group();
+						break;
+					}
+				break;
+			}
+			if (group == "")
+			{
+				cout << "В системе нет студента с введенном именем. Введите новый данные о студенте" << endl;
+				student::add_stud();
+				group = stud.back().get_group();
+			}
 			if (save_to_file(login, password, 0, group))
 			{
 				*log = login;

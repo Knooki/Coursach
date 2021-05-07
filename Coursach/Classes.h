@@ -43,6 +43,7 @@ protected:
 	vector<student> sort_date(vector<student> array, int type);
 	void save_to_file(student new_stud);
 	void change_data_in_file(vector<student> array, string type_sort);
+	int search_menu(string type);
 public:
 	student() {}
 	int get_code_of_student() {
@@ -58,6 +59,7 @@ public:
 		return(course);
 	}
 	void show_info_stud(string group, string sort_type);
+	void search_student(string group);
 	void add_stud();
 	void change_stud();
 	void delete_stud_or_sort_stud(string type);
@@ -93,6 +95,7 @@ protected:
 	int number_of_semester;
 	vector<subject> load_from_file();
 	vector<subject> sort_array(vector<subject> arr);
+	int search_menu();
 	void save_to_file(subject new_subj);
 	void change_data_in_file(vector<subject> array, string type_sort);
 public:
@@ -111,6 +114,7 @@ public:
 		return(number_of_semester);
 	}
 	void show_info_subj(string sort_type);
+	void search_subject();
 	void add_subj();
 	void change_subj();
 	void delete_subj_or_sort_subj(string type);
@@ -122,12 +126,14 @@ private:
 	int mark;
 	int code_of_acc;
 	void save_to_file(accounting new_acc);
+	int search_menu(string group);
 	vector<student> sort_array_of_accounting(vector<student> array_of_stud);
 public:
 	accounting() : student(), subject() {}
 	vector<accounting> load_from_file();
 	void change_data_in_file(vector<accounting> array, string type_sort);
 	void show_info(string group, string sort_type);
+	void search_info(string group);
 	void add_info();
 	void change_info();
 	void delete_info_or_sort_info(string type);

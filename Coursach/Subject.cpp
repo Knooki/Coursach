@@ -185,7 +185,6 @@ vector<subject> subject::sort_array(vector<subject> arr) {
 void subject::show_info_subj(string sort_type) {
 	vector<subject> array = load_from_file();
 	if (array.size() != 0) {
-		system("cls");
 		if (sort_type == "sorted") array = sort_array(array);
 		cout << "Информация о предметах." << endl;
 		SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
@@ -203,6 +202,132 @@ void subject::show_info_subj(string sort_type) {
 	}
 	else error_message("Нет данных о предметах.");
 	system("pause");
+}
+
+void subject::search_subject() {
+	vector<subject> array;
+	array = load_from_file();
+	int buffer;
+	string string_buffer;
+	vector<subject> array_to_show;
+	if (array.size() != 0) {
+		buffer = search_menu();
+		switch (buffer) {
+		case 1:
+			cout << "Введите искомый код предмета" << endl;
+			while (!(cin >> buffer) || cin.peek() != '\n' || buffer < 0) {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				if (buffer < 0) error_message("Код предмета не может быть отрицательным.");
+				else
+					error_message("Вы можете ввести только цифры.");
+			}
+			for (register int i = 0; i < array.size(); i++)
+				if (buffer == array[i].code_of_subject)
+					array_to_show.push_back(array[i]);
+			break;
+		case 2:
+			cout << "Введите искомое название предмета" << endl;
+			while (1) {
+				buffer = 1;
+				rewind(stdin);
+				getline(cin, string_buffer, '\n');
+				if (string_buffer.size() > 20)
+				{
+					error_message("Название предмета не должно превышать 20 символов.");
+					continue;
+				}
+				for (register int i = 0; i < string_buffer.size(); i++)
+					if (!is_russian_alpha(string_buffer[i])) {
+						error_message("Пожaлуйста, используйте только русские буквы.");
+						buffer = -1;
+						break;
+					}
+				if (buffer == -1)
+					continue;
+				for (register int i = 0; i < array.size(); i++)
+					if (string_buffer == array[i].name)
+						array_to_show.push_back(array[i]);
+				break;
+			}
+			break;
+		case 3:
+			cout << "Введите искомое имя учителя." << endl;
+			while (1) {
+				buffer = 1;
+				rewind(stdin);
+				getline(cin, string_buffer, '\n');
+				if (string_buffer.size() > 20)
+				{
+					error_message("Имя учителя не должно превышать 20 символов.");
+					continue;
+				}
+				for (register int i = 0; i < string_buffer.size(); i++)
+					if (!is_russian_alpha(string_buffer[i]) && string_buffer[i] != '.') {
+						error_message("Пожaлуйста, используйте только русские буквы.");
+						buffer = -1;
+						break;
+					}
+				if (buffer == -1)
+					continue;
+				for (register int i = 0; i < array.size(); i++)
+				{
+					if (string_buffer == array[i].teacher_name)
+						array_to_show.push_back(array[i]);
+				}
+				break;
+			}
+			break;
+		case 4:
+			cout << "Введите искомый номер семестра." << endl;
+			while (!(cin >> buffer) || cin.peek() != '\n' || buffer > 8 || buffer < 1) {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				if (buffer > 8 || buffer < 1)
+					error_message("Номер семестра может быть от 1 до 8");
+				else
+					error_message("Вы можете ввести только цифры");
+			}
+			for (register int i = 0; i < array.size(); i++)
+			{
+				if (buffer == array[i].get_number_of_semester())
+					array_to_show.push_back(array[i]);
+			}
+			break;
+		default: error_message("Вы ввели неизвестную опцию");
+			break;
+		}
+		if (array_to_show.size() == 0) {
+			error_message("Нет предметов с искомыми данными");
+			return;
+		}
+		cout << "Код предмета " << setw(20) << left << "Название предмета"
+			<< setw(20) << "ФИО Преподавателя"
+			<< setw(6) << "Часы"
+			<< setw(7) << "Семестр" << endl;
+		for (register int i = 0; i < array_to_show.size(); i++) {
+			cout << setw(13) << left << array_to_show[i].code_of_subject << setw(20) << left << array_to_show[i].name
+				<< setw(20) << array_to_show[i].teacher_name
+				<< setw(6) << array_to_show[i].hours
+				<< setw(7) << array_to_show[i].number_of_semester << endl;
+		}
+	}
+	else error_message("Нет данных о студентах.");
+}
+
+int subject::search_menu() {
+	int sw;
+	cout << "Выберите опцию." << endl;
+	cout << "1)Поиск по коду предмета" << endl;
+	cout << "2)Поиск по названию предмета" << endl;
+	cout << "3)Поиск по имени учителя" << endl;
+	cout << "4)Поиск по номеру семестра" << endl;
+	while (!(cin >> sw) || cin.peek() != '\n') {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		error_message("Вы можете ввести только цифры");
+	}
+	return(sw);
 }
 
 void subject::add_subj() {
@@ -240,7 +365,15 @@ void subject::add_subj() {
 				error_message("Имя предмета не должно превышать 20 символов.");
 				continue;
 			}
-			else break;
+			for (register int i = 0; i < buffer.name.size(); i++)
+				if (!is_russian_alpha(buffer.name[i])) {
+					error_message("Пожaлуйста, используйте только русские буквы.");
+					flag = -1;
+					break;
+				}
+			if (flag == -1)
+				continue;
+			break;
 		}
 		cout << "ФИО преподавателя:" << endl;
 		while (1)
