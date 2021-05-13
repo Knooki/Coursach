@@ -225,7 +225,22 @@ void student::show_info_stud(string group, string sort_type) {
 	vector<student> array = load_from_file();
 	if (array.size() != 0) {
 		if (sort_type == "sorted") array = sort_array(array);
-		cout << "Информация о студентах." << endl;
+
+		//int amount_of_symbols_name, amount_of_symbols_speciality; //amount_of_symbols_name_of_teacher;
+		//int table_width;
+
+		//amount_of_symbols_name = 0;
+		//amount_of_symbols_speciality = 0;
+		//for (register int i = 0; i < array.size(); i++) {
+		//	if (amount_of_symbols_name > array[i].full_name.size()) amount_of_symbols_name = array[i].full_name.size();
+		//	if (amount_of_symbols_speciality > array[i].speciality.size()) amount_of_symbols_speciality = array[i].speciality.size();
+		//}
+		//table_width = 4 + amount_of_symbols_name + amount_of_symbols_speciality + 4 + 6 + 10 + 6;
+
+		//cout << "Информация о студентах." << endl;
+
+		//cout << char(218) << setw(table_width) << char(191) << endl;
+
 		SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
 		cout << "Код студента " << setw(40) << left << "Полное имя студента"
 			<< "Дата рождения "
@@ -239,11 +254,11 @@ void student::show_info_stud(string group, string sort_type) {
 			{
 				if (array[j].group.compare(0, 4, group, 0, 4) == 0)
 				{
-					cout << setw(13) << left << array[j].code_of_student << setw(40) << left << array[j].full_name
-						<< setw(14) << array[j].birth_date
-						<< setw(14) << array[j].speciality
-						<< setw(7) << array[j].group
-						<< setw(10) << array[j].faculty
+					cout << setw(4) << left << array[j].code_of_student << setw(amount_of_symbols_name) << left << array[j].full_name
+						<< setw(10) << array[j].birth_date
+						<< setw(amount_of_symbols_speciality) << array[j].speciality
+						<< setw(6) << array[j].group
+						<< setw(6) << array[j].faculty
 						<< array[j].course << endl;
 				}
 			}

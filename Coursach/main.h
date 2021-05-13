@@ -25,6 +25,8 @@
 using namespace std;
 static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
+#define space_between_columns 4
+
 void error_message(string message);
 void complete_message(string message);
 void show_info(string type);

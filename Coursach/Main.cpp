@@ -1,9 +1,3 @@
-//knooki 1
-//venia11let
-//knukknakiknak 0
-//venia11let
-//knuks 0
-//venia11let
 #include "main.h"
 #include "Classes.h"
 

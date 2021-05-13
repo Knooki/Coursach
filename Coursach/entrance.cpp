@@ -28,19 +28,8 @@ int entrance::entering() {
 		switch (entr_menu()) {
 		case 1:
 		{
-			int amount = 1;
+			int amount = 0;
 			do {
-				if (amount % 4 == 0)
-				{
-					int c = clock() + 30000;
-					while (clock() < c)
-					{
-						system("cls");
-						int _c = clock();
-						cout << "Программа приостановлена из-за превышения попыток ввода." << endl;
-						cout << "До возобновления программы осталось: " << (c - _c) / 1000 << " с" << endl;
-					}
-				}
 				system("cls");
 				cout << "Введите логин." << endl;
 				rewind(stdin);
@@ -59,6 +48,17 @@ int entrance::entering() {
 					}
 				error_message("Вы ввели неверный логин или пароль.");
 				amount++;
+				if (amount == 3)
+				{
+					amount = 0;
+					for (register int i = 30; i > 0; i--) {
+						Sleep(1000);
+						system("cls");
+						cout << "Программа приостановлена из-за превышения попыток ввода." << endl;
+						cout << "До возобновления программы осталось: " << i << " с" << endl;
+					}
+					system("cls");
+				}
 			} while (is_repeat_operation());
 			break; }
 		case 2:
