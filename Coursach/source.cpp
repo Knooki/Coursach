@@ -1,115 +1,101 @@
 #include "main.h"
 #include "Classes.h"
 
-void show_info(string type) {
+int input_check() {
 	int sw;
-	system("cls");
-	cout << "Выбериет опцию:" << endl;
-	cout << "1)Просмотр данных о студентах." << endl;
-	cout << "2)Просмотр данных о предметах." << endl;
-	cout << "3)Просмотр данных об успеваемости студентов." << endl;
-	cout << "4)Выход." << endl;
-	while (!(cin >> sw) || cin.peek() != '\n') {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		error_message("Вы можете ввести только цифры");
-	}
-	switch (sw) {
-	case 1:
-	{
-		student st;
-		st.show_info_stud(type, "non_sorted");
-	}
-	break;
-	case 2:
-	{
-		subject sub;
-		sub.show_info_subj("non_sorted");
-	}
-	break;
-	case 3:
-	{
-		accounting acc;
-		acc.show_info(type, "non_sorted");
-	}
-	break;
-	case 4: return;
-	default:
-		error_message("Вы ввели неизвестную опцию.");
-		system("pause");
-		break;
-	}
-}
-
-void show_sorted_info(string type) {
-	int sw;
-	system("cls");
-	cout << "Выбериет опцию:" << endl;
-	cout << "1)Сортировка и просмотр данных о студентах." << endl;
-	cout << "2)Сортировка и просмотр данных о предметах." << endl;
-	cout << "3)Сортировка и просмотр об успеваемости студентов." << endl;
-	cout << "4)Выход." << endl;
-	while (!(cin >> sw) || cin.peek() != '\n') {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		error_message("Вы можете ввести только цифры");
-	}
-	switch (sw) {
-	case 1:
-	{
-		student st;
-		st.show_info_stud(type, "sorted");
-	}
-	break;
-	case 2:
-	{
-		subject sub;
-		sub.show_info_subj("sorted");
-	}
-	break;
-	case 3:
-	{
-		accounting acc;
-		acc.show_info(type, "sorted");
-	}
-	break;
-	case 4: return;
-	default:
-		error_message("Вы ввели неизвестную опцию.");
-		system("pause");
-		break;
-	}
-}
-
-int switch_sort() {
-	int sw;
-	system("cls");
-	cout << "Выбериет опцию:" << endl;
-	cout << "1)В алфавитном порядке//по возврастанию." << endl;
-	cout << "2)Не в алфавитном порядке//по убыванию." << endl;
-	cout << "3)Выход." << endl;
-	while (!(cin >> sw) || cin.peek() != '\n') {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		error_message("Вы можете ввести только цифры.");
+	while (!(wcin >> sw) || wcin.peek() != L'\n') {
+		wcin.clear();
+		wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+		error_message(L"Вы можете ввести только цифры");
 	}
 	return sw;
 }
 
-void search_info(string group) {
-	int sw;
+void show_info(wstring type) {
 	system("cls");
-	cout << "Выберите опцию" << endl;
-	cout << "1)Поиск студентов" << endl;
-	cout << "2)Поиск предметов" << endl;
-	cout << "3)Поиск данных учета" << endl;
-	cout << "4)Выход" << endl;
-	while (!(cin >> sw) || cin.peek() != '\n') {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		error_message("Вы можете вводить только цифры");
+	wcout << L"Выбериет опцию:" << endl;
+	wcout << L"1)Просмотр данных о студентах." << endl;
+	wcout << L"2)Просмотр данных о предметах." << endl;
+	wcout << L"3)Просмотр данных об успеваемости студентов." << endl;
+	wcout << L"4)Выход." << endl;
+	switch (input_check()) {
+	case 1:
+	{
+		student st;
+		st.show_info_stud(type, L"non_sorted");
 	}
-	switch (sw) {
+	break;
+	case 2:
+	{
+		subject sub;
+		sub.show_info_subj(L"non_sorted");
+	}
+	break;
+	case 3:
+	{
+		accounting acc;
+		acc.show_info(type, L"non_sorted");
+	}
+	break;
+	case 4: return;
+	default:
+		error_message(L"Вы ввели неизвестную опцию.");
+		system("pause");
+		break;
+	}
+}
+
+void show_sorted_info(wstring type) {
+	system("cls");
+	wcout << L"Выбериет опцию:" << endl;
+	wcout << L"1)Сортировка и просмотр данных о студентах." << endl;
+	wcout << L"2)Сортировка и просмотр данных о предметах." << endl;
+	wcout << L"3)Сортировка и просмотр об успеваемости студентов." << endl;
+	wcout << L"4)Выход." << endl;
+	switch (input_check()) {
+	case 1:
+	{
+		student st;
+		st.show_info_stud(type, L"sorted");
+	}
+	break;
+	case 2:
+	{
+		subject sub;
+		sub.show_info_subj(L"sorted");
+	}
+	break;
+	case 3:
+	{
+		accounting acc;
+		acc.show_info(type, L"sorted");
+	}
+	break;
+	case 4: return;
+	default:
+		error_message(L"Вы ввели неизвестную опцию.");
+		break
+	}
+	system("pause");
+}
+
+int switch_sort() {
+	system("cls");
+	wcout << L"Выбериет опцию:" << endl;
+	wcout << L"1)В алфавитном порядке//по возврастанию." << endl;
+	wcout << L"2)Не в алфавитном порядке//по убыванию." << endl;
+	wcout << L"3)Выход." << endl;
+	return input_check();
+}
+
+void search_info(wstring group) {
+	system("cls");
+	wcout << L"Выберите опцию" << endl;
+	wcout << L"1)Поиск студентов" << endl;
+	wcout << L"2)Поиск предметов" << endl;
+	wcout << L"3)Поиск данных учета" << endl;
+	wcout << L"4)Выход" << endl;
+	switch (input_check()) {
 	case 1: {
 		student st;
 		st.search_student(group);
@@ -128,40 +114,40 @@ void search_info(string group) {
 	}
 	break;
 	default:
-		error_message("Вы ввели неизвестную опцию");
+		error_message(L"Вы ввели неизвестную опцию");
 	}
 	system("pause");
 }
 
-void error_message(string message) {
+void error_message(wstring message) {
 	SetConsoleTextAttribute(handle, FOREGROUND_RED);
-	cout << message << endl;
+	wcout << message << endl;
 	SetConsoleTextAttribute(handle, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE);
 }
 
-void complete_message(string message) {
+void complete_message(wstring message) {
 	SetConsoleTextAttribute(handle, FOREGROUND_GREEN);
-	cout << message << endl;
+	wcout << message << endl;
 	SetConsoleTextAttribute(handle, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE);
 }
 
-bool check_date(string str, string type) {
+bool check_date(wstring str, wstring type) {
 	if (str.size() != 10) {
-		error_message("Дата дожна быть длиной 10 символов.");
+		error_message(L"Дата дожна быть длиной 10 символов.");
 		return false;
 	}
-	if (str[2] != '.' || str[5] != '.')
+	if (str[2] != L'.' || str[5] != L'.')
 	{
-		error_message("Неверный формат даты.");
+		error_message(L"Неверный формат даты.");
 		return false;
 	}
 	for (register int i = 0; i < 10; i++)
-		if (!isdigit(str[i]) && str[i] != '.')
+		if (!isdigit(str[i]) && str[i] != L'.')
 		{
-			error_message("В дате могут быть только цифры и точки.");
+			error_message(L"В дате могут быть только цифры и точки.");
 			return false;
 		}
-	string date, month, year;
+	wstring date, month, year;
 	date = str.substr(0, 2);
 	month = str.substr(3, 2);
 	year = str.substr(6, 4);
@@ -175,37 +161,37 @@ bool check_date(string str, string type) {
 	localtime_s(&local, &now);
 	while (1) {
 		if (ye < 1950) {
-			error_message("Год не может быть введен раньше чем 1950");
+			error_message(L"Год не может быть введен раньше чем 1950");
 			flag++;
 			break;
 		}
-		if (type == "stud")
+		if (type == L"stud")
 			if (ye > local.tm_year + 1900 - 15)
 			{
-				error_message("Студент не может быть настолько молод.");
+				error_message(< "Студент не может быть настолько молод.");
 				flag++;
 				break;
 			}
 		if (mo > 12 || mo == 0) {
-			error_message("Неверное количество месяцев.");
+			error_message(L"Неверное количество месяцев.");
 			flag++;
 			break;
 		}
 		if (da > 31 || da == 0) {
-			error_message("Неверное количество дней.");
+			error_message(L"Неверное количество дней.");
 			flag++;
 			break;
 		}
 		if (ye > local.tm_year + 1900)
 		{
-			error_message("Эта дата еще не наступила.");
+			error_message(L"Эта дата еще не наступила.");
 			flag++;
 			break;
 		}
 		if (ye == local.tm_year + 1900)
 			if (mo > local.tm_mon + 1)
 			{
-				error_message("Эта дата еще не наступила.");
+				error_message(L"Эта дата еще не наступила.");
 				flag++;
 				break;
 			}
@@ -213,7 +199,7 @@ bool check_date(string str, string type) {
 			if (mo == local.tm_mon + 1)
 				if (da > local.tm_mday)
 				{
-					error_message("Эта дата еще не наступила.");
+					error_message(L"Эта дата еще не наступила.");
 					flag++;
 					break;
 				}
@@ -221,7 +207,7 @@ bool check_date(string str, string type) {
 			if (mo == 2)
 				if (da > 29 || da == 0)
 				{
-					error_message("В високосный год в феврале максимум 29 чисел.");
+					error_message(L"В високосный год в феврале максимум 29 чисел.");
 					flag++;
 					break;
 				}
@@ -229,13 +215,13 @@ bool check_date(string str, string type) {
 			if (mo == 2)
 				if (da > 28 || da == 0)
 				{
-					error_message("В не високосный год в феврале максимум 28 чисел.");
+					error_message(L"В не високосный год в феврале максимум 28 чисел.");
 					flag++;
 					break;
 				}
 		if (mo == 4 || mo == 6 || mo == 9 || mo == 11)
 			if (da > 30) {
-				error_message("Неверное количество дней. В этом месяце максимум 30 дней.");
+				error_message(L"Неверное количество дней. В этом месяце максимум 30 дней.");
 				flag++;
 				break;
 			}
@@ -245,9 +231,9 @@ bool check_date(string str, string type) {
 	else return false;
 }
 
-bool check_date(string str, int number_of_semester, int course_of_stud) {
-	if (check_date(str, "sub")) {
-		string month, year;
+bool check_date(wstring str, int number_of_semester, int course_of_stud) {
+	if (check_date(str, L"sub")) {
+		wstring month, year;
 		month = str.substr(3, 2);
 		year = str.substr(6, 4);
 		int mo, ye;
@@ -267,21 +253,21 @@ bool check_date(string str, int number_of_semester, int course_of_stud) {
 		possible_year = (local.tm_year + 1900) - course_of_stud + ceil((float)number_of_semester / 2) + current_semester;
 		if (ye != possible_year)
 		{
-			error_message("Введенный студент данного курса, не мог сдавать предмет данного семестра в введенном вами году.");
+			error_message(L"Введенный студент данного курса, не мог сдавать предмет данного семестра в введенном вами году.");
 			return (false);
 		}
 		if (number_of_semester % 2 == 1)
 		{
 			if (mo != 1)
 			{
-				error_message("Сессия в нечетных семестрах проходит в январе(01).");
+				error_message(L"Сессия в нечетных семестрах проходит в январе(01).");
 				return false;
 			}
 		}
 		else
 			if (mo != 6)
 			{
-				error_message("Сессия в четных семестрах проходит в июне(06).");
+				error_message(L"Сессия в четных семестрах проходит в июне(06).");
 				return false;
 			}
 		return true;
@@ -289,12 +275,12 @@ bool check_date(string str, int number_of_semester, int course_of_stud) {
 	else return false;
 }
 
-bool is_russian_alpha(char c) {
-	return (c >= 'А' && c <= 'я' || c == ' ' || c == 'Ё' || c == 'ё');
+bool is_russian_alpha(wchar_t c) {
+	return (c >= L'А' && c <= L'я' || c == L' ' || c == L'Ё' || c == L'ё');
 }
 
 bool is_repeat_operation() {
-	cout << "Чтобы продолжить нажмите любую клавишу." << endl;
-	cout << "Чтобы вернуться в меню уровня ниже нажмите esc." << endl;
+	wcout << L"Чтобы продолжить нажмите любую клавишу." << endl;
+	wcout << L"Чтобы вернуться в меню уровня ниже нажмите esc." << endl;
 	return(_getch() != 27);
 }

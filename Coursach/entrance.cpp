@@ -1,29 +1,23 @@
-#pragma once
+п»ї#pragma once
 #include "main.h"
 #include "Classes.h"
 
 int entrance::entr_menu() {
 	system("cls");
-	int sw;
-	cout << "Выберите опцию." << endl;
-	cout << "1)Вход.\n2)Регистрация\n3)Выход из программы." << endl;
-	while (!(cin >> sw) || cin.peek() != '\n') {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		error_message("Ошибка. Вы можете ввести только цифры.");
-	}
-	return (sw);
+	wcout << L"Р’С‹Р±РµСЂРёС‚Рµ РѕРїС†РёСЋ." << endl;
+	wcout << L"1)Р’С…РѕРґ.\n2)Р РµРіРёСЃС‚СЂР°С†РёСЏ\n3)Р’С‹С…РѕРґ РёР· РїСЂРѕРіСЂР°РјРјС‹." << endl;
+	return (input_check());
 }
 
 int entrance::entering() {
 	int counter = load_from_file();
 	if (counter == 0) {
-		error_message("Ошибка.Нет учетных записей.");
+		error_message(L"РћС€РёР±РєР°.РќРµС‚ СѓС‡РµС‚РЅС‹С… Р·Р°РїРёСЃРµР№.");
 		return (-1);
 	}
 	else {
 		counter = load_from_file();
-		string login, password, group;
+		wstring login, password, group;
 		int type;
 		switch (entr_menu()) {
 		case 1:
@@ -31,12 +25,12 @@ int entrance::entering() {
 			int amount = 0;
 			do {
 				system("cls");
-				cout << "Введите логин." << endl;
+				wcout << L"Р’РІРµРґРёС‚Рµ Р»РѕРіРёРЅ." << endl;
 				rewind(stdin);
-				getline(cin, login);
-				cout << "Введите пароль." << endl;
+				getline(wcin, login);
+				wcout << L"Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ." << endl;
 				rewind(stdin);
-				getline(cin, password);
+				getline(wcin, password);
 				login = sha1(login);
 				password = sha1(password);
 				for (register int i = 0; i < counter; i++)
@@ -46,7 +40,7 @@ int entrance::entering() {
 						*gr = _group[i];
 						return(_type[i]);
 					}
-				error_message("Вы ввели неверный логин или пароль.");
+				error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРІРµСЂРЅС‹Р№ Р»РѕРіРёРЅ РёР»Рё РїР°СЂРѕР»СЊ.");
 				amount++;
 				if (amount == 3)
 				{
@@ -54,8 +48,8 @@ int entrance::entering() {
 					for (register int i = 30; i > 0; i--) {
 						Sleep(1000);
 						system("cls");
-						cout << "Программа приостановлена из-за превышения попыток ввода." << endl;
-						cout << "До возобновления программы осталось: " << i << " с" << endl;
+						wcout << L"РџСЂРѕРіСЂР°РјРјР° РїСЂРёРѕСЃС‚Р°РЅРѕРІР»РµРЅР° РёР·-Р·Р° РїСЂРµРІС‹С€РµРЅРёСЏ РїРѕРїС‹С‚РѕРє РІРІРѕРґР°." << endl;
+						wcout << L"Р”Рѕ РІРѕР·РѕР±РЅРѕРІР»РµРЅРёСЏ РїСЂРѕРіСЂР°РјРјС‹ РѕСЃС‚Р°Р»РѕСЃСЊ: " << i << L " СЃ" << endl;
 					}
 					system("cls");
 				}
@@ -65,15 +59,15 @@ int entrance::entering() {
 		{
 			while (1) {
 				system("cls");
-				cout << "Введите логин." << endl;
+				wcout << L"Р’РІРµРґРёС‚Рµ Р»РѕРіРёРЅ." << endl;
 				rewind(stdin);
-				getline(cin, login);
+				getline(wcin, login);
 				login = sha1(login);
 				int i = 0;
 				while (i < counter) {
 					if (login == _login[i])
 					{
-						error_message("Этот логин уже занят.");
+						error_message(L"Р­С‚РѕС‚ Р»РѕРіРёРЅ СѓР¶Рµ Р·Р°РЅСЏС‚.");
 						if (is_repeat_operation())
 							break;
 						else {
@@ -86,29 +80,29 @@ int entrance::entering() {
 				if (i > counter) return (2);
 				if (i == counter) break;
 			}
-			cout << "Введите пароль." << endl;
+			wcout << L"Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ." << endl;
 			rewind(stdin);
-			getline(cin, password);
+			getline(wcin, password);
 			password = sha1(password);
 			vector<student> stud;
 			stud = student::load_from_file();
 			while (1) {
-				cout << "Введите ваше полное имя." << endl;
-				string full_name;
+				wcout << L"Р’РІРµРґРёС‚Рµ РІР°С€Рµ РїРѕР»РЅРѕРµ РёРјСЏ." << endl;
+				wstring full_name;
 				rewind(stdin);
-				getline(cin, full_name, '\n');
+				getline(wcin, full_name, L'\n');
 				if (full_name.size() > 40)
 				{
-					error_message("Имя студента не должно превышать 40 символов.");
+					error_message(L"РРјСЏ СЃС‚СѓРґРµРЅС‚Р° РЅРµ РґРѕР»Р¶РЅРѕ РїСЂРµРІС‹С€Р°С‚СЊ 40 СЃРёРјРІРѕР»РѕРІ.");
 					continue;
 				}
 				for (register int i = 0; i < full_name.size(); i++)
 					if (!is_russian_alpha(full_name[i])) {
-						error_message("Пожaлуйста, используйте только русские буквы.");
-						full_name = "error";
+						error_message(L"РџРѕР¶aР»СѓР№СЃС‚Р°, РёСЃРїРѕР»СЊР·СѓР№С‚Рµ С‚РѕР»СЊРєРѕ СЂСѓСЃСЃРєРёРµ Р±СѓРєРІС‹.");
+						full_name = L"error";
 						break;
 					}
-				if (full_name == "error")
+				if (full_name == L"error")
 					continue;
 				for (register int i = 0; i < stud.size(); i++)
 					if (full_name == stud[i].get_full_name()) {
@@ -117,9 +111,9 @@ int entrance::entering() {
 					}
 				break;
 			}
-			if (group == "")
+			if (group == L"")
 			{
-				cout << "В системе нет студента с введенном именем. Введите новый данные о студенте" << endl;
+				wcout << L"Р’ СЃРёСЃС‚РµРјРµ РЅРµС‚ СЃС‚СѓРґРµРЅС‚Р° СЃ РІРІРµРґРµРЅРЅРѕРј РёРјРµРЅРµРј. Р’РІРµРґРёС‚Рµ РЅРѕРІС‹Р№ РґР°РЅРЅС‹Рµ Рѕ СЃС‚СѓРґРµРЅС‚Рµ" << endl;
 				student::add_stud();
 				group = stud.back().get_group();
 			}
@@ -127,42 +121,42 @@ int entrance::entering() {
 			{
 				*log = login;
 				*gr = group;
-				complete_message("Вы успешно зарегестрировались.");
+				complete_message(L"Р’С‹ СѓСЃРїРµС€РЅРѕ Р·Р°СЂРµРіРµСЃС‚СЂРёСЂРѕРІР°Р»РёСЃСЊ.");
 				counter++;
 				if (is_repeat_operation())
 					return (0);
 				else return (-1);
 			}
-			error_message("Ошибка регистрации.");
+			error_message(L"РћС€РёР±РєР° СЂРµРіРёСЃС‚СЂР°С†РёРё.");
 			system("pause");
 		}
 		break;
 		case 3:
 			return(-1);
-		default: error_message("Вы ввели неизвестную опцию.");
+		default: error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРёР·РІРµСЃС‚РЅСѓСЋ РѕРїС†РёСЋ.");
 		}
 	}
 	return(2);
 }
 
 int entrance::load_from_file() {
-	ifstream fin(file_authentication, ios_base::in);
+	wifstream fin(file_authentication, ios_base::in);
 	if (!fin.is_open()) {
-		error_message("Ошибка открытия файла.");
+		error_message(L"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°.");
 		return(0);
 	}
 	else {
 		int i = 0;
-		string buffer = "";
+		wstring buffer = "";
 		int buf;
-		while (getline(fin, buffer, ',')) {
+		while (getline(fin, buffer, L',')) {
 			_login.push_back(buffer);
-			getline(fin, buffer, ',');
+			getline(fin, buffer, L',');
 			_password.push_back(buffer);
 			fin >> buf;
 			_type.push_back(buf);
 			fin.ignore(1);
-			getline(fin, buffer, '\n');
+			getline(fin, buffer, L'\n');
 			_group.push_back(buffer);
 			i++;
 		}
@@ -172,83 +166,83 @@ int entrance::load_from_file() {
 }
 
 void entrance::change_data_in_file() {
-	ofstream fout;
+	wofstream fout;
 	fout.open(file, ios_base::app);
 	if (!fout.is_open())
-		error_message("Ошибка открытия файла.");
+		error_message(L"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°.");
 	else {
 		for (register int i = 0; i < _login.size(); i++) {
-			fout << _login[i] << ',';
-			fout << _password[i] << ',';
-			fout << _type[i] << ',';
+			fout << _login[i] << L',';
+			fout << _password[i] << L',';
+			fout << _type[i] << L',';
 			fout << _group[i] << endl;
 		}
 		remove(file_authentication);
 		char old_name[] = file, new_name[] = file_authentication;
 		fout.close();
 		if (rename(old_name, new_name) != 0)
-			error_message("Ошибка в переименовании файлов.");
+			error_message(L"РћС€РёР±РєР° РІ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёРё С„Р°Р№Р»РѕРІ.");
 		else
-			complete_message("Аккаунты пользователей с удаленной группой удалены.");
+			complete_message(L"РђРєРєР°СѓРЅС‚С‹ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ СЃ СѓРґР°Р»РµРЅРЅРѕР№ РіСЂСѓРїРїРѕР№ СѓРґР°Р»РµРЅС‹.");
 	}
 }
 
-bool entrance::save_to_file(string login, string password, int type, string group) {
-	ofstream fout;
+bool entrance::save_to_file(wstring login, wstring password, int type, wstring group) {
+	wofstream fout;
 	fout.open(file_authentication, ios_base::app);
 	if (!fout.is_open()) {
-		error_message("Ошибка открытия файла.");
+		error_message(L"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°.");
 		return false;
 	}
 	else {
-		fout << login << ',';
-		fout << password << ',';
-		fout << type << ',';
+		fout << login << L',';
+		fout << password << L',';
+		fout << type << L',';
 		fout << group << endl;
 		fout.close();
 		return true;
 	}
 }
 
-bool entrance::change_pas(string* login) {
+bool entrance::change_pas(wstring* login) {
 	int counter = load_from_file();
 	int i = 0;
 	while (i < counter) {
 		if (*login == _login[i]) {
-			string pas;
-			cout << "Введите нынешний пароль." << endl;
-			cin >> pas;
+			wstring pas;
+			wcout << L"Р’РІРµРґРёС‚Рµ РЅС‹РЅРµС€РЅРёР№ РїР°СЂРѕР»СЊ." << endl;
+			wcin >> pas;
 			pas = sha1(pas);
 			if (pas == _password[i])
 			{
-				cout << "Введите новый пароль." << endl;
-				cin >> _password[i];
-				fstream fout;
+				wcout << L"Р’РІРµРґРёС‚Рµ РЅРѕРІС‹Р№ РїР°СЂРѕР»СЊ." << endl;
+				wcin >> _password[i];
+				wfstream fout;
 				fout.open(file, ios_base::out);
 				if (!fout.is_open())
 				{
-					error_message("Ошибка открытия файла.");
+					error_message(L"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°.");
 				}
 				else {
 					_password[i] = sha1(_password[i]);
 					for (register int j = 0; j < counter; j++) {
-						fout << _login[i] << ',';
-						fout << _password[i] << ',';
+						fout << _login[i] << L',';
+						fout << _password[i] << L',';
 						fout << _type[i] << endl;
 					}
 					remove(file_authentication);
 					char old_name[] = file, new_name[] = file_authentication;
 					fout.close();
 					if (rename(old_name, new_name) == 0) {
-						complete_message("Вы успешно изменили пароль.");
+						complete_message(L"Р’С‹ СѓСЃРїРµС€РЅРѕ РёР·РјРµРЅРёР»Рё РїР°СЂРѕР»СЊ.");
 						system("pause");
 						return true;
 					}
-					else error_message("Ошибка в переименовании файлов.");
+					else error_message(L"РћС€РёР±РєР° РІ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёРё С„Р°Р№Р»РѕРІ.");
 				}
 			}
 			else {
-				error_message("Вы ввели неверный пароль.");
+				error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ.");
 				system("pause");
 				return false;
 			}
@@ -257,12 +251,12 @@ bool entrance::change_pas(string* login) {
 		i++;
 	}
 	if (i == counter) {
-		error_message("Произошла ошибка в изменении пароля.");
+		error_message(L"РџСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР° РІ РёР·РјРµРЅРµРЅРёРё РїР°СЂРѕР»СЏ.");
 		return false;
 	}
 }
 
-void entrance::delete_users_with_group(string group) {
+void entrance::delete_users_with_group(wstring group) {
 	int amount = load_from_file();
 	for (register int j = 0; j < amount; j++)
 		if (_group[j] == group)

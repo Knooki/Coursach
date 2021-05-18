@@ -2,10 +2,10 @@
 #include "Classes.h"
 
 int main() {
-	setlocale(LC_ALL, "Rus");
-	system("chcp 1251");
-	string* login = new string;
-	string* group = new string;
+	_setmode(_fileno(stdout), _O_U16TEXT);
+	_setmode(_fileno(stdin), _O_U16TEXT);
+	wstring* login = new wstring;
+	wstring* group = new wstring;
 	entrance person(login, group);
 	handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	while (1) {
@@ -24,7 +24,7 @@ int main() {
 			student.operation();
 		}
 		break;
-		default: cout << "?" << endl;
+		default: wcout << L"?" << endl;
 			break;
 		}
 	}

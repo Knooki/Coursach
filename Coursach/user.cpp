@@ -3,26 +3,20 @@
 #include "Classes.h"
 
 int user::menu_user() {
-	int sw;
-	cout << "Выберите опцию:" << endl;
-	cout << "1)Просмотр данных с вашего потока в виде табличной формы." << endl;
-	cout << "2)Вывести на экран 3 предмета по которым больше всего отрицательных оценок." << endl;
-	cout << "3)Поиск данных по вашему потоку." << endl;
-	cout << "4)Показ данных с вашего потока в отсортированном виде(файлы не меняются)." << endl;
-	cout << "5)Смена пароля." << endl;
-	cout << "6)Выход в меню первого уровня." << endl;
-	while (!(cin >> sw) || cin.peek() != '\n') {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		error_message("Ошибка. Вы можете ввести только цифры.");
-	}
-	return (sw);
+	wcout << L"Выберите опцию:" << endl;
+	wcout << L"1)Просмотр данных с вашего потока в виде табличной формы." << endl;
+	wcout << L"2)Вывести на экран 3 предмета по которым больше всего отрицательных оценок." << endl;
+	wcout << L"3)Поиск данных по вашему потоку." << endl;
+	wcout << L"4)Показ данных с вашего потока в отсортированном виде(файлы не меняются)." << endl;
+	wcout << L"5)Смена пароля." << endl;
+	wcout << L"6)Выход в меню первого уровня." << endl;
+	return (input_check());
 }
 
 void user::operation() {
 	while (1) {
 		system("cls");
-		cout << "Меню простого пользователя." << endl;
+		wcout << L"Меню простого пользователя." << endl;
 		switch (menu_user()) {
 		case 1:
 			show_info(*group);
@@ -51,7 +45,7 @@ void user::operation() {
 		case 6:
 			return;
 		default:
-			error_message("Вы ввели несуществующую опцию.");
+			error_message(L"Вы ввели несуществующую опцию.");
 			break;
 		}
 		system("pause");

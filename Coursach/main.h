@@ -14,6 +14,8 @@
 #include "sha1.h"
 #define NOMINMAX
 #include <Windows.h>
+#include <io.h>
+#include <fcntl.h>
 
 #define file_authentication "authentication_data.txt"
 #define file "file.txt"
@@ -27,13 +29,14 @@ static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 #define space_between_columns 4
 
-void error_message(string message);
-void complete_message(string message);
-void show_info(string type);
-void show_sorted_info(string type);
+int input_check();
+void error_message(wstring message);
+void complete_message(wstring message);
+void show_info(wstring type);
+void show_sorted_info(wstring type);
 int switch_sort();
-void search_info(string group);
-bool check_date(string str, string type);
-bool check_date(string str, int number_of_semester, int course_of_stud);
+void search_info(wstring group);
+bool check_date(wstring str, wstring type);
+bool check_date(wstring str, int number_of_semester, int course_of_stud);
 bool is_russian_alpha(char c);
 bool is_repeat_operation();

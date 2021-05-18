@@ -6,21 +6,21 @@
 
 int admin::menu_admin() {
 	int sw;
-	cout << "Выберите опцию:" << endl;
-	cout << "1)Добавление записи." << endl;
-	cout << "2)Редактирование записи." << endl;
-	cout << "3)Удаление записи." << endl;
-	cout << "4)Отсортировать данные." << endl;
-	cout << "5)Просмотр данных в табличной форме." << endl;
-	cout << "6)Поиск данных." << endl;
-	cout << "7)Показ данных в отсортированном виде(файлы не меняются)." << endl;
-	cout << "8)Удалить пользователей из определенной группы." << endl;
-	cout << "9)Изменение пароля." << endl;
-	cout << "10)Выход в меню 1-го уровня." << endl;
-	while (!(cin >> sw) || cin.peek() != '\n') {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		error_message("Ошибка. Вы можете ввести только цифры.");
+	wcout << L"Выберите опцию:" << endl;
+	wcout << L"1)Добавление записи." << endl;
+	wcout << L"2)Редактирование записи." << endl;
+	wcout << L"3)Удаление записи." << endl;
+	wcout << L"4)Отсортировать данные." << endl;
+	wcout << L"5)Просмотр данных в табличной форме." << endl;
+	wcout << L"6)Поиск данных." << endl;
+	wcout << L"7)Показ данных в отсортированном виде(файлы не меняются)." << endl;
+	wcout << L"8)Удалить пользователей из определенной группы." << endl;
+	wcout << L"9)Изменение пароля." << endl;
+	wcout << L"10)Выход в меню 1-го уровня." << endl;
+	while (!(wcin >> sw) || wcin.peek() != L'\n') {
+		wcin.clear();
+		wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+		error_message(L"Ошибка. Вы можете ввести только цифры.");
 	}
 	return(sw);
 }
@@ -28,7 +28,7 @@ int admin::menu_admin() {
 void admin::operation() {
 	do {
 		system("cls");
-		cout << "Меню админа." << endl;
+		wcout << L"Меню админа." << endl;
 		switch (menu_admin()) {
 		case 1:
 			add_data();
@@ -43,13 +43,13 @@ void admin::operation() {
 			sort_data();
 			break;
 		case 5:
-			show_info("admin");
+			show_info(L"admin");
 			break;
 		case 6:
-			search_info("admin");
+			search_info(L"admin");
 			break;
 		case 7:
-			show_sorted_info("admin");
+			show_sorted_info(L"admin");
 			break;
 		case 8:
 			break;
@@ -62,67 +62,55 @@ void admin::operation() {
 		break;
 		case 10:
 			return;
-		default: error_message("Вы ввели несуществующую опцию.");
+		default: error_message(L"Вы ввели несуществующую опцию.");
 		}
 	} while (1);
 }
 
 void admin::sort_data() {
-	int sw;
 	while (1) {
 		system("cls");
-		cout << "Выбериет опцию:" << endl;
-		cout << "1)Сортировка данных о студентах." << endl;
-		cout << "2)Сортировка данных о предметах." << endl;
-		cout << "3)Сортировка об успеваемости студентов." << endl;
-		cout << "4)Выход." << endl;
-		while (!(cin >> sw) || cin.peek() != '\n') {
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			error_message("Вы можете ввести только цифры");
-		}
-		switch (sw) {
+		wcout << L"Выбериет опцию:" << endl;
+		wcout << L"1)Сортировка данных о студентах." << endl;
+		wcout << L"2)Сортировка данных о предметах." << endl;
+		wcout << L"3)Сортировка об успеваемости студентов." << endl;
+		wcout << L"4)Выход." << endl;
+		switch (input_check()) {
 		case 1:
 		{
 			student st;
-			st.delete_stud_or_sort_stud("sort");
+			st.delete_stud_or_sort_stud(L"sort");
 		}
 		break;
 		case 2:
 		{
 			subject sub;
-			sub.delete_subj_or_sort_subj("sort");
+			sub.delete_subj_or_sort_subj(L"sort");
 		}
 		break;
 		case 3:
 		{
 			accounting acc;
-			acc.delete_info_or_sort_info("sort");
+			acc.delete_info_or_sort_info(L"sort");
 		}
 		break;
 		case 4: return;
 		default:
-			error_message("Вы ввели неизвестную опцию.");
+			error_message(L"Вы ввели неизвестную опцию.");
 			break;
 		}
 	}
 }
 
 void admin::add_data() {
-	int sw;
 	while (1) {
 		system("cls");
-		cout << "Выберите опцию." << endl;
-		cout << "1)Добавить нового студента." << endl;
-		cout << "2)Добавить новый предмет." << endl;
-		cout << "3)Добавить новый учет о сдаче." << endl;
-		cout << "4)Выход в меню админа." << endl;
-		while (!(cin >> sw) || cin.peek() != '\n') {
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			error_message("Ошибка. Вы можете ввести только цифры.");
-		}
-		switch (sw) {
+		wcout << L"Выберите опцию." << endl;
+		wcout << L"1)Добавить нового студента." << endl;
+		wcout << L"2)Добавить новый предмет." << endl;
+		wcout << L"3)Добавить новый учет о сдаче." << endl;
+		wcout << L"4)Выход в меню админа." << endl;
+		switch (input_check()) {
 		case 1:
 		{
 			student st;
@@ -143,27 +131,21 @@ void admin::add_data() {
 		break;
 		case 4:
 			return;
-		default: error_message("Вы ввели неизвестную опцию.");
+		default: error_message(L"Вы ввели неизвестную опцию.");
 			break;
 		}
 	}
 }
 
 void admin::change_data() {
-	int sw;
 	while (1) {
 		system("cls");
-		cout << "Выберите опцию." << endl;
-		cout << "1)Поменять данные о студентах." << endl;
-		cout << "2)Поменять данные о предметах." << endl;
-		cout << "3)Поменять данные об учете сдачи." << endl;
-		cout << "4)Выход в меню админа." << endl;
-		while (!(cin >> sw) || cin.peek() != '\n') {
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			error_message("Ошибка. Вы можете ввести только цифры.");
-		}
-		switch (sw) {
+		wcout << L"Выберите опцию." << endl;
+		wcout << L"1)Поменять данные о студентах." << endl;
+		wcout << L"2)Поменять данные о предметах." << endl;
+		wcout << L"3)Поменять данные об учете сдачи." << endl;
+		wcout << L"4)Выход в меню админа." << endl;
+		switch (input_check()) {
 		case 1:
 		{
 			student st;
@@ -184,69 +166,63 @@ void admin::change_data() {
 		break;
 		case 4:
 			return;
-		default: error_message("Вы ввели неизвестную опцию.");
+		default: error_message(L"Вы ввели неизвестную опцию.");
 			break;
 		}
 	}
 }
 
 void admin::delete_data() {
-	int sw;
 	while (1) {
 		system("cls");
-		cout << "Выберите опцию." << endl;
-		cout << "1)Удалить данные о студентах." << endl;
-		cout << "2)Удалить данные о предметах." << endl;
-		cout << "3)Удалить данные об учете сдачи." << endl;
-		cout << "4)Выход в меню админа" << endl;
-		while (!(cin >> sw) || cin.peek() != '\n') {
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			error_message("Ошибка. Вы можете ввести только цифры.");
-		}
-		switch (sw) {
+		wcout << L"Выберите опцию." << endl;
+		wcout << L"1)Удалить данные о студентах." << endl;
+		wcout << L"2)Удалить данные о предметах." << endl;
+		wcout << L"3)Удалить данные об учете сдачи." << endl;
+		wcout << L"4)Выход в меню админа" << endl;
+		switch (input_check()) {
 		case 1:
 		{
 			student st;
-			st.delete_stud_or_sort_stud("delete");
+			st.delete_stud_or_sort_stud(L"delete");
 		}
 		break;
 		case 2:
 		{
 			subject sub;
-			sub.delete_subj_or_sort_subj("delete");
+			sub.delete_subj_or_sort_subj(L"delete");
 		}
 		break;
 		case 3:
 		{
 			accounting acc;
-			acc.delete_info_or_sort_info("delete");
+			acc.delete_info_or_sort_info(L"delete");
 		}
 		break;
 		case 4:
 			return;
-		default: error_message("Вы ввели неизвестную опцию.");
+		default: error_message(L"Вы ввели неизвестную опцию.");
 			break;
 		}
 	}
 }
 
 void admin::user_manage() {
-	string string_buffer;
+	wstring string_buffer;
 	rewind(stdin);
-	cout << "Введите группу" << endl;
+	wcout << "Введите группу" << endl;
 	while (1) {
 		int flag = 1;
-		getline(cin, string_buffer, '\n');
+		getline(wcin, string_buffer, L'\n');
 		if (string_buffer.size() != 6)
 		{
-			error_message("Группа должна быть 6-тизначным числом.");
+			error_message(L"Группа должна быть 6-тизначным числом.");
 			continue;
 		}
 		for (register int i = 0; i < string_buffer.size(); i++) {
 			if (!isdigit(string_buffer[i]))
 			{
-				error_message("В группе могут быть только цифры.");
+				error_message(L"В группе могут быть только цифры.");
 				flag = -1;
 				break;
 			}

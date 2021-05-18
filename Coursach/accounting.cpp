@@ -2,67 +2,68 @@
 #include "Classes.h"
 
 //можно добавить вариативности посреедством показывания учета за прошлый год, только о первых курсах, за все года, 2 года назад и тд
+//надо сделать сортировку по учебным годам
 
 void accounting::save_to_file(accounting new_acc) {
-	fstream fout;
+	wfstream fout;
 	fout.open(file_accounting, ios_base::app);
 	if (!fout.is_open())
-		error_message("Ошибка открытия файла");
+		error_message(L"Ошибка открытия файла");
 	else {
-		fout << new_acc.code_of_student << ','
-			<< new_acc.code_of_subject << ','
-			<< new_acc.date << ','
-			<< new_acc.mark << ','
+		fout << new_acc.code_of_student << L','
+			<< new_acc.code_of_subject << L','
+			<< new_acc.date << L','
+			<< new_acc.mark << L','
 			<< new_acc.code_of_acc << endl;
 	}
 	fout.close();
 }
 
-void accounting::change_data_in_file(vector<accounting> array, string type_sort) {
-	fstream fout;
+void accounting::change_data_in_file(vector<accounting> array, wstring type_sort) {
+	wfstream fout;
 	fout.open(file, ios_base::out);
 	if (!fout.is_open())
-		error_message("Ошибка открытия файла.");
+		error_message(L"Ошибка открытия файла.");
 	else {
 		for (register int i = 0; i < array.size(); i++)
 		{
-			fout << array[i].code_of_student << ','
-				<< array[i].code_of_subject << ','
-				<< array[i].date << ','
-				<< array[i].mark << ','
+			fout << array[i].code_of_student << L','
+				<< array[i].code_of_subject << L','
+				<< array[i].date << L','
+				<< array[i].mark << L','
 				<< array[i].code_of_acc << endl;
 		}
 		remove(file_accounting);
 		char old_name[] = file, new_name[] = file_accounting;
 		fout.close();
 		if (rename(old_name, new_name) != 0)
-			error_message("Ошибка в переименовании файлов.");
-		else if (type_sort == "sort")
-			complete_message("Вы успешно отсортировали данные.");
-		else if (type_sort == "student")
-			complete_message("Данные о студенте успешно удалены.");
+			error_message(L"Ошибка в переименовании файлов.");
+		else if (type_sort == L"sort")
+			complete_message(L"Вы успешно отсортировали данные.");
+		else if (type_sort == L"student")
+			complete_message(L"Данные о студенте успешно удалены.");
 		else
-			complete_message("Вы успешно удалили запись.");
+			complete_message(L"Вы успешно удалили запись.");
 	}
 }
 
 vector<accounting> accounting::load_from_file() {
 	vector<accounting> acc;
 	accounting buffer;
-	fstream fin;
+	wfstream fin;
 	fin.open(file_accounting, ios_base::in);
-	if (!fin.is_open()) error_message("Ошибка открытия файла.");
+	if (!fin.is_open()) error_message(L"Ошибка открытия файла.");
 	else
 		while (fin >> buffer.code_of_student)
 		{
 			fin.ignore(1);
 			fin >> buffer.code_of_subject;
 			fin.ignore(1);
-			getline(fin, buffer.date, ',');
+			getline(fin, buffer.date, L',');
 			fin >> buffer.mark;
 			fin.ignore(1);
 			fin >> buffer.code_of_acc;
-			fin.ignore(numeric_limits<streamsize>::max(), '\n');
+			fin.ignore(numeric_limits<streamsize>::max(), L'\n');
 			acc.push_back(buffer);
 		}
 	return(acc);
@@ -76,18 +77,12 @@ vector<student> accounting::sort_array_of_accounting(vector<student> array_of_st
 	if (array_of_acc.size() != 0)
 	{
 		system("cls");
-		int sw;
-		cout << "Выберите опцию:" << endl;
-		cout << "1)Отсортировать по информации студентов." << endl;
-		cout << "2)Отсортировать по успеваемости студентов." << endl;
-		cout << "3)Отсортировать по учебным годам." << endl;
-		cout << "4)Выход." << endl;
-		while (!(cin >> sw) || cin.peek() != '\n') {
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			error_message("Ошибка. Вы можете ввести только цифры.");
-		}
-		switch (sw)
+		wcout << L"Выберите опцию:" << endl;
+		wcout << L"1)Отсортировать по информации студентов." << endl;
+		wcout << L"2)Отсортировать по успеваемости студентов." << endl;
+		wcout << L"3)Отсортировать по учебным годам." << endl;
+		wcout << L"4)Выход." << endl;
+		switch (input_check())
 		{
 		case 1:
 			array_of_stud = student::sort_array(array_of_stud);
@@ -188,14 +183,14 @@ vector<student> accounting::sort_array_of_accounting(vector<student> array_of_st
 			  break;
 		case 4:
 			return(array_of_stud);
-		default: error_message("Вы ввели неизвестную опцию");
+		default: error_message(L"Вы ввели неизвестную опцию");
 			break;
 		}
 	}
-	else error_message("Нет данных об учете студентов");
+	else error_message(L"Нет данных об учете студентов");
 }
 
-void accounting::show_info(string group, string sort_type) {
+void accounting::show_info(wstring group, wstring sort_type) {
 	vector<accounting> acc;
 	acc = load_from_file();
 	if (acc.size() != 0) {
@@ -203,25 +198,25 @@ void accounting::show_info(string group, string sort_type) {
 		stud = student::load_from_file();
 		vector<subject> subj;
 		subj = subject::load_from_file();
-		if (sort_type == "sorted")
+		if (sort_type == L"sorted")
 			stud = sort_array_of_accounting(stud);
-		cout << "Таблица успеваемости студентов." << endl;
+		wcout << L"Таблица успеваемости студентов." << endl;
 		SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
-		cout << "Код студента " << setw(40) << left << "Имя Студента"
-			<< setw(20) << "Предмет"
-			<< "Дата сдачи "
-			<< "Оценка "
-			<< "Семестр "
-			<< "Код записи" << endl;
+		wcout << L"Код студента " << setw(40) << left << L"Имя Студента"
+			<< setw(20) << L"Предмет"
+			<< L"Дата сдачи "
+			<< L"Оценка "
+			<< L"Семестр "
+			<< L"Код записи" << endl;
 		SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
 		for (register int k = 0; k < stud.size(); k++)
 		{
-			if (group != "admin")
+			if (group != L"admin")
 			{
 				if (stud[k].get_group().compare(0, 4, group, 0, 4) == 0)
 				{
-					cout << "\r";
-					cout << setw(13) << left << stud[k].get_code_of_student()
+					wcout << L"\r";
+					wcout << setw(13) << left << stud[k].get_code_of_student()
 						<< setw(40) << left << stud[k].get_full_name();
 					for (register int j = 0; j < acc.size(); j++)
 					{
@@ -229,19 +224,19 @@ void accounting::show_info(string group, string sort_type) {
 							for (register int g = 0; g < subj.size(); g++)
 								if (acc[j].code_of_subject == subj[g].get_code_of_subject())
 								{
-									cout << setw(20) << left << subj[g].get_name()
+									wcout << setw(20) << left << subj[g].get_name()
 										<< setw(11) << left << acc[j].date
 										<< setw(7) << left << acc[j].mark
 										<< setw(8) << left << subj[g].get_number_of_semester()
 										<< acc[j].code_of_acc << endl;
-									cout << setw(53) << "";
+									wcout << setw(53) << "";
 								}
 					}
 				}
 			}
 			else {
-				cout << "\r";
-				cout << setw(13) << left << stud[k].get_code_of_student()
+				wcout << L"\r";
+				wcout << setw(13) << left << stud[k].get_code_of_student()
 					<< setw(40) << left << stud[k].get_full_name();
 				for (register int j = 0; j < acc.size(); j++)
 				{
@@ -249,44 +244,44 @@ void accounting::show_info(string group, string sort_type) {
 						for (register int g = 0; g < subj.size(); g++)
 							if (acc[j].code_of_subject == subj[g].get_code_of_subject())
 							{
-								cout << setw(20) << left << subj[g].get_name()
+								wcout << setw(20) << left << subj[g].get_name()
 									<< setw(11) << left << acc[j].date
 									<< setw(7) << left << acc[j].mark
 									<< setw(8) << left << subj[g].get_number_of_semester()
 									<< acc[j].code_of_acc << endl;
-								cout << setw(53) << "";
+								wcout << setw(53) << "";
 							}
 				}
 			}
 		}
-		cout << "\r";
+		wcout << L"\r";
 	}
-	else error_message("Нет данных об учете студентов");
+	else error_message(L"Нет данных об учете студентов");
 	system("pause");
 }
 
-void accounting::search_info(string group) {
+void accounting::search_info(wstring group) {
 	vector<accounting> array;
 	array = load_from_file();
 	int buffer;
-	string string_buffer;
+	wstring string_buffer;
 	vector<accounting> array_to_show;
 	if (array.size() != 0) {
 		buffer = search_menu(group);
 		if (buffer < 3)
 			switch (buffer) {
 			case 1:
-				cout << "Введите искомый код студента" << endl;
-				while (!(cin >> buffer) || cin.peek() != '\n' || buffer < 0) {
-					cin.clear();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					if (buffer < 0) error_message("Код студента не может быть отрицательным.");
+				wcout << L"Введите искомый код студента" << endl;
+				while (!(wcin >> buffer) || wcin.peek() != L'\n' || buffer < 0) {
+					wcin.clear();
+					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+					if (buffer < 0) error_message(L"Код студента не может быть отрицательным.");
 					else
-						error_message("Вы можете ввести только цифры.");
+						error_message(L"Вы можете ввести только цифры.");
 				}
 				for (register int i = 0; i < array.size(); i++)
 				{
-					if (group == "admin")
+					if (group == L"admin")
 					{
 						if (buffer == array[i].code_of_student)
 							array_to_show.push_back(array[i]);
@@ -298,19 +293,19 @@ void accounting::search_info(string group) {
 				}
 				break;
 			case 2:
-				cout << "Введите искомые ФИО студента" << endl;
+				wcout << L"Введите искомые ФИО студента" << endl;
 				while (1) {
 					buffer = 1;
 					rewind(stdin);
-					getline(cin, string_buffer, '\n');
+					getline(wcin, string_buffer, L'\n');
 					if (string_buffer.size() > 40)
 					{
-						error_message("Имя студента не должно превышать 40 символов.");
+						error_message(L"Имя студента не должно превышать 40 символов.");
 						continue;
 					}
 					for (register int i = 0; i < string_buffer.size(); i++)
 						if (!is_russian_alpha(string_buffer[i])) {
-							error_message("Пожaлуйста, используйте только русские буквы.");
+							error_message(L"Пожaлуйста, используйте только русские буквы.");
 							buffer = -1;
 							break;
 						}
@@ -318,7 +313,7 @@ void accounting::search_info(string group) {
 						continue;
 					for (register int i = 0; i < array.size(); i++)
 					{
-						if (group == "admin")
+						if (group == L"admin")
 						{
 							if (string_buffer == array[i].full_name)
 								array_to_show.push_back(array[i]);
@@ -332,19 +327,19 @@ void accounting::search_info(string group) {
 				}
 				break;
 			case 3:
-				cout << "Введите искомое название предмета." << endl;
+				wcout << L"Введите искомое название предмета." << endl;
 				while (1) {
 					buffer = 1;
 					rewind(stdin);
-					getline(cin, string_buffer, '\n');
+					getline(wcin, string_buffer, L'\n');
 					if (string_buffer.size() > 20)
 					{
-						error_message("Название предмета не должно превышать 20 символов.");
+						error_message(L"Название предмета не должно превышать 20 символов.");
 						continue;
 					}
 					for (register int i = 0; i < string_buffer.size(); i++)
 						if (!is_russian_alpha(string_buffer[i])) {
-							error_message("Пожaлуйста, используйте только русские буквы.");
+							error_message(L"Пожaлуйста, используйте только русские буквы.");
 							buffer = -1;
 							break;
 						}
@@ -352,7 +347,7 @@ void accounting::search_info(string group) {
 						continue;
 					for (register int i = 0; i < array.size(); i++)
 					{
-						if (group == "admin")
+						if (group == L"admin")
 						{
 							if (string_buffer == array[i].full_name)
 								array_to_show.push_back(array[i]);
@@ -365,55 +360,55 @@ void accounting::search_info(string group) {
 					break;
 				}
 				break;
-			default: error_message("Вы ввели неизвестную опцию");
+			default: error_message(L"Вы ввели неизвестную опцию");
 				break;
 			}
 		else
 			switch (buffer) {
 			case 4:
-				cout << "Введите искомый код записи." << endl;
-				while (!(cin >> buffer) || cin.peek() != '\n' || buffer < 0) {
-					cin.clear();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				wcout << L"Введите искомый код записи." << endl;
+				while (!(wcin >> buffer) || wcin.peek() != L'\n' || buffer < 0) {
+					wcin.clear();
+					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
 					if (buffer < 0)
-						error_message("Курс не может быть отрицательным");
+						error_message(L"Курс не может быть отрицательным");
 					else
-						error_message("Вы можете ввести только цифры");
+						error_message(L"Вы можете ввести только цифры");
 				}
 				for (register int i = 0; i < array.size(); i++)
 					if (buffer == array[i].code_of_acc)
 						array_to_show.push_back(array[i]);
 				break;
 			case 5:
-				cout << "Введите искомый семестр." << endl;
-				while (!(cin >> buffer) || cin.peek() != '\n' || buffer < 1 || buffer > 8) {
-					cin.clear();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				wcout << L"Введите искомый семестр." << endl;
+				while (!(wcin >> buffer) || wcin.peek() != L'\n' || buffer < 1 || buffer > 8) {
+					wcin.clear();
+					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
 					if (buffer < 1 || buffer > 8)
-						error_message("Семестр может быть от 1 до 8");
+						error_message(L"Семестр может быть от 1 до 8");
 					else
-						error_message("Вы можете ввести только цифры");
+						error_message(L"Вы можете ввести только цифры");
 				}
 				for (register int i = 0; i < array.size(); i++)
 					if (buffer == array[i].get_number_of_semester())
 						array_to_show.push_back(array[i]);
 				break;
 			default:
-				error_message("Вы ввели неизвестную опцию");
+				error_message(L"Вы ввели неизвестную опцию");
 				break;
 			}
 		if (array_to_show.size() == 0) {
-			error_message("Нет записей с искомыми данными");
+			error_message(L"Нет записей с искомыми данными");
 			return;
 		}
-		cout << "Код студента " << setw(40) << left << "Имя Студента"
-			<< setw(20) << "Предмет"
-			<< "Дата сдачи "
-			<< "Оценка "
-			<< "Семестр "
-			<< "Код записи" << endl;
+		wcout << L"Код студента " << setw(40) << left << L"Имя Студента"
+			<< setw(20) << L"Предмет"
+			<< L"Дата сдачи "
+			<< L"Оценка "
+			<< L"Семестр "
+			<< L"Код записи" << endl;
 		for (register int i = 0; i < array_to_show.size(); i++) {
-			cout << setw(13) << left << array_to_show[i].get_code_of_student()
+			wcout << setw(13) << left << array_to_show[i].get_code_of_student()
 				<< setw(40) << left << array_to_show[i].get_full_name()
 				<< setw(20) << left << array_to_show[i].get_name()
 				<< setw(11) << left << array_to_show[i].date
@@ -422,25 +417,19 @@ void accounting::search_info(string group) {
 				<< array_to_show[i].code_of_acc << endl;
 		}
 	}
-	else error_message("Нет данных об учете успеваемости.");
+	else error_message(L"Нет данных об учете успеваемости.");
 }
 
-int accounting::search_menu(string group) {
-	int sw;
-	cout << "Выберите опцию." << endl;
-	cout << "1)Поиск по коду студента" << endl;
-	cout << "2)Поиск по ФИО студента" << endl;
-	cout << "3)Поиск по названию предмета" << endl;
-	if (group == "admin") {
-		cout << "4)Поиск по коду записи" << endl;
-		cout << "5)Поиск по семестру " << endl;
+int accounting::search_menu(wstring group) {
+	wcout << L"Выберите опцию." << endl;
+	wcout << L"1)Поиск по коду студента" << endl;
+	wcout << L"2)Поиск по ФИО студента" << endl;
+	wcout << L"3)Поиск по названию предмета" << endl;
+	if (group == L"admin") {
+		wcout << L"4)Поиск по коду записи" << endl;
+		wcout << L"5)Поиск по семестру " << endl;
 	}
-	while (!(cin >> sw) || cin.peek() != '\n') {
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		error_message("Вы можете ввести только цифры");
-	}
-	return(sw);
+	return(input_check());
 }
 
 void accounting::add_info() {
@@ -454,16 +443,16 @@ void accounting::add_info() {
 	system("cls");
 	if (stud.size() != 0 && subj.size() != 0)
 		while (1) {
-			show_info("admin", "non_sorted");
-			cout << "Введите новую запись о сдаче предмета." << endl;
-			student::show_info_stud("admin", "non_sorted");
-			cout << "Код студента:" << endl;
-			while (!(cin >> buffer.code_of_student) || cin.peek() != '\n' || buffer.code_of_student < 0) {
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				if (buffer.code_of_student < 0) error_message("Код студента не может быть отрицательным.");
+			show_info(L"admin", L"non_sorted");
+			wcout << L"Введите новую запись о сдаче предмета." << endl;
+			student::show_info_stud(L"admin", L"non_sorted");
+			wcout << L"Код студента:" << endl;
+			while (!(wcin >> buffer.code_of_student) || wcin.peek() != L'\n' || buffer.code_of_student < 0) {
+				wcin.clear();
+				wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+				if (buffer.code_of_student < 0) error_message(L"Код студента не может быть отрицательным.");
 				else
-					error_message("Вы можете ввести только цифры.");
+					error_message(L"Вы можете ввести только цифры.");
 			}
 			int i = 0;
 			while (i < stud.size())
@@ -476,7 +465,7 @@ void accounting::add_info() {
 				i++;
 			}
 			if (i == stud.size()) {
-				error_message("Вы ввели несуществующий код студента.");
+				error_message(L"Вы ввели несуществующий код студента.");
 				continue;
 			}
 			int number_of_student = i;
@@ -485,18 +474,18 @@ void accounting::add_info() {
 					flag++;
 			if (flag >= subj.size())
 			{
-				error_message("У этого студента сданы все предметы.");
+				error_message(L"У этого студента сданы все предметы.");
 				flag = 1;
 				continue;
 			}
-			subject::show_info_subj("non_sorted");
-			cout << "Код предмета:" << endl;
-			while (!(cin >> buffer.code_of_subject) || cin.peek() != '\n' || buffer.code_of_subject < 0) {
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				if (buffer.code_of_subject < 0) error_message("Код предмета не может быть отрицательным.");
+			subject::show_info_subj(L"non_sorted");
+			wcout << L"Код предмета:" << endl;
+			while (!(wcin >> buffer.code_of_subject) || wcin.peek() != L'\n' || buffer.code_of_subject < 0) {
+				wcin.clear();
+				wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+				if (buffer.code_of_subject < 0) error_message(L"Код предмета не может быть отрицательным.");
 				else
-					error_message("Вы можете ввести только цифры.");
+					error_message(L"Вы можете ввести только цифры.");
 			}
 			i = 0;
 			while (i < subj.size())
@@ -506,7 +495,7 @@ void accounting::add_info() {
 				i++;
 			}
 			if (i == subj.size()) {
-				error_message("Вы ввели несуществующий код предмета.");
+				error_message(L"Вы ввели несуществующий код предмета.");
 				continue;
 			}
 			int number_of_subject = i;
@@ -521,7 +510,7 @@ void accounting::add_info() {
 			else if (local.tm_mon > 6 && local.tm_mon < 9)
 				current_semester = -1; //каникулы
 			if (subj[i].get_number_of_semester() > (buffer.course * 2 - 1) - current_semester) {
-				error_message("Этот студент еще не мог сдавать этот предмет.");
+				error_message(L"Этот студент еще не мог сдавать этот предмет.");
 				flag = 0;
 				continue;
 			}
@@ -531,7 +520,7 @@ void accounting::add_info() {
 					for (register int j = 0; j < array.size(); j++)
 						if (buffer.code_of_subject == array[j].code_of_subject)
 						{
-							error_message("У этого студента уже есть оценка по этому предмету.");
+							error_message(L"У этого студента уже есть оценка по этому предмету.");
 							flag = 1;
 							break;
 						}
@@ -539,34 +528,34 @@ void accounting::add_info() {
 				}
 			if (flag == 1)
 				continue;
-			cout << "Введите дату cдачи предмета (пример 01.01.2001):" << endl;
+			wcout << L"Введите дату cдачи предмета (пример 01.01.2001):" << endl;
 			while (1)
 			{
 				rewind(stdin);
-				getline(cin, buffer.date, '\n');
+				getline(wcin, buffer.date, L'\n');
 				if (!check_date(buffer.date, subj[number_of_subject].get_number_of_semester(), stud[number_of_student].get_course()))
 					continue;
 				else break;
 			}
-			cout << "Введите отметку по предмету:" << endl;
-			while (!(cin >> buffer.mark) || cin.peek() != '\n' || buffer.mark < 0 || buffer.mark > 10) {
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				if (buffer.mark < 0 || buffer.mark > 10) error_message("Отметка по предмету может быть от 0 до 10.");
+			wcout << L"Введите отметку по предмету:" << endl;
+			while (!(wcin >> buffer.mark) || wcin.peek() != L'\n' || buffer.mark < 0 || buffer.mark > 10) {
+				wcin.clear();
+				wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+				if (buffer.mark < 0 || buffer.mark > 10) error_message(L"Отметка по предмету может быть от 0 до 10.");
 				else
-					error_message("Вы можете ввести только цифры.");
+					error_message(L"Вы можете ввести только цифры.");
 			}
-			cout << "Введите код записи:" << endl;
-			while (!(cin >> buffer.code_of_acc) || cin.peek() != '\n') {
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				error_message("Вы можете ввести только цифры.");
+			wcout << L"Введите код записи:" << endl;
+			while (!(wcin >> buffer.code_of_acc) || wcin.peek() != L'\n') {
+				wcin.clear();
+				wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+				error_message(L"Вы можете ввести только цифры.");
 			}
 			for (i = 0; i < array.size(); i++)
 				if (buffer.code_of_acc == array[i].code_of_acc)
 				{
 					flag = 1;
-					error_message("Такой код записи уже введен.");
+					error_message(L"Такой код записи уже введен.");
 					break;
 				}
 			if (flag == 1)
@@ -574,7 +563,7 @@ void accounting::add_info() {
 			save_to_file(buffer);
 			break;
 		}
-	else error_message("В базе нет данных о предметах или об учениках.");
+	else error_message(L"В базе нет данных о предметах или об учениках.");
 }
 
 void accounting::change_info() {
@@ -586,15 +575,11 @@ void accounting::change_info() {
 	subj = subject::load_from_file();
 	if (array.size() != 0 && stud.size() != 0 && subj.size() != 0) {
 		system("cls");
-		show_info("admin", "non_sorted");
+		show_info(L"admin", L"non_sorted");
 		int buf;
 		int flag = 1;
-		cout << "Введите код записи, которую хотите поменять." << endl;
-		while (!(cin >> buf) || cin.peek() != '\n') {
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			error_message("Вы можете ввести только цифры.");
-		}
+		wcout << L"Введите код записи, которую хотите поменять." << endl;
+		buf = input_check();
 		for (register int i = 0; i < array.size(); i++)
 			if (buf == array[i].code_of_acc) {
 				buf = i;
@@ -604,14 +589,14 @@ void accounting::change_info() {
 		if (flag == 0) {
 			while (1) {
 				system("cls");
-				cout << "Введите новую запись о сдаче предмета." << endl;
-				cout << "Код студента:" << endl;
-				while (!(cin >> buffer.code_of_student) || cin.peek() != '\n' || buffer.code_of_student < 0) {
-					cin.clear();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					if (buffer.code_of_student < 0) error_message("Код студента не может быть отрицательным.");
+				wcout << L"Введите новую запись о сдаче предмета." << endl;
+				wcout << L"Код студента:" << endl;
+				while (!(wcin >> buffer.code_of_student) || wcin.peek() != L'\n' || buffer.code_of_student < 0) {
+					wcin.clear();
+					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+					if (buffer.code_of_student < 0) error_message(L"Код студента не может быть отрицательным.");
 					else
-						error_message("Вы можете ввести только цифры.");
+						error_message(L"Вы можете ввести только цифры.");
 				}
 				int i = 0;
 				while (i < stud.size())
@@ -624,7 +609,7 @@ void accounting::change_info() {
 					i++;
 				}
 				if (i == stud.size()) {
-					error_message("Вы ввели несуществующий код студента.");
+					error_message(L"Вы ввели несуществующий код студента.");
 					continue;
 				}
 				int number_of_student = i;
@@ -633,18 +618,18 @@ void accounting::change_info() {
 						flag++;
 				if (flag >= subj.size() - 1)
 				{
-					error_message("У этого студента сданы все предметы.");
+					error_message(L"У этого студента сданы все предметы.");
 					flag = 1;
 					continue;
 				}
-				subject::show_info_subj("non_sorted");
-				cout << "Код предмета:" << endl;
-				while (!(cin >> buffer.code_of_subject) || cin.peek() != '\n' || buffer.get_code_of_subject() < 0) {
-					cin.clear();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					if (buffer.code_of_subject < 0) error_message("Код предмета не может быть отрицательным.");
+				subject::show_info_subj(L"non_sorted");
+				wcout << L"Код предмета:" << endl;
+				while (!(wcin >> buffer.code_of_subject) || wcin.peek() != L'\n' || buffer.get_code_of_subject() < 0) {
+					wcin.clear();
+					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+					if (buffer.code_of_subject < 0) error_message(L"Код предмета не может быть отрицательным.");
 					else
-						error_message("Вы можете ввести только цифры.");
+						error_message(L"Вы можете ввести только цифры.");
 				}
 				i = 0;
 				while (i < subj.size())
@@ -654,7 +639,7 @@ void accounting::change_info() {
 					i++;
 				}
 				if (i == subj.size()) {
-					error_message("Вы ввели несуществующий код предмета.");
+					error_message(L"Вы ввели несуществующий код предмета.");
 					continue;
 				}
 				int number_of_subject = i;
@@ -670,7 +655,7 @@ void accounting::change_info() {
 					current_semester = -1; //каникулы
 				if (subj[i].get_number_of_semester() > (buffer.course * 2 - 1) - current_semester)
 				{
-					error_message("Этот студент еще не мог сдавать этот предмет.");
+					error_message(L"Этот студент еще не мог сдавать этот предмет.");
 					flag = 0;
 					continue;
 				}
@@ -682,7 +667,7 @@ void accounting::change_info() {
 							if (buffer.code_of_subject == array[buf].code_of_subject) continue;
 							if (buffer.code_of_subject == array[j].code_of_subject)
 							{
-								error_message("У этого студента уже есть оценка по этому предмету.");
+								error_message(L"У этого студента уже есть оценка по этому предмету.");
 								flag = 1;
 								break;
 							}
@@ -691,48 +676,49 @@ void accounting::change_info() {
 					}
 				if (flag == 1)
 					continue;
-				cout << "Введите дату cдачи предмета (пример 01.01.2001):" << endl;
+				wcout << L"Введите дату cдачи предмета (пример 01.01.2001):" << endl;
 				while (1)
 				{
 					rewind(stdin);
-					getline(cin, buffer.date, '\n');
+					getline(wcin, buffer.date, L'\n');
 					if (!check_date(buffer.date, subj[number_of_subject].get_number_of_semester(), stud[number_of_student].get_course()))
 						continue;
 					else break;
 				}
-				cout << "Введите отметку по предмету:" << endl;
-				while (!(cin >> buffer.mark) || cin.peek() != '\n' || buffer.mark < 0 || buffer.mark > 10) {
-					cin.clear();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					if (buffer.mark < 0 || buffer.mark > 10) error_message("Отметка по предмету может быть от 0 до 10.");
+				wcout << L"Введите отметку по предмету:" << endl;
+				while (!(wcin >> buffer.mark) || wcin.peek() != L'\n' || buffer.mark < 0 || buffer.mark > 10) {
+					wcin.clear();
+					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+					if (buffer.mark < 0 || buffer.mark > 10) error_message(L"Отметка по предмету может быть от 0 до 10.");
 					else
-						error_message("Вы можете ввести только цифры.");
+						error_message(L"Вы можете ввести только цифры.");
 				}
-				cout << "Введите код записи:" << endl;
-				while (!(cin >> buffer.code_of_acc) || cin.peek() != '\n') {
-					cin.clear();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-					error_message("Вы можете ввести только цифры.");
+				wcout << L"Введите код записи:" << endl;
+				while (!(wcin >> buffer.code_of_acc) || wcin.peek() != L'\n' || buffer.code_of_acc < 0) {
+					wcin.clear();
+					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+					if (buffer.code_of_acc < 0) error_message(L"Код записи не может быть отрицательным.");
+					error_message(L"Вы можете ввести только цифры.");
 				}
 				for (i = 0; i < array.size(); i++) {
 					if (buffer.code_of_acc == array[buf].code_of_acc) continue;
 					if (buffer.code_of_acc == array[i].code_of_acc)
 					{
 						flag = 1;
-						error_message("Такой код записи уже введен.");
+						error_message(L"Такой код записи уже введен.");
 						break;
 					}
 				}
 				if (flag == 1)
 					continue;
 				array[buf] = buffer;
-				change_data_in_file(array, "non_sort");
+				change_data_in_file(array, L"non_sort");
 				break;
 			}
 		}
-		else error_message("Вы ввели неизвестный код записи.");
+		else error_message(L"Вы ввели неизвестный код записи.");
 	}
-	else error_message("Нет информации по записям.");
+	else error_message(L"Нет информации по записям.");
 	system("pause");
 }
 
@@ -777,29 +763,29 @@ void accounting::show_info_about_three() {
 				}
 			}
 		}
-		cout << "Информация о трех предметах с наименьшим средним баллом." << endl;
+		wcout << L"Информация о трех предметах с наименьшим средним баллом." << endl;
 		SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
-		cout << "Код предмета " << setw(20) << left << "Название предмета"
-			<< setw(20) << "ФИО Преподавателя"
-			<< "Кол-во отр-ных оценок "
-			<< "Средний балл" << endl;
+		wcout << L"Код предмета " << setw(20) << left << L"Название предмета"
+			<< setw(20) << L"ФИО Преподавателя"
+			<< L"Кол-во отр-ных оценок "
+			<< L"Средний балл" << endl;
 		SetConsoleTextAttribute(handle, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
 		for (register int j = 0; j < stud_acc.size(); j++) {
-			cout << setw(13) << left << stud_acc[j].code_of_subject << setw(20) << left << stud_acc[j].name_of_subject
+			wcout << setw(13) << left << stud_acc[j].code_of_subject << setw(20) << left << stud_acc[j].name_of_subject
 				<< setw(20) << stud_acc[j].teacher_name
 				<< setw(22) << stud_acc[j].amount_of_negative_marks
 				<< fixed << setprecision(2) << stud_acc[j].average_score << endl;
 		}
 	}
-	else error_message("Нет данных об учете студентов.");
+	else error_message(L"Нет данных об учете студентов.");
 }
 
-void accounting::delete_info_or_sort_info(string type) {
+void accounting::delete_info_or_sort_info(wstring type) {
 	vector<accounting> array = load_from_file();
 	if (array.size() != 0) {
 		system("cls");
 		int flag = 0;
-		if (type == "sort")
+		if (type == L"sort")
 		{
 			vector<student> stud;
 			stud = student::load_from_file();
@@ -812,14 +798,10 @@ void accounting::delete_info_or_sort_info(string type) {
 			array = tmp;
 		}
 		else {
-			show_info("admin", "non_sorted");
+			show_info(L"admin", L"non_sorted");
 			int buffer;
-			cout << "Введите код записи, которую хотите удалить." << endl;
-			while (!(cin >> buffer) || cin.peek() != '\n') {
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				error_message("Вы можете ввести только цифры.");
-			}
+			wcout << L"Введите код записи, которую хотите удалить." << endl;
+			buffer = input_check();
 			for (register int i = 0; i < array.size(); i++)
 				if (buffer == array[i].code_of_acc) {
 					array.erase(array.begin() + i);
@@ -829,13 +811,13 @@ void accounting::delete_info_or_sort_info(string type) {
 			if (flag == 0)
 			{
 				flag = -1;
-				error_message("Вы ввели неизвестный код записи.");
+				error_message(L"Вы ввели неизвестный код записи.");
 			}
 		}
 		if (flag != -1)
 			change_data_in_file(array, type);
 	}
-	else error_message("Нет информации по предметам.");
+	else error_message(L"Нет информации по предметам.");
 	system("pause");
 }
 
@@ -851,6 +833,6 @@ void accounting::delete_all_info_about_student(int code_of_student) {
 				flag++;
 			}
 		if (flag != 0)
-			change_data_in_file(array, "student");
+			change_data_in_file(array, L"student");
 	}
 }
