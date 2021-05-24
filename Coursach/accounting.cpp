@@ -1,14 +1,14 @@
-#include "main.h"
+п»ї#include "main.h"
 #include "Classes.h"
 
-//можно добавить вариативности посреедством показывания учета за прошлый год, только о первых курсах, за все года, 2 года назад и тд
-//надо сделать сортировку по учебным годам
+//РјРѕР¶РЅРѕ РґРѕР±Р°РІРёС‚СЊ РІР°СЂРёР°С‚РёРІРЅРѕСЃС‚Рё РїРѕСЃСЂРµРµРґСЃС‚РІРѕРј РїРѕРєР°Р·С‹РІР°РЅРёСЏ СѓС‡РµС‚Р° Р·Р° РїСЂРѕС€Р»С‹Р№ РіРѕРґ, С‚РѕР»СЊРєРѕ Рѕ РїРµСЂРІС‹С… РєСѓСЂСЃР°С…, Р·Р° РІСЃРµ РіРѕРґР°, 2 РіРѕРґР° РЅР°Р·Р°Рґ Рё С‚Рґ
+//РЅР°РґРѕ СЃРґРµР»Р°С‚СЊ СЃРѕСЂС‚РёСЂРѕРІРєСѓ РїРѕ СѓС‡РµР±РЅС‹Рј РіРѕРґР°Рј
 
 void accounting::save_to_file(accounting new_acc) {
-	wfstream fout;
-	fout.open(file_accounting, ios_base::app);
+	wfstream fout(file_accounting, ios_base::app);
+	fout.imbue(locale(locale::empty(), new codecvt_utf8<wchar_t>));
 	if (!fout.is_open())
-		error_message(L"Ошибка открытия файла");
+		error_message(L"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°");
 	else {
 		fout << new_acc.code_of_student << L','
 			<< new_acc.code_of_subject << L','
@@ -20,10 +20,10 @@ void accounting::save_to_file(accounting new_acc) {
 }
 
 void accounting::change_data_in_file(vector<accounting> array, wstring type_sort) {
-	wfstream fout;
-	fout.open(file, ios_base::out);
+	wfstream fout(file, ios_base::out);
+	fout.imbue(locale(locale::empty(), new codecvt_utf8<wchar_t>));
 	if (!fout.is_open())
-		error_message(L"Ошибка открытия файла.");
+		error_message(L"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°.");
 	else {
 		for (register int i = 0; i < array.size(); i++)
 		{
@@ -37,23 +37,23 @@ void accounting::change_data_in_file(vector<accounting> array, wstring type_sort
 		char old_name[] = file, new_name[] = file_accounting;
 		fout.close();
 		if (rename(old_name, new_name) != 0)
-			error_message(L"Ошибка в переименовании файлов.");
+			error_message(L"РћС€РёР±РєР° РІ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёРё С„Р°Р№Р»РѕРІ.");
 		else if (type_sort == L"sort")
-			complete_message(L"Вы успешно отсортировали данные.");
+			complete_message(L"Р’С‹ СѓСЃРїРµС€РЅРѕ РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°Р»Рё РґР°РЅРЅС‹Рµ.");
 		else if (type_sort == L"student")
-			complete_message(L"Данные о студенте успешно удалены.");
+			complete_message(L"Р”Р°РЅРЅС‹Рµ Рѕ СЃС‚СѓРґРµРЅС‚Рµ СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅС‹.");
 		else
-			complete_message(L"Вы успешно удалили запись.");
+			complete_message(L"Р’С‹ СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РёР»Рё Р·Р°РїРёСЃСЊ.");
 	}
 }
 
 vector<accounting> accounting::load_from_file() {
 	vector<accounting> acc;
 	accounting buffer;
-	wfstream fin;
-	fin.open(file_accounting, ios_base::in);
-	if (!fin.is_open()) error_message(L"Ошибка открытия файла.");
-	else
+	wfstream fin(file_accounting, ios_base::in);
+	fin.imbue(locale(locale::empty(), new codecvt_utf8<wchar_t>));
+	if (!fin.is_open()) error_message(L"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°.");
+	else {
 		while (fin >> buffer.code_of_student)
 		{
 			fin.ignore(1);
@@ -66,27 +66,47 @@ vector<accounting> accounting::load_from_file() {
 			fin.ignore(numeric_limits<streamsize>::max(), L'\n');
 			acc.push_back(buffer);
 		}
+		vector<student> stud;
+		stud = student::load_from_file();
+		vector<subject> subj;
+		subj = subject::load_from_file();
+		for (register int i = 0; i < acc.size(); i++) {
+			for (register int j = 0; j < stud.size(); j++)
+				if (acc[i].code_of_student == stud[j].get_code_of_student()) {
+					acc[i].full_name = stud[j].get_full_name();
+					acc[i].group = stud[j].get_group();
+					break;
+				}
+			for (register int j = 0; j < subj.size(); j++)
+				if (acc[i].code_of_subject == subj[j].get_number_of_semester()) {
+					acc[i].number_of_semester == subj[j].get_number_of_semester();
+					break;
+				}
+		}
+	}
 	return(acc);
 }
 
-vector<student> accounting::sort_array_of_accounting(vector<student> array_of_stud)
+vector<accounting> accounting::sort_array_of_accounting(vector<accounting> array_of_acc)
 {
 	vector<accounting> array_of_acc;
-	accounting acc;
-	array_of_acc = acc.load_from_file();
+	array_of_acc = load_from_file();
 	if (array_of_acc.size() != 0)
 	{
 		system("cls");
-		wcout << L"Выберите опцию:" << endl;
-		wcout << L"1)Отсортировать по информации студентов." << endl;
-		wcout << L"2)Отсортировать по успеваемости студентов." << endl;
-		wcout << L"3)Отсортировать по учебным годам." << endl;
-		wcout << L"4)Выход." << endl;
+		wcout << L"Р’С‹Р±РµСЂРёС‚Рµ РѕРїС†РёСЋ:" << endl;
+		wcout << L"1)РћС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ РёРЅС„РѕСЂРјР°С†РёРё СЃС‚СѓРґРµРЅС‚РѕРІ." << endl;
+		wcout << L"2)РћС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ СѓСЃРїРµРІР°РµРјРѕСЃС‚Рё СЃС‚СѓРґРµРЅС‚РѕРІ." << endl;
+		wcout << L"3)РћС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ СѓС‡РµР±РЅС‹Рј РіРѕРґР°Рј." << endl;
+		wcout << L"4)Р’С‹С…РѕРґ." << endl;
 		switch (input_check())
 		{
 		case 1:
-			array_of_stud = student::sort_array(array_of_stud);
-			return (array_of_stud);
+		{
+			vector<student> stud = student::load_from_file();
+			stud = student::sort_array(stud);
+			bruh
+				return (); }
 		case 2:
 		{
 			vector<student_account> stud_acc;
@@ -150,7 +170,7 @@ vector<student> accounting::sort_array_of_accounting(vector<student> array_of_st
 			//{
 			//	month = array_of_acc[i].date.substr(3, 2);
 			//	year = array_of_acc[i].date.substr(6, 4);
-			//	//надо сделать сортировку по учебным годам ......
+			//	//РЅР°РґРѕ СЃРґРµР»Р°С‚СЊ СЃРѕСЂС‚РёСЂРѕРІРєСѓ РїРѕ СѓС‡РµР±РЅС‹Рј РіРѕРґР°Рј ......
 			//		amount_of_month.push_back(stoi(year) * 12 + stoi(month));
 			//}
 			//switch (switch_sort())
@@ -183,81 +203,23 @@ vector<student> accounting::sort_array_of_accounting(vector<student> array_of_st
 			  break;
 		case 4:
 			return(array_of_stud);
-		default: error_message(L"Вы ввели неизвестную опцию");
+		default: error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРёР·РІРµСЃС‚РЅСѓСЋ РѕРїС†РёСЋ");
 			break;
 		}
 	}
-	else error_message(L"Нет данных об учете студентов");
+	else error_message(L"РќРµС‚ РґР°РЅРЅС‹С… РѕР± СѓС‡РµС‚Рµ СЃС‚СѓРґРµРЅС‚РѕРІ");
 }
 
 void accounting::show_info(wstring group, wstring sort_type) {
 	vector<accounting> acc;
 	acc = load_from_file();
 	if (acc.size() != 0) {
-		vector<student> stud;
-		stud = student::load_from_file();
-		vector<subject> subj;
-		subj = subject::load_from_file();
 		if (sort_type == L"sorted")
-			stud = sort_array_of_accounting(stud);
-		wcout << L"Таблица успеваемости студентов." << endl;
-		SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
-		wcout << L"Код студента " << setw(40) << left << L"Имя Студента"
-			<< setw(20) << L"Предмет"
-			<< L"Дата сдачи "
-			<< L"Оценка "
-			<< L"Семестр "
-			<< L"Код записи" << endl;
-		SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
-		for (register int k = 0; k < stud.size(); k++)
-		{
-			if (group != L"admin")
-			{
-				if (stud[k].get_group().compare(0, 4, group, 0, 4) == 0)
-				{
-					wcout << L"\r";
-					wcout << setw(13) << left << stud[k].get_code_of_student()
-						<< setw(40) << left << stud[k].get_full_name();
-					for (register int j = 0; j < acc.size(); j++)
-					{
-						if (stud[k].get_code_of_student() == acc[j].code_of_student)
-							for (register int g = 0; g < subj.size(); g++)
-								if (acc[j].code_of_subject == subj[g].get_code_of_subject())
-								{
-									wcout << setw(20) << left << subj[g].get_name()
-										<< setw(11) << left << acc[j].date
-										<< setw(7) << left << acc[j].mark
-										<< setw(8) << left << subj[g].get_number_of_semester()
-										<< acc[j].code_of_acc << endl;
-									wcout << setw(53) << "";
-								}
-					}
-				}
-			}
-			else {
-				wcout << L"\r";
-				wcout << setw(13) << left << stud[k].get_code_of_student()
-					<< setw(40) << left << stud[k].get_full_name();
-				for (register int j = 0; j < acc.size(); j++)
-				{
-					if (stud[k].get_code_of_student() == acc[j].code_of_student)
-						for (register int g = 0; g < subj.size(); g++)
-							if (acc[j].code_of_subject == subj[g].get_code_of_subject())
-							{
-								wcout << setw(20) << left << subj[g].get_name()
-									<< setw(11) << left << acc[j].date
-									<< setw(7) << left << acc[j].mark
-									<< setw(8) << left << subj[g].get_number_of_semester()
-									<< acc[j].code_of_acc << endl;
-								wcout << setw(53) << "";
-							}
-				}
-			}
-		}
-		wcout << L"\r";
+			acc = sort_array_of_accounting(acc);
+		wcout << L"РўР°Р±Р»РёС†Р° СѓСЃРїРµРІР°РµРјРѕСЃС‚Рё СЃС‚СѓРґРµРЅС‚РѕРІ." << endl;
+		print(acc, group);
 	}
-	else error_message(L"Нет данных об учете студентов");
-	system("pause");
+	else error_message(L"РќРµС‚ РґР°РЅРЅС‹С… РѕР± СѓС‡РµС‚Рµ СЃС‚СѓРґРµРЅС‚РѕРІ");
 }
 
 void accounting::search_info(wstring group) {
@@ -268,16 +230,16 @@ void accounting::search_info(wstring group) {
 	vector<accounting> array_to_show;
 	if (array.size() != 0) {
 		buffer = search_menu(group);
-		if (buffer < 3)
+		if (buffer < 4)
 			switch (buffer) {
 			case 1:
-				wcout << L"Введите искомый код студента" << endl;
+				wcout << L"Р’РІРµРґРёС‚Рµ РёСЃРєРѕРјС‹Р№ РєРѕРґ СЃС‚СѓРґРµРЅС‚Р°" << endl;
 				while (!(wcin >> buffer) || wcin.peek() != L'\n' || buffer < 0) {
 					wcin.clear();
 					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-					if (buffer < 0) error_message(L"Код студента не может быть отрицательным.");
+					if (buffer < 0) error_message(L"РљРѕРґ СЃС‚СѓРґРµРЅС‚Р° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј.");
 					else
-						error_message(L"Вы можете ввести только цифры.");
+						error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 				}
 				for (register int i = 0; i < array.size(); i++)
 				{
@@ -293,19 +255,14 @@ void accounting::search_info(wstring group) {
 				}
 				break;
 			case 2:
-				wcout << L"Введите искомые ФИО студента" << endl;
+				wcout << L"Р’РІРµРґРёС‚Рµ РёСЃРєРѕРјС‹Рµ Р¤РРћ СЃС‚СѓРґРµРЅС‚Р°" << endl;
 				while (1) {
 					buffer = 1;
 					rewind(stdin);
 					getline(wcin, string_buffer, L'\n');
-					if (string_buffer.size() > 40)
-					{
-						error_message(L"Имя студента не должно превышать 40 символов.");
-						continue;
-					}
 					for (register int i = 0; i < string_buffer.size(); i++)
 						if (!is_russian_alpha(string_buffer[i])) {
-							error_message(L"Пожaлуйста, используйте только русские буквы.");
+							error_message(L"РџРѕР¶aР»СѓР№СЃС‚Р°, РёСЃРїРѕР»СЊР·СѓР№С‚Рµ С‚РѕР»СЊРєРѕ СЂСѓСЃСЃРєРёРµ Р±СѓРєРІС‹.");
 							buffer = -1;
 							break;
 						}
@@ -327,19 +284,14 @@ void accounting::search_info(wstring group) {
 				}
 				break;
 			case 3:
-				wcout << L"Введите искомое название предмета." << endl;
+				wcout << L"Р’РІРµРґРёС‚Рµ РёСЃРєРѕРјРѕРµ РЅР°Р·РІР°РЅРёРµ РїСЂРµРґРјРµС‚Р°." << endl;
 				while (1) {
 					buffer = 1;
 					rewind(stdin);
 					getline(wcin, string_buffer, L'\n');
-					if (string_buffer.size() > 20)
-					{
-						error_message(L"Название предмета не должно превышать 20 символов.");
-						continue;
-					}
 					for (register int i = 0; i < string_buffer.size(); i++)
 						if (!is_russian_alpha(string_buffer[i])) {
-							error_message(L"Пожaлуйста, используйте только русские буквы.");
+							error_message(L"РџРѕР¶aР»СѓР№СЃС‚Р°, РёСЃРїРѕР»СЊР·СѓР№С‚Рµ С‚РѕР»СЊРєРѕ СЂСѓСЃСЃРєРёРµ Р±СѓРєРІС‹.");
 							buffer = -1;
 							break;
 						}
@@ -360,74 +312,60 @@ void accounting::search_info(wstring group) {
 					break;
 				}
 				break;
-			default: error_message(L"Вы ввели неизвестную опцию");
+			default: error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРёР·РІРµСЃС‚РЅСѓСЋ РѕРїС†РёСЋ");
 				break;
 			}
 		else
 			switch (buffer) {
 			case 4:
-				wcout << L"Введите искомый код записи." << endl;
+				wcout << L"Р’РІРµРґРёС‚Рµ РёСЃРєРѕРјС‹Р№ РєРѕРґ Р·Р°РїРёСЃРё." << endl;
 				while (!(wcin >> buffer) || wcin.peek() != L'\n' || buffer < 0) {
 					wcin.clear();
 					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
 					if (buffer < 0)
-						error_message(L"Курс не может быть отрицательным");
+						error_message(L"РљРѕРґ Р·Р°РїРёСЃРё РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј");
 					else
-						error_message(L"Вы можете ввести только цифры");
+						error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹");
 				}
 				for (register int i = 0; i < array.size(); i++)
 					if (buffer == array[i].code_of_acc)
 						array_to_show.push_back(array[i]);
 				break;
 			case 5:
-				wcout << L"Введите искомый семестр." << endl;
+				wcout << L"Р’РІРµРґРёС‚Рµ РёСЃРєРѕРјС‹Р№ СЃРµРјРµСЃС‚СЂ." << endl;
 				while (!(wcin >> buffer) || wcin.peek() != L'\n' || buffer < 1 || buffer > 8) {
 					wcin.clear();
 					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
 					if (buffer < 1 || buffer > 8)
-						error_message(L"Семестр может быть от 1 до 8");
+						error_message(L"РЎРµРјРµСЃС‚СЂ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚ 1 РґРѕ 8");
 					else
-						error_message(L"Вы можете ввести только цифры");
+						error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹");
 				}
 				for (register int i = 0; i < array.size(); i++)
 					if (buffer == array[i].get_number_of_semester())
 						array_to_show.push_back(array[i]);
 				break;
 			default:
-				error_message(L"Вы ввели неизвестную опцию");
+				error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРёР·РІРµСЃС‚РЅСѓСЋ РѕРїС†РёСЋ");
 				break;
 			}
 		if (array_to_show.size() == 0) {
-			error_message(L"Нет записей с искомыми данными");
+			error_message(L"РќРµС‚ Р·Р°РїРёСЃРµР№ СЃ РёСЃРєРѕРјС‹РјРё РґР°РЅРЅС‹РјРё");
 			return;
 		}
-		wcout << L"Код студента " << setw(40) << left << L"Имя Студента"
-			<< setw(20) << L"Предмет"
-			<< L"Дата сдачи "
-			<< L"Оценка "
-			<< L"Семестр "
-			<< L"Код записи" << endl;
-		for (register int i = 0; i < array_to_show.size(); i++) {
-			wcout << setw(13) << left << array_to_show[i].get_code_of_student()
-				<< setw(40) << left << array_to_show[i].get_full_name()
-				<< setw(20) << left << array_to_show[i].get_name()
-				<< setw(11) << left << array_to_show[i].date
-				<< setw(7) << left << array_to_show[i].mark
-				<< setw(8) << left << array_to_show[i].get_number_of_semester()
-				<< array_to_show[i].code_of_acc << endl;
-		}
+		print(array_to_show);
 	}
-	else error_message(L"Нет данных об учете успеваемости.");
+	else error_message(L"РќРµС‚ РґР°РЅРЅС‹С… РѕР± СѓС‡РµС‚Рµ СѓСЃРїРµРІР°РµРјРѕСЃС‚Рё.");
 }
 
 int accounting::search_menu(wstring group) {
-	wcout << L"Выберите опцию." << endl;
-	wcout << L"1)Поиск по коду студента" << endl;
-	wcout << L"2)Поиск по ФИО студента" << endl;
-	wcout << L"3)Поиск по названию предмета" << endl;
+	wcout << L"Р’С‹Р±РµСЂРёС‚Рµ РѕРїС†РёСЋ." << endl;
+	wcout << L"1)РџРѕРёСЃРє РїРѕ РєРѕРґСѓ СЃС‚СѓРґРµРЅС‚Р°" << endl;
+	wcout << L"2)РџРѕРёСЃРє РїРѕ Р¤РРћ СЃС‚СѓРґРµРЅС‚Р°" << endl;
+	wcout << L"3)РџРѕРёСЃРє РїРѕ РЅР°Р·РІР°РЅРёСЋ РїСЂРµРґРјРµС‚Р°" << endl;
 	if (group == L"admin") {
-		wcout << L"4)Поиск по коду записи" << endl;
-		wcout << L"5)Поиск по семестру " << endl;
+		wcout << L"4)РџРѕРёСЃРє РїРѕ РєРѕРґСѓ Р·Р°РїРёСЃРё" << endl;
+		wcout << L"5)РџРѕРёСЃРє РїРѕ СЃРµРјРµСЃС‚СЂСѓ " << endl;
 	}
 	return(input_check());
 }
@@ -440,21 +378,23 @@ void accounting::add_info() {
 	stud = student::load_from_file();
 	vector<subject> subj;
 	subj = subject::load_from_file();
+	int i = 0, number_of_subject = -1, number_of_student = -1;
 	system("cls");
 	if (stud.size() != 0 && subj.size() != 0)
+	{
+		show_info(L"admin", L"non_sorted");
+		wcout << L"Р’РІРµРґРёС‚Рµ РЅРѕРІСѓСЋ Р·Р°РїРёСЃСЊ Рѕ СЃРґР°С‡Рµ РїСЂРµРґРјРµС‚Р°." << endl;
+		student::show_info_stud(L"admin", L"non_sorted");
+		wcout << L"РљРѕРґ СЃС‚СѓРґРµРЅС‚Р°:" << endl;
 		while (1) {
-			show_info(L"admin", L"non_sorted");
-			wcout << L"Введите новую запись о сдаче предмета." << endl;
-			student::show_info_stud(L"admin", L"non_sorted");
-			wcout << L"Код студента:" << endl;
 			while (!(wcin >> buffer.code_of_student) || wcin.peek() != L'\n' || buffer.code_of_student < 0) {
 				wcin.clear();
 				wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-				if (buffer.code_of_student < 0) error_message(L"Код студента не может быть отрицательным.");
+				if (buffer.code_of_student < 0) error_message(L"РљРѕРґ СЃС‚СѓРґРµРЅС‚Р° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј.");
 				else
-					error_message(L"Вы можете ввести только цифры.");
+					error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 			}
-			int i = 0;
+			i = 0;
 			while (i < stud.size())
 			{
 				if (buffer.code_of_student == stud[i].get_code_of_student())
@@ -464,28 +404,31 @@ void accounting::add_info() {
 				}
 				i++;
 			}
-			if (i == stud.size()) {
-				error_message(L"Вы ввели несуществующий код студента.");
+			if (i >= stud.size()) {
+				error_message(L"Р’С‹ РІРІРµР»Рё РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РєРѕРґ СЃС‚СѓРґРµРЅС‚Р°.");
 				continue;
 			}
-			int number_of_student = i;
+			number_of_student = i;
+			flag = 0;
 			for (i = 0; i < array.size(); i++)
 				if (buffer.code_of_student == array[i].code_of_student)
 					flag++;
 			if (flag >= subj.size())
 			{
-				error_message(L"У этого студента сданы все предметы.");
-				flag = 1;
+				error_message(L"РЈ СЌС‚РѕРіРѕ СЃС‚СѓРґРµРЅС‚Р° СЃРґР°РЅС‹ РІСЃРµ РїСЂРµРґРјРµС‚С‹.");
 				continue;
 			}
-			subject::show_info_subj(L"non_sorted");
-			wcout << L"Код предмета:" << endl;
+			break;
+		}
+		subject::show_info_subj(L"non_sorted");
+		wcout << L"РљРѕРґ РїСЂРµРґРјРµС‚Р°:" << endl;
+		while (1) {
 			while (!(wcin >> buffer.code_of_subject) || wcin.peek() != L'\n' || buffer.code_of_subject < 0) {
 				wcin.clear();
 				wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-				if (buffer.code_of_subject < 0) error_message(L"Код предмета не может быть отрицательным.");
+				if (buffer.code_of_subject < 0) error_message(L"РљРѕРґ РїСЂРµРґРјРµС‚Р° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј.");
 				else
-					error_message(L"Вы можете ввести только цифры.");
+					error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 			}
 			i = 0;
 			while (i < subj.size())
@@ -494,76 +437,75 @@ void accounting::add_info() {
 					break;
 				i++;
 			}
-			if (i == subj.size()) {
-				error_message(L"Вы ввели несуществующий код предмета.");
+			if (i >= subj.size()) {
+				error_message(L"Р’С‹ РІРІРµР»Рё РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РєРѕРґ РїСЂРµРґРјРµС‚Р°.");
 				continue;
 			}
-			int number_of_subject = i;
+			number_of_subject = i;
 			time_t now = time(0);
 			struct tm local;
 			localtime_s(&local, &now);
 			int current_semester = 0;
 			if (local.tm_mon + 1 > 8)
-				current_semester = 1;//первый сем
+				current_semester = 1;//РїРµСЂРІС‹Р№ СЃРµРј
 			else if (local.tm_mon + 1 < 7)
-				current_semester = 0;//второй сем
+				current_semester = 0;//РІС‚РѕСЂРѕР№ СЃРµРј
 			else if (local.tm_mon > 6 && local.tm_mon < 9)
-				current_semester = -1; //каникулы
-			if (subj[i].get_number_of_semester() > (buffer.course * 2 - 1) - current_semester) {
-				error_message(L"Этот студент еще не мог сдавать этот предмет.");
-				flag = 0;
+				current_semester = -1; //РєР°РЅРёРєСѓР»С‹
+			if (subj[number_of_subject].get_number_of_semester() > (buffer.course * 2 - 1) - current_semester) {
+				error_message(L"Р­С‚РѕС‚ СЃС‚СѓРґРµРЅС‚ РµС‰Рµ РЅРµ РјРѕРі СЃРґР°РІР°С‚СЊ СЌС‚РѕС‚ РїСЂРµРґРјРµС‚.");
 				continue;
 			}
+			flag = 0;
 			for (i = 0; i < array.size(); i++)
 				if (buffer.code_of_student == array[i].get_code_of_student())
 				{
 					for (register int j = 0; j < array.size(); j++)
 						if (buffer.code_of_subject == array[j].code_of_subject)
 						{
-							error_message(L"У этого студента уже есть оценка по этому предмету.");
+							error_message(L"РЈ СЌС‚РѕРіРѕ СЃС‚СѓРґРµРЅС‚Р° СѓР¶Рµ РµСЃС‚СЊ РѕС†РµРЅРєР° РїРѕ СЌС‚РѕРјСѓ РїСЂРµРґРјРµС‚Сѓ.");
 							flag = 1;
 							break;
 						}
 					break;
 				}
-			if (flag == 1)
+			if (flag == 1) continue;
+			break;
+		}
+		wcout << L"Р’РІРµРґРёС‚Рµ РґР°С‚Сѓ cРґР°С‡Рё РїСЂРµРґРјРµС‚Р° (РїСЂРёРјРµСЂ 01.01.2001):" << endl;
+		while (1)
+		{
+			rewind(stdin);
+			getline(wcin, buffer.date, L'\n');
+			if (!check_date(buffer.date, subj[number_of_subject].get_number_of_semester(), stud[number_of_student].get_course()))
 				continue;
-			wcout << L"Введите дату cдачи предмета (пример 01.01.2001):" << endl;
-			while (1)
-			{
-				rewind(stdin);
-				getline(wcin, buffer.date, L'\n');
-				if (!check_date(buffer.date, subj[number_of_subject].get_number_of_semester(), stud[number_of_student].get_course()))
-					continue;
-				else break;
-			}
-			wcout << L"Введите отметку по предмету:" << endl;
-			while (!(wcin >> buffer.mark) || wcin.peek() != L'\n' || buffer.mark < 0 || buffer.mark > 10) {
-				wcin.clear();
-				wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-				if (buffer.mark < 0 || buffer.mark > 10) error_message(L"Отметка по предмету может быть от 0 до 10.");
-				else
-					error_message(L"Вы можете ввести только цифры.");
-			}
-			wcout << L"Введите код записи:" << endl;
-			while (!(wcin >> buffer.code_of_acc) || wcin.peek() != L'\n') {
-				wcin.clear();
-				wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-				error_message(L"Вы можете ввести только цифры.");
-			}
+			break;
+		}
+		wcout << L"Р’РІРµРґРёС‚Рµ РѕС‚РјРµС‚РєСѓ РїРѕ РїСЂРµРґРјРµС‚Сѓ:" << endl;
+		while (!(wcin >> buffer.mark) || wcin.peek() != L'\n' || buffer.mark < 0 || buffer.mark > 10) {
+			wcin.clear();
+			wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+			if (buffer.mark < 0 || buffer.mark > 10) error_message(L"РћС‚РјРµС‚РєР° РїРѕ РїСЂРµРґРјРµС‚Сѓ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚ 0 РґРѕ 10.");
+			else
+				error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
+		}
+		wcout << L"Р’РІРµРґРёС‚Рµ РєРѕРґ Р·Р°РїРёСЃРё:" << endl;
+		while (1) {
+			buffer.code_of_acc = input_check();
 			for (i = 0; i < array.size(); i++)
 				if (buffer.code_of_acc == array[i].code_of_acc)
 				{
 					flag = 1;
-					error_message(L"Такой код записи уже введен.");
+					error_message(L"РўР°РєРѕР№ РєРѕРґ Р·Р°РїРёСЃРё СѓР¶Рµ РІРІРµРґРµРЅ.");
 					break;
 				}
 			if (flag == 1)
 				continue;
-			save_to_file(buffer);
 			break;
 		}
-	else error_message(L"В базе нет данных о предметах или об учениках.");
+		save_to_file(buffer);
+	}
+	else error_message(L"Р’ Р±Р°Р·Рµ РЅРµС‚ РґР°РЅРЅС‹С… Рѕ РїСЂРµРґРјРµС‚Р°С… РёР»Рё РѕР± СѓС‡РµРЅРёРєР°С….");
 }
 
 void accounting::change_info() {
@@ -578,7 +520,8 @@ void accounting::change_info() {
 		show_info(L"admin", L"non_sorted");
 		int buf;
 		int flag = 1;
-		wcout << L"Введите код записи, которую хотите поменять." << endl;
+		int number_of_student = 0, number_of_subject = 0;
+		wcout << L"Р’РІРµРґРёС‚Рµ РєРѕРґ Р·Р°РїРёСЃРё, РєРѕС‚РѕСЂСѓСЋ С…РѕС‚РёС‚Рµ РїРѕРјРµРЅСЏС‚СЊ." << endl;
 		buf = input_check();
 		for (register int i = 0; i < array.size(); i++)
 			if (buf == array[i].code_of_acc) {
@@ -589,94 +532,99 @@ void accounting::change_info() {
 		if (flag == 0) {
 			while (1) {
 				system("cls");
-				wcout << L"Введите новую запись о сдаче предмета." << endl;
-				wcout << L"Код студента:" << endl;
-				while (!(wcin >> buffer.code_of_student) || wcin.peek() != L'\n' || buffer.code_of_student < 0) {
-					wcin.clear();
-					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-					if (buffer.code_of_student < 0) error_message(L"Код студента не может быть отрицательным.");
-					else
-						error_message(L"Вы можете ввести только цифры.");
-				}
-				int i = 0;
-				while (i < stud.size())
-				{
-					if (buffer.code_of_student == stud[i].get_code_of_student())
-					{
-						buffer.course = stud[i].get_course();
-						break;
+				wcout << L"Р’РІРµРґРёС‚Рµ РЅРѕРІСѓСЋ Р·Р°РїРёСЃСЊ Рѕ СЃРґР°С‡Рµ РїСЂРµРґРјРµС‚Р°." << endl;
+				wcout << L"РљРѕРґ СЃС‚СѓРґРµРЅС‚Р°:" << endl;
+				while (1) {
+					while (!(wcin >> buffer.code_of_student) || wcin.peek() != L'\n' || buffer.code_of_student < 0) {
+						wcin.clear();
+						wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+						if (buffer.code_of_student < 0) error_message(L"РљРѕРґ СЃС‚СѓРґРµРЅС‚Р° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј.");
+						else
+							error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 					}
-					i++;
-				}
-				if (i == stud.size()) {
-					error_message(L"Вы ввели несуществующий код студента.");
-					continue;
-				}
-				int number_of_student = i;
-				for (i = 0; i < array.size(); i++)
-					if (buffer.code_of_student == array[i].get_code_of_student())
+					flag = 0;
+					while (flag < stud.size())
+					{
+						if (buffer.code_of_student == stud[flag].get_code_of_student())
+						{
+							buffer.course = stud[flag].get_course();
+							break;
+						}
 						flag++;
-				if (flag >= subj.size() - 1)
-				{
-					error_message(L"У этого студента сданы все предметы.");
-					flag = 1;
-					continue;
+					}
+					if (flag >= stud.size()) {
+						error_message(L"Р’С‹ РІРІРµР»Рё РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РєРѕРґ СЃС‚СѓРґРµРЅС‚Р°.");
+						continue;
+					}
+					number_of_student = flag;
+					flag = 0;
+					for (register int i = 0; i < array.size(); i++)
+						if (buffer.code_of_student == array[i].get_code_of_student())
+							flag++;
+					if (flag >= subj.size() - 1)
+					{
+						error_message(L"РЈ СЌС‚РѕРіРѕ СЃС‚СѓРґРµРЅС‚Р° СЃРґР°РЅС‹ РІСЃРµ РїСЂРµРґРјРµС‚С‹.");
+						continue;
+					}
+					break;
 				}
 				subject::show_info_subj(L"non_sorted");
-				wcout << L"Код предмета:" << endl;
-				while (!(wcin >> buffer.code_of_subject) || wcin.peek() != L'\n' || buffer.get_code_of_subject() < 0) {
-					wcin.clear();
-					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-					if (buffer.code_of_subject < 0) error_message(L"Код предмета не может быть отрицательным.");
-					else
-						error_message(L"Вы можете ввести только цифры.");
-				}
-				i = 0;
-				while (i < subj.size())
-				{
-					if (buffer.code_of_subject == subj[i].get_code_of_subject())
-						break;
-					i++;
-				}
-				if (i == subj.size()) {
-					error_message(L"Вы ввели несуществующий код предмета.");
-					continue;
-				}
-				int number_of_subject = i;
-				time_t now = time(0);
-				struct tm local;
-				localtime_s(&local, &now);
-				int current_semester = 0;
-				if (local.tm_mon + 1 > 8)
-					current_semester = 1;//первый сем
-				else if (local.tm_mon + 1 < 7)
-					current_semester = 0;//второй сем
-				else if (local.tm_mon > 6 && local.tm_mon < 9)
-					current_semester = -1; //каникулы
-				if (subj[i].get_number_of_semester() > (buffer.course * 2 - 1) - current_semester)
-				{
-					error_message(L"Этот студент еще не мог сдавать этот предмет.");
-					flag = 0;
-					continue;
-				}
-				for (i = 0; i < array.size(); i++)
-					if (buffer.code_of_student == array[i].code_of_student)
-					{
-						for (register int j = 0; j < array.size(); j++)
-						{
-							if (buffer.code_of_subject == array[buf].code_of_subject) continue;
-							if (buffer.code_of_subject == array[j].code_of_subject)
-							{
-								error_message(L"У этого студента уже есть оценка по этому предмету.");
-								flag = 1;
-								break;
-							}
-						}
-						break;
+				wcout << L"РљРѕРґ РїСЂРµРґРјРµС‚Р°:" << endl;
+				while (1) {
+					while (!(wcin >> buffer.code_of_subject) || wcin.peek() != L'\n' || buffer.get_code_of_subject() < 0) {
+						wcin.clear();
+						wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+						if (buffer.code_of_subject < 0) error_message(L"РљРѕРґ РїСЂРµРґРјРµС‚Р° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј.");
+						else
+							error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 					}
-				if (flag == 1)
-					continue;
-				wcout << L"Введите дату cдачи предмета (пример 01.01.2001):" << endl;
+					flag = 0;
+					while (flag < subj.size())
+					{
+						if (buffer.code_of_subject == subj[flag].get_code_of_subject())
+							break;
+						flag++;
+					}
+					if (flag >= subj.size()) {
+						error_message(L"Р’С‹ РІРІРµР»Рё РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РєРѕРґ РїСЂРµРґРјРµС‚Р°.");
+						continue;
+					}
+					number_of_subject = flag;
+					time_t now = time(0);
+					struct tm local;
+					localtime_s(&local, &now);
+					int current_semester = 0;
+					if (local.tm_mon + 1 > 8)
+						current_semester = 1;//РїРµСЂРІС‹Р№ СЃРµРј
+					else if (local.tm_mon + 1 < 7)
+						current_semester = 0;//РІС‚РѕСЂРѕР№ СЃРµРј
+					else if (local.tm_mon > 6 && local.tm_mon < 9)
+						current_semester = -1; //РєР°РЅРёРєСѓР»С‹
+					if (subj[number_of_subject].get_number_of_semester() > (buffer.course * 2 - 1) - current_semester)
+					{
+						error_message(L"Р­С‚РѕС‚ СЃС‚СѓРґРµРЅС‚ РµС‰Рµ РЅРµ РјРѕРі СЃРґР°РІР°С‚СЊ СЌС‚РѕС‚ РїСЂРµРґРјРµС‚.");
+						continue;
+					}
+					for (register int i = 0; i < array.size(); i++)
+						if (buffer.code_of_student == array[i].code_of_student)
+						{
+							for (register int j = 0; j < array.size(); j++)
+							{
+								if (buffer.code_of_subject == array[buf].code_of_subject) continue;
+								if (buffer.code_of_subject == array[j].code_of_subject)
+								{
+									error_message(L"РЈ СЌС‚РѕРіРѕ СЃС‚СѓРґРµРЅС‚Р° СѓР¶Рµ РµСЃС‚СЊ РѕС†РµРЅРєР° РїРѕ СЌС‚РѕРјСѓ РїСЂРµРґРјРµС‚Сѓ.");
+									flag = 1;
+									break;
+								}
+							}
+							break;
+						}
+					if (flag == 1)
+						continue;
+					break;
+				}
+				wcout << L"Р’РІРµРґРёС‚Рµ РґР°С‚Сѓ cРґР°С‡Рё РїСЂРµРґРјРµС‚Р° (РїСЂРёРјРµСЂ 01.01.2001):" << endl;
 				while (1)
 				{
 					rewind(stdin);
@@ -685,41 +633,43 @@ void accounting::change_info() {
 						continue;
 					else break;
 				}
-				wcout << L"Введите отметку по предмету:" << endl;
+				wcout << L"Р’РІРµРґРёС‚Рµ РѕС‚РјРµС‚РєСѓ РїРѕ РїСЂРµРґРјРµС‚Сѓ:" << endl;
 				while (!(wcin >> buffer.mark) || wcin.peek() != L'\n' || buffer.mark < 0 || buffer.mark > 10) {
 					wcin.clear();
 					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-					if (buffer.mark < 0 || buffer.mark > 10) error_message(L"Отметка по предмету может быть от 0 до 10.");
+					if (buffer.mark < 0 || buffer.mark > 10) error_message(L"РћС‚РјРµС‚РєР° РїРѕ РїСЂРµРґРјРµС‚Сѓ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚ 0 РґРѕ 10.");
 					else
-						error_message(L"Вы можете ввести только цифры.");
+						error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 				}
-				wcout << L"Введите код записи:" << endl;
-				while (!(wcin >> buffer.code_of_acc) || wcin.peek() != L'\n' || buffer.code_of_acc < 0) {
-					wcin.clear();
-					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-					if (buffer.code_of_acc < 0) error_message(L"Код записи не может быть отрицательным.");
-					error_message(L"Вы можете ввести только цифры.");
-				}
-				for (i = 0; i < array.size(); i++) {
-					if (buffer.code_of_acc == array[buf].code_of_acc) continue;
-					if (buffer.code_of_acc == array[i].code_of_acc)
-					{
-						flag = 1;
-						error_message(L"Такой код записи уже введен.");
-						break;
+				wcout << L"Р’РІРµРґРёС‚Рµ РєРѕРґ Р·Р°РїРёСЃРё:" << endl;
+				while (1) {
+					while (!(wcin >> buffer.code_of_acc) || wcin.peek() != L'\n' || buffer.code_of_acc < 0) {
+						wcin.clear();
+						wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+						if (buffer.code_of_acc < 0) error_message(L"РљРѕРґ Р·Р°РїРёСЃРё РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј.");
+						error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 					}
+					for (register int i = 0; i < array.size(); i++) {
+						if (buffer.code_of_acc == array[buf].code_of_acc) continue;
+						if (buffer.code_of_acc == array[i].code_of_acc)
+						{
+							flag = 1;
+							error_message(L"РўР°РєРѕР№ РєРѕРґ Р·Р°РїРёСЃРё СѓР¶Рµ РІРІРµРґРµРЅ.");
+							break;
+						}
+					}
+					if (flag == 1)
+						continue;
+					break;
 				}
-				if (flag == 1)
-					continue;
 				array[buf] = buffer;
 				change_data_in_file(array, L"non_sort");
 				break;
 			}
 		}
-		else error_message(L"Вы ввели неизвестный код записи.");
+		else error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРёР·РІРµСЃС‚РЅС‹Р№ РєРѕРґ Р·Р°РїРёСЃРё.");
 	}
-	else error_message(L"Нет информации по записям.");
-	system("pause");
+	else error_message(L"РќРµС‚ РёРЅС„РѕСЂРјР°С†РёРё РїРѕ Р·Р°РїРёСЃСЏРј.");
 }
 
 void accounting::show_info_about_three() {
@@ -763,21 +713,35 @@ void accounting::show_info_about_three() {
 				}
 			}
 		}
-		wcout << L"Информация о трех предметах с наименьшим средним баллом." << endl;
-		SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
-		wcout << L"Код предмета " << setw(20) << left << L"Название предмета"
-			<< setw(20) << L"ФИО Преподавателя"
-			<< L"Кол-во отр-ных оценок "
-			<< L"Средний балл" << endl;
-		SetConsoleTextAttribute(handle, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
-		for (register int j = 0; j < stud_acc.size(); j++) {
-			wcout << setw(13) << left << stud_acc[j].code_of_subject << setw(20) << left << stud_acc[j].name_of_subject
-				<< setw(20) << stud_acc[j].teacher_name
-				<< setw(22) << stud_acc[j].amount_of_negative_marks
-				<< fixed << setprecision(2) << stud_acc[j].average_score << endl;
+		wcout << L"РРЅС„РѕСЂРјР°С†РёСЏ Рѕ С‚СЂРµС… РїСЂРµРґРјРµС‚Р°С… СЃ РЅР°РёРјРµРЅСЊС€РёРј СЃСЂРµРґРЅРёРј Р±Р°Р»Р»РѕРј." << endl;
+		int max_size_name = 0, max_size_teacher_name = 0;
+		for (int i = 0; i < stud_acc.size(); i++)
+		{
+			if (stud_acc.at(i).name_of_subject.length() > max_size_name)
+				max_size_name = stud_acc.at(i).name_of_subject.size();
+			if (array.at(i).teacher_name.length() > max_size_teacher_name)
+				max_size_teacher_name = array.at(i).teacher_name.size();
 		}
+		int table_width = 14 + 21 + 13 + ((max_size_teacher_name > 16) ? max_size_teacher_name + 1 : 16) + (max_size_name > 18 ? max_size_name + 1 : 18);
+		wcout << L"в”Њ" << wstring(table_width, L'в”Ђ') << L"в”ђ" << endl;
+		wcout << L"в”‚";
+		SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
+		wcout << L"РљРѕРґ РїСЂРµРґРјРµС‚Р° " << setw(max_size_name > 18 ? max_size_name + 1 : 18) << left << L"РќР°Р·РІР°РЅРёРµ РїСЂРµРґРјРµС‚Р° "
+			<< setw(max_size_teacher_name > 16 ? max_size_teacher_name + 1 : 16) << L"Р¤РРћ РџСЂРµРїРѕРґР°РІР°С‚РµР»СЏ "
+			<< L"РљРѕР»-РІРѕ РѕС‚СЂ-РЅС‹С… РѕС†РµРЅРѕРє "
+			<< L"РЎСЂРµРґРЅРёР№ Р±Р°Р»Р»";
+		SetConsoleTextAttribute(handle, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
+		wcout << L"в”‚" << endl;
+		for (register int j = 0; j < stud_acc.size(); j++) {
+			wcout << L"в”њ" << wstring(table_width, L'в”Ђ') << L"в”¤" << endl;
+			wcout << L"в”‚" << setw(13) << left << stud_acc[j].code_of_subject << setw(max_size_name > 18 ? max_size_name + 1 : 18) << left << stud_acc[j].name_of_subject
+				<< setw(max_size_teacher_name > 16 ? max_size_teacher_name + 1 : 16) << stud_acc[j].teacher_name
+				<< setw(21) << stud_acc[j].amount_of_negative_marks
+				<< setw(12) << fixed << setprecision(2) << stud_acc[j].average_score << L"в”‚" << endl;
+		}
+		wcout << L"в””" << wstring(table_width, L'в”Ђ') << L"в”" << endl;
 	}
-	else error_message(L"Нет данных об учете студентов.");
+	else error_message(L"РќРµС‚ РґР°РЅРЅС‹С… РѕР± СѓС‡РµС‚Рµ СЃС‚СѓРґРµРЅС‚РѕРІ.");
 }
 
 void accounting::delete_info_or_sort_info(wstring type) {
@@ -800,7 +764,7 @@ void accounting::delete_info_or_sort_info(wstring type) {
 		else {
 			show_info(L"admin", L"non_sorted");
 			int buffer;
-			wcout << L"Введите код записи, которую хотите удалить." << endl;
+			wcout << L"Р’РІРµРґРёС‚Рµ РєРѕРґ Р·Р°РїРёСЃРё, РєРѕС‚РѕСЂСѓСЋ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ." << endl;
 			buffer = input_check();
 			for (register int i = 0; i < array.size(); i++)
 				if (buffer == array[i].code_of_acc) {
@@ -811,14 +775,13 @@ void accounting::delete_info_or_sort_info(wstring type) {
 			if (flag == 0)
 			{
 				flag = -1;
-				error_message(L"Вы ввели неизвестный код записи.");
+				error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРёР·РІРµСЃС‚РЅС‹Р№ РєРѕРґ Р·Р°РїРёСЃРё.");
 			}
 		}
 		if (flag != -1)
 			change_data_in_file(array, type);
 	}
-	else error_message(L"Нет информации по предметам.");
-	system("pause");
+	else error_message(L"РќРµС‚ РёРЅС„РѕСЂРјР°С†РёРё РїРѕ РїСЂРµРґРјРµС‚Р°Рј.");
 }
 
 void accounting::delete_all_info_about_student(int code_of_student) {
@@ -835,4 +798,115 @@ void accounting::delete_all_info_about_student(int code_of_student) {
 		if (flag != 0)
 			change_data_in_file(array, L"student");
 	}
+}
+
+void accounting::print(vector<accounting> acc, wstring group) {
+	int max_size_name = 0, max_size_full_name = 0;
+	for (register int i = 0; i < acc.size(); i++)
+	{
+		if (acc.at(i).get_name().length() > max_size_name)
+			max_size_name = acc.at(i).get_name().size();
+		if (acc.at(i).get_full_name().length() > max_size_full_name)
+			max_size_full_name = acc.at(i).get_full_name().size();
+	}
+	int table_width = space_accounting + ((max_size_full_name > 13) ? max_size_full_name + 1 : 13) + (max_size_name > 8 ? max_size_name + 1 : 8);
+	wcout << L"в”Њ" << wstring(table_width, L'в”Ђ') << L"в”ђ" << endl;
+	wcout << L"в”‚";
+	SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
+	wcout << L"РљРѕРґ СЃС‚СѓРґРµРЅС‚Р° " << setw(max_size_full_name > 13 ? max_size_full_name + 1 : 13) << left << L"РРјСЏ РЎС‚СѓРґРµРЅС‚Р° "
+		<< setw(max_size_name > 8 ? max_size_name + 1 : 8) << L"РџСЂРµРґРјРµС‚ "
+		<< L"Р”Р°С‚Р° СЃРґР°С‡Рё "
+		<< L"РћС†РµРЅРєР° "
+		<< L"РЎРµРјРµСЃС‚СЂ "
+		<< L"РљРѕРґ Р·Р°РїРёСЃРё";
+	SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+	wcout << L"в”‚" << endl;
+
+	vector <int> students;
+	for (register int i = 0; i < acc.size(); i++)
+		students.push_back(acc[i].code_of_student);
+
+	for (register int k = 0; k < Set.size(); k++)
+	{
+		wcout << L"\r";
+		if (group != L"admin")
+		{
+			if (acc[k].group.compare(0, 4, group, 0, 4) == 0)
+			{
+				wcout << L"в”њ" << wstring(table_width, L'в”Ђ') << L"в”¤" << endl;
+				wcout << L"в”‚" << setw(13) << left << stud[k].get_code_of_student()
+					<< setw(max_size_full_name > 13 ? max_size_full_name + 1 : 13) << left << stud[k].get_full_name();
+				for (register int j = 0; j < acc.size(); j++)
+				{
+					if (stud[k].get_code_of_student() == acc[j].code_of_student)
+						for (register int g = 0; g < subj.size(); g++)
+							if (acc[j].code_of_subject == subj[g].get_code_of_subject())
+							{
+								wcout << setw(max_size_name > 8 ? max_size_name + 1 : 8) << left << subj[g].get_name()
+									<< setw(11) << left << acc[j].date
+									<< setw(7) << left << acc[j].mark
+									<< setw(8) << left << subj[g].get_number_of_semester()
+									<< setw(10) << acc[j].code_of_acc << L"в”‚" << endl;
+								wcout << L"в”‚" << setw(52) << "";
+							}
+				}
+			}
+		}
+		else {
+			wcout << L"в”њ" << wstring(table_width, L'в”Ђ') << L"в”¤" << endl;
+			wcout << L"в”‚" << setw(13) << left << stud[k].get_code_of_student()
+				<< setw(max_size_full_name > 13 ? max_size_full_name + 1 : 13) << left << stud[k].get_full_name();
+			for (register int j = 0; j < acc.size(); j++)
+			{
+				if (stud[k].get_code_of_student() == acc[j].code_of_student)
+					for (register int g = 0; g < subj.size(); g++)
+						if (acc[j].code_of_subject == subj[g].get_code_of_subject())
+						{
+							wcout << setw(max_size_name > 8 ? max_size_name + 1 : 8) << left << subj[g].get_name()
+								<< setw(11) << left << acc[j].date
+								<< setw(7) << left << acc[j].mark
+								<< setw(8) << left << subj[g].get_number_of_semester()
+								<< setw(10) << acc[j].code_of_acc << L"в”‚" << endl;
+							wcout << L"в”‚" << setw(52) << "";
+						}
+			}
+		}
+	}
+	wcout << L"\r";
+	wcout << L"в””" << wstring(table_width, L'в”Ђ') << L"в”" << endl;
+}
+
+void accounting::print(vector<accounting> array) {
+	int max_size_name = 0, max_size_full_name = 0;
+	for (register int i = 0; i < array.size(); i++)
+	{
+		if (array.at(i).name.length() > max_size_name)
+			max_size_name = array.at(i).name.size();
+		if (array.at(i).full_name.length() > max_size_full_name)
+			max_size_full_name = array.at(i).full_name.size();
+	}
+	int table_width = space_students + ((max_size_full_name > 13) ? max_size_full_name + 1 : 13) + (max_size_name > 8 ? max_size_name + 1 : 8);
+	wcout << L"в”Њ" << wstring(table_width, L'в”Ђ') << L"в”ђ" << endl;
+	wcout << L"в”‚";
+	SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
+	wcout << L"РљРѕРґ СЃС‚СѓРґРµРЅС‚Р° " << setw(max_size_full_name > 13 ? max_size_full_name + 1 : 13) << left << L"РРјСЏ РЎС‚СѓРґРµРЅС‚Р° "
+		<< setw(max_size_name > 8 ? max_size_name + 1 : 8) << L"РџСЂРµРґРјРµС‚ "
+		<< L"Р”Р°С‚Р° СЃРґР°С‡Рё "
+		<< L"РћС†РµРЅРєР° "
+		<< L"РЎРµРјРµСЃС‚СЂ "
+		<< L"РљРѕРґ Р·Р°РїРёСЃРё" << endl;
+	SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+	wcout << L"в”‚" << endl;
+	for (register int k = 0; k < array.size(); k++)
+	{
+		wcout << L"в”њ" << wstring(table_width, L'в”Ђ') << L"в”¤" << endl;
+		wcout << L"в”‚" << setw(13) << left << array[k].get_code_of_student()
+			<< setw(max_size_full_name > 13 ? max_size_full_name + 1 : 13) << left << array[k].get_full_name()
+			<< setw(max_size_name > 8 ? max_size_name + 1 : 8) << left << array[k].get_name()
+			<< setw(11) << left << array[k].date
+			<< setw(7) << left << array[k].mark
+			<< setw(8) << left << array[k].get_number_of_semester()
+			<< setw(10) << array[k].code_of_acc << L"в”‚" << endl;
+	}
+	wcout << L"в””" << wstring(table_width, L'в”Ђ') << L"в”" << endl;
 }

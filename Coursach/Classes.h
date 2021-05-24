@@ -44,6 +44,7 @@ protected:
 	void save_to_file(student new_stud);
 	void change_data_in_file(vector<student> array, wstring type_sort);
 	int search_menu(wstring type);
+	void print(vector<student> array, wstring group);
 public:
 	student() {}
 	int get_code_of_student() {
@@ -98,6 +99,7 @@ protected:
 	int search_menu();
 	void save_to_file(subject new_subj);
 	void change_data_in_file(vector<subject> array, wstring type_sort);
+	void print(vector<subject> array);
 public:
 	subject() {}
 	int get_code_of_subject() {
@@ -127,7 +129,9 @@ private:
 	int code_of_acc;
 	void save_to_file(accounting new_acc);
 	int search_menu(wstring group);
-	vector<student> sort_array_of_accounting(vector<student> array_of_stud);
+	vector<accounting> sort_array_of_accounting(vector<accounting> array_of_acc);
+	void print(vector<accounting> acc, wstring group);
+	void print(vector<accounting> array);
 public:
 	accounting() : student(), subject() {}
 	vector<accounting> load_from_file();

@@ -31,8 +31,10 @@ int entrance::entering() {
 				wcout << L"Введите пароль." << endl;
 				rewind(stdin);
 				getline(wcin, password);
-				login = sha1(login);
-				password = sha1(password);
+				string string_login = sha1(string(login.begin(), login.end()));
+				string string_password = sha1(string(password.begin(), password.end()));
+				login = wstring(string_login.begin(), string_login.end());
+				password = wstring(string_password.begin(), string_password.end());
 				for (register int i = 0; i < counter; i++)
 					if (login == _login[i] && password == _password[i])
 					{
@@ -49,7 +51,7 @@ int entrance::entering() {
 						Sleep(1000);
 						system("cls");
 						wcout << L"Программа приостановлена из-за превышения попыток ввода." << endl;
-						wcout << L"До возобновления программы осталось: " << i << L " с" << endl;
+						wcout << L"До возобновления программы осталось: " << i << L" с" << endl;
 					}
 					system("cls");
 				}
@@ -62,7 +64,8 @@ int entrance::entering() {
 				wcout << L"Введите логин." << endl;
 				rewind(stdin);
 				getline(wcin, login);
-				login = sha1(login);
+				string string_login = sha1(string(login.begin(), login.end()));
+				login = wstring(string_login.begin(), string_login.end());
 				int i = 0;
 				while (i < counter) {
 					if (login == _login[i])
@@ -83,7 +86,8 @@ int entrance::entering() {
 			wcout << L"Введите пароль." << endl;
 			rewind(stdin);
 			getline(wcin, password);
-			password = sha1(password);
+			string string_password = sha1(string(password.begin(), password.end()));
+			password = wstring(string_password.begin(), string_password.end());
 			vector<student> stud;
 			stud = student::load_from_file();
 			while (1) {
@@ -134,6 +138,8 @@ int entrance::entering() {
 		case 3:
 			return(-1);
 		default: error_message(L"Вы ввели неизвестную опцию.");
+			system("pause");
+			break;
 		}
 	}
 	return(2);
@@ -141,13 +147,14 @@ int entrance::entering() {
 
 int entrance::load_from_file() {
 	wifstream fin(file_authentication, ios_base::in);
+	fin.imbue(locale(locale::empty(), new codecvt_utf8<wchar_t>));
 	if (!fin.is_open()) {
 		error_message(L"Ошибка открытия файла.");
 		return(0);
 	}
 	else {
 		int i = 0;
-		wstring buffer = "";
+		wstring buffer = L"";
 		int buf;
 		while (getline(fin, buffer, L',')) {
 			_login.push_back(buffer);
@@ -166,8 +173,8 @@ int entrance::load_from_file() {
 }
 
 void entrance::change_data_in_file() {
-	wofstream fout;
-	fout.open(file, ios_base::app);
+	wfstream fout(file, ios_base::out);
+	fout.imbue(locale(locale::empty(), new codecvt_utf8<wchar_t>));
 	if (!fout.is_open())
 		error_message(L"Ошибка открытия файла.");
 	else {
@@ -188,8 +195,8 @@ void entrance::change_data_in_file() {
 }
 
 bool entrance::save_to_file(wstring login, wstring password, int type, wstring group) {
-	wofstream fout;
-	fout.open(file_authentication, ios_base::app);
+	wfstream fout(file_authentication, ios_base::app);
+	fout.imbue(locale(locale::empty(), new codecvt_utf8<wchar_t>));
 	if (!fout.is_open()) {
 		error_message(L"Ошибка открытия файла.");
 		return false;
@@ -212,7 +219,8 @@ bool entrance::change_pas(wstring* login) {
 			wstring pas;
 			wcout << L"Введите нынешний пароль." << endl;
 			wcin >> pas;
-			pas = sha1(pas);
+			string string_password = sha1(string(pas.begin(), pas.end()));
+			pas = wstring(string_password.begin(), string_password.end());
 			if (pas == _password[i])
 			{
 				wcout << L"Введите новый пароль." << endl;
@@ -224,7 +232,8 @@ bool entrance::change_pas(wstring* login) {
 					error_message(L"Ошибка открытия файла.");
 				}
 				else {
-					_password[i] = sha1(_password[i]);
+					string string_password = sha1(string(_password[i].begin(), _password[i].end()));
+					_password[i] = wstring(string_password.begin(), string_password.end());
 					for (register int j = 0; j < counter; j++) {
 						fout << _login[i] << L',';
 						fout << _password[i] << L',';

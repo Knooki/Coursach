@@ -16,6 +16,9 @@
 #include <Windows.h>
 #include <io.h>
 #include <fcntl.h>
+#include <codecvt>
+#include <set>
+#include <algorithm>
 
 #define file_authentication "authentication_data.txt"
 #define file "file.txt"
@@ -27,7 +30,9 @@
 using namespace std;
 static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
-#define space_between_columns 4
+#define space_students 48
+#define space_subjects 26
+#define space_accounting 49
 
 int input_check();
 void error_message(wstring message);
@@ -38,5 +43,5 @@ int switch_sort();
 void search_info(wstring group);
 bool check_date(wstring str, wstring type);
 bool check_date(wstring str, int number_of_semester, int course_of_stud);
-bool is_russian_alpha(char c);
+bool is_russian_alpha(wchar_t c);
 bool is_repeat_operation();

@@ -1,11 +1,11 @@
-#include "main.h"
+п»ї#include "main.h"
 #include "Classes.h"
 
 void subject::save_to_file(subject new_subj) {
-	wfstream fout;
-	fout.open(file_subject, ios_base::app);
+	wfstream fout(file_subject, ios_base::app);
+	fout.imbue(locale(locale::empty(), new codecvt_utf8<wchar_t>));
 	if (!fout.is_open())
-		error_message(L"Ошибка открытия файла");
+		error_message(L"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°");
 	else {
 		fout << new_subj.code_of_subject << L','
 			<< new_subj.name << L','
@@ -17,10 +17,10 @@ void subject::save_to_file(subject new_subj) {
 }
 
 void subject::change_data_in_file(vector<subject> array, wstring type_sort) {
-	wfstream fout;
-	fout.open(file, ios_base::out);
+	wfstream fout(file, ios_base::out);
+	fout.imbue(locale(locale::empty(), new codecvt_utf8<wchar_t>));
 	if (!fout.is_open())
-		error_message(L"Ошибка открытия файла.");
+		error_message(L"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°.");
 	else {
 		for (register int i = 0; i < array.size(); i++)
 		{
@@ -34,21 +34,21 @@ void subject::change_data_in_file(vector<subject> array, wstring type_sort) {
 		char old_name[] = file, new_name[] = file_subject;
 		fout.close();
 		if (rename(old_name, new_name) != 0)
-			error_message(L"Ошибка в переименовании файлов.");
+			error_message(L"РћС€РёР±РєР° РІ РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёРё С„Р°Р№Р»РѕРІ.");
 		else if (type_sort == L"sort")
-			complete_message(L"Вы успешно отсортировали данные.");
+			complete_message(L"Р’С‹ СѓСЃРїРµС€РЅРѕ РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°Р»Рё РґР°РЅРЅС‹Рµ.");
 		else
-			complete_message(L"Вы успешно удалили запись.");
+			complete_message(L"Р’С‹ СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РёР»Рё Р·Р°РїРёСЃСЊ.");
 	}
 }
 
 vector<subject> subject::load_from_file() {
 	vector <subject> array;
-	wifstream fin;
-	fin.open(file_subject, ios_base::in);
+	wifstream fin(file_subject);
+	fin.imbue(locale(locale::empty(), new codecvt_utf8<wchar_t>));
 	if (!fin.is_open())
 	{
-		error_message(L"Нет информации о предметах.");
+		error_message(L"РќРµС‚ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РїСЂРµРґРјРµС‚Р°С….");
 	}
 	else {
 		struct subject buffer;
@@ -71,12 +71,12 @@ vector<subject> subject::load_from_file() {
 
 vector<subject> subject::sort_array(vector<subject> arr) {
 	system("cls");
-	wcout << L"Выберите опцию:" << endl;
-	wcout << L"1)Отсортировать по названию предмета." << endl;
-	wcout << L"2)Отсортировать ФИО преподавателя." << endl;
-	wcout << L"3)Отсортировать по количеству часов." << endl;
-	wcout << L"4)Отсортировать по семестру." << endl;
-	wcout << L"5)Выход." << endl;
+	wcout << L"Р’С‹Р±РµСЂРёС‚Рµ РѕРїС†РёСЋ:" << endl;
+	wcout << L"1)РћС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ РЅР°Р·РІР°РЅРёСЋ РїСЂРµРґРјРµС‚Р°." << endl;
+	wcout << L"2)РћС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ Р¤РРћ РїСЂРµРїРѕРґР°РІР°С‚РµР»СЏ." << endl;
+	wcout << L"3)РћС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ РєРѕР»РёС‡РµСЃС‚РІСѓ С‡Р°СЃРѕРІ." << endl;
+	wcout << L"4)РћС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ СЃРµРјРµСЃС‚СЂСѓ." << endl;
+	wcout << L"5)Р’С‹С…РѕРґ." << endl;
 	subject temp;
 	switch (input_check()) {
 	case 1:
@@ -170,7 +170,7 @@ vector<subject> subject::sort_array(vector<subject> arr) {
 	case 5:
 		return (arr);
 	default:
-		error_message(L"Вы ввели неизвестную опцию.");
+		error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРёР·РІРµСЃС‚РЅСѓСЋ РѕРїС†РёСЋ.");
 		return(arr);
 		break;
 	}
@@ -180,22 +180,10 @@ void subject::show_info_subj(wstring sort_type) {
 	vector<subject> array = load_from_file();
 	if (array.size() != 0) {
 		if (sort_type == L"sorted") array = sort_array(array);
-		wcout << L"Информация о предметах." << endl;
-		SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
-		wcout << L"Код предмета " << setw(20) << left << L"Название предмета"
-			<< setw(20) << L"ФИО Преподавателя"
-			<< setw(6) << L"Часы"
-			<< setw(7) << L"Семестр" << endl;
-		SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
-		for (register int j = 0; j < array.size(); j++) {
-			wcout << setw(13) << left << array[j].code_of_subject << setw(20) << left << array[j].name
-				<< setw(20) << array[j].teacher_name
-				<< setw(6) << array[j].hours
-				<< setw(7) << array[j].number_of_semester << endl;
-		}
+		wcout << L"РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РїСЂРµРґРјРµС‚Р°С…." << endl;
+		print(array);
 	}
-	else error_message(L"Нет данных о предметах.");
-	system("pause");
+	else error_message(L"РќРµС‚ РґР°РЅРЅС‹С… Рѕ РїСЂРµРґРјРµС‚Р°С….");
 }
 
 void subject::search_subject() {
@@ -208,32 +196,32 @@ void subject::search_subject() {
 		buffer = search_menu();
 		switch (buffer) {
 		case 1:
-			wcout << L"Введите искомый код предмета" << endl;
+			wcout << L"Р’РІРµРґРёС‚Рµ РёСЃРєРѕРјС‹Р№ РєРѕРґ РїСЂРµРґРјРµС‚Р°" << endl;
 			while (!(wcin >> buffer) || wcin.peek() != L'\n' || buffer < 0) {
 				wcin.clear();
 				wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-				if (buffer < 0) error_message(L"Код предмета не может быть отрицательным.");
+				if (buffer < 0) error_message(L"РљРѕРґ РїСЂРµРґРјРµС‚Р° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј.");
 				else
-					error_message(L"Вы можете ввести только цифры.");
+					error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 			}
 			for (register int i = 0; i < array.size(); i++)
 				if (buffer == array[i].code_of_subject)
 					array_to_show.push_back(array[i]);
 			break;
 		case 2:
-			wcout << L"Введите искомое название предмета" << endl;
+			wcout << L"Р’РІРµРґРёС‚Рµ РёСЃРєРѕРјРѕРµ РЅР°Р·РІР°РЅРёРµ РїСЂРµРґРјРµС‚Р°" << endl;
 			while (1) {
 				buffer = 1;
 				rewind(stdin);
 				getline(wcin, string_buffer, L'\n');
 				if (string_buffer.size() > 20)
 				{
-					error_message(L"Название предмета не должно превышать 20 символов.");
+					error_message(L"РќР°Р·РІР°РЅРёРµ РїСЂРµРґРјРµС‚Р° РЅРµ РґРѕР»Р¶РЅРѕ РїСЂРµРІС‹С€Р°С‚СЊ 20 СЃРёРјРІРѕР»РѕРІ.");
 					continue;
 				}
 				for (register int i = 0; i < string_buffer.size(); i++)
 					if (!is_russian_alpha(string_buffer[i])) {
-						error_message(L"Пожaлуйста, используйте только русские буквы.");
+						error_message(L"РџРѕР¶aР»СѓР№СЃС‚Р°, РёСЃРїРѕР»СЊР·СѓР№С‚Рµ С‚РѕР»СЊРєРѕ СЂСѓСЃСЃРєРёРµ Р±СѓРєРІС‹.");
 						buffer = -1;
 						break;
 					}
@@ -246,19 +234,19 @@ void subject::search_subject() {
 			}
 			break;
 		case 3:
-			wcout << L"Введите искомое имя учителя." << endl;
+			wcout << L"Р’РІРµРґРёС‚Рµ РёСЃРєРѕРјРѕРµ РёРјСЏ СѓС‡РёС‚РµР»СЏ." << endl;
 			while (1) {
 				buffer = 1;
 				rewind(stdin);
 				getline(wcin, string_buffer, L'\n');
 				if (string_buffer.size() > 20)
 				{
-					error_message(L"Имя учителя не должно превышать 20 символов.");
+					error_message(L"РРјСЏ СѓС‡РёС‚РµР»СЏ РЅРµ РґРѕР»Р¶РЅРѕ РїСЂРµРІС‹С€Р°С‚СЊ 20 СЃРёРјРІРѕР»РѕРІ.");
 					continue;
 				}
 				for (register int i = 0; i < string_buffer.size(); i++)
 					if (!is_russian_alpha(string_buffer[i]) && string_buffer[i] != L'.') {
-						error_message(L"Пожaлуйста, используйте только русские буквы.");
+						error_message(L"РџРѕР¶aР»СѓР№СЃС‚Р°, РёСЃРїРѕР»СЊР·СѓР№С‚Рµ С‚РѕР»СЊРєРѕ СЂСѓСЃСЃРєРёРµ Р±СѓРєРІС‹.");
 						buffer = -1;
 						break;
 					}
@@ -273,14 +261,14 @@ void subject::search_subject() {
 			}
 			break;
 		case 4:
-			wcout << L"Введите искомый номер семестра." << endl;
+			wcout << L"Р’РІРµРґРёС‚Рµ РёСЃРєРѕРјС‹Р№ РЅРѕРјРµСЂ СЃРµРјРµСЃС‚СЂР°." << endl;
 			while (!(wcin >> buffer) || wcin.peek() != L'\n' || buffer > 8 || buffer < 1) {
 				wcin.clear();
 				wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
 				if (buffer > 8 || buffer < 1)
-					error_message(L"Номер семестра может быть от 1 до 8");
+					error_message(L"РќРѕРјРµСЂ СЃРµРјРµСЃС‚СЂР° РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚ 1 РґРѕ 8");
 				else
-					error_message(L"Вы можете ввести только цифры");
+					error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹");
 			}
 			for (register int i = 0; i < array.size(); i++)
 			{
@@ -288,33 +276,24 @@ void subject::search_subject() {
 					array_to_show.push_back(array[i]);
 			}
 			break;
-		default: error_message(L"Вы ввели неизвестную опцию");
+		default: error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРёР·РІРµСЃС‚РЅСѓСЋ РѕРїС†РёСЋ");
 			break;
 		}
 		if (array_to_show.size() == 0) {
-			error_message(L"Нет предметов с искомыми данными");
+			error_message(L"РќРµС‚ РїСЂРµРґРјРµС‚РѕРІ СЃ РёСЃРєРѕРјС‹РјРё РґР°РЅРЅС‹РјРё");
 			return;
 		}
-		wcout << L"Код предмета " << setw(20) << left << L"Название предмета"
-			<< setw(20) << L"ФИО Преподавателя"
-			<< setw(6) << L"Часы"
-			<< setw(7) << L"Семестр" << endl;
-		for (register int i = 0; i < array_to_show.size(); i++) {
-			wcout << setw(13) << left << array_to_show[i].code_of_subject << setw(20) << left << array_to_show[i].name
-				<< setw(20) << array_to_show[i].teacher_name
-				<< setw(6) << array_to_show[i].hours
-				<< setw(7) << array_to_show[i].number_of_semester << endl;
-		}
+		print(array_to_show);
 	}
-	else error_message(L"Нет данных о студентах.");
+	else error_message(L"РќРµС‚ РґР°РЅРЅС‹С… Рѕ СЃС‚СѓРґРµРЅС‚Р°С….");
 }
 
 int subject::search_menu() {
-	wcout << L"Выберите опцию." << endl;
-	wcout << L"1)Поиск по коду предмета" << endl;
-	wcout << L"2)Поиск по названию предмета" << endl;
-	wcout << L"3)Поиск по имени учителя" << endl;
-	wcout << L"4)Поиск по номеру семестра" << endl;
+	wcout << L"Р’С‹Р±РµСЂРёС‚Рµ РѕРїС†РёСЋ." << endl;
+	wcout << L"1)РџРѕРёСЃРє РїРѕ РєРѕРґСѓ РїСЂРµРґРјРµС‚Р°" << endl;
+	wcout << L"2)РџРѕРёСЃРє РїРѕ РЅР°Р·РІР°РЅРёСЋ РїСЂРµРґРјРµС‚Р°" << endl;
+	wcout << L"3)РџРѕРёСЃРє РїРѕ РёРјРµРЅРё СѓС‡РёС‚РµР»СЏ" << endl;
+	wcout << L"4)РџРѕРёСЃРє РїРѕ РЅРѕРјРµСЂСѓ СЃРµРјРµСЃС‚СЂР°" << endl;
 	return(input_check());
 }
 
@@ -324,38 +303,42 @@ void subject::add_subj() {
 		system("cls");
 		vector<subject> array = load_from_file();
 		subject buffer;
-		wcout << L"Введите новые данные по предмету." << endl;
-		wcout << L"Код предмета" << endl;
-		while (!(wcin >> buffer.code_of_subject) || wcin.peek() != L'\n' || buffer.code_of_subject < 0) {
-			wcin.clear();
-			wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-			if (buffer.code_of_subject < 0) error_message(L"Код предмета не может быть отрицательным.");
-			else
-				error_message(L"Вы можете ввести только цифры.");
-		}
-		for (register int i = 0; i < array.size(); i++)
-			if (buffer.code_of_subject == array[i].code_of_subject) {
-				flag = 1;
-				break;
+		wcout << L"Р’РІРµРґРёС‚Рµ РЅРѕРІС‹Рµ РґР°РЅРЅС‹Рµ РїРѕ РїСЂРµРґРјРµС‚Сѓ." << endl;
+		wcout << L"РљРѕРґ РїСЂРµРґРјРµС‚Р°" << endl;
+		while (1) {
+			while (!(wcin >> buffer.code_of_subject) || wcin.peek() != L'\n' || buffer.code_of_subject < 0) {
+				wcin.clear();
+				wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+				if (buffer.code_of_subject < 0) error_message(L"РљРѕРґ РїСЂРµРґРјРµС‚Р° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј.");
+				else
+					error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 			}
-		if (flag == 1) {
-			flag = 0;
-			error_message(L"Такой код предмета уже введен.");
-			continue;
+			for (register int i = 0; i < array.size(); i++)
+				if (buffer.code_of_subject == array[i].code_of_subject) {
+					flag = 1;
+					break;
+				}
+			if (flag == 1) {
+				flag = 0;
+				error_message(L"РўР°РєРѕР№ РєРѕРґ РїСЂРµРґРјРµС‚Р° СѓР¶Рµ РІРІРµРґРµРЅ.");
+				system("pause");
+				continue;
+			}
+			break;
 		}
-		wcout << L"Название предмета:" << endl;
+		wcout << L"РќР°Р·РІР°РЅРёРµ РїСЂРµРґРјРµС‚Р°:" << endl;
 		while (1)
 		{
 			rewind(stdin);
 			getline(wcin, buffer.name, L'\n');
 			if (buffer.name.size() > 20)
 			{
-				error_message(L"Имя предмета не должно превышать 20 символов.");
+				error_message(L"РРјСЏ РїСЂРµРґРјРµС‚Р° РЅРµ РґРѕР»Р¶РЅРѕ РїСЂРµРІС‹С€Р°С‚СЊ 20 СЃРёРјРІРѕР»РѕРІ.");
 				continue;
 			}
 			for (register int i = 0; i < buffer.name.size(); i++)
 				if (!is_russian_alpha(buffer.name[i])) {
-					error_message(L"Пожaлуйста, используйте только русские буквы.");
+					error_message(L"РџРѕР¶aР»СѓР№СЃС‚Р°, РёСЃРїРѕР»СЊР·СѓР№С‚Рµ С‚РѕР»СЊРєРѕ СЂСѓСЃСЃРєРёРµ Р±СѓРєРІС‹.");
 					flag = -1;
 					break;
 				}
@@ -363,19 +346,19 @@ void subject::add_subj() {
 				continue;
 			break;
 		}
-		wcout << L"ФИО преподавателя:" << endl;
+		wcout << L"Р¤РРћ РїСЂРµРїРѕРґР°РІР°С‚РµР»СЏ:" << endl;
 		while (1)
 		{
 			rewind(stdin);
 			getline(wcin, buffer.teacher_name, L'\n');
 			if (buffer.name.size() > 20)
 			{
-				error_message(L"Имя преподавателя не должно превышать 20 символов.");
+				error_message(L"РРјСЏ РїСЂРµРїРѕРґР°РІР°С‚РµР»СЏ РЅРµ РґРѕР»Р¶РЅРѕ РїСЂРµРІС‹С€Р°С‚СЊ 20 СЃРёРјРІРѕР»РѕРІ.");
 				continue;
 			}
 			for (register int i = 0; i < buffer.teacher_name.size(); i++)
 				if (!is_russian_alpha(buffer.teacher_name[i]) && buffer.teacher_name[i] != L'.') {
-					error_message(L"Пожaлуйста, используйте только русские буквы.");
+					error_message(L"РџРѕР¶aР»СѓР№СЃС‚Р°, РёСЃРїРѕР»СЊР·СѓР№С‚Рµ С‚РѕР»СЊРєРѕ СЂСѓСЃСЃРєРёРµ Р±СѓРєРІС‹.");
 					flag = -1;
 					break;
 				}
@@ -383,29 +366,29 @@ void subject::add_subj() {
 				continue;
 			break;
 		}
-		wcout << L"Количество часов:" << endl;
+		wcout << L"РљРѕР»РёС‡РµСЃС‚РІРѕ С‡Р°СЃРѕРІ:" << endl;
 		while (!(wcin >> buffer.hours) || wcin.peek() != L'\n' || buffer.hours < 2 || buffer.hours % 2 != 0)
 		{
 			wcin.clear();
 			wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-			if (buffer.hours < 2 || buffer.hours % 2 != 0) error_message(L"Количество часов не может быть отрицательным или не кратным 2.");
+			if (buffer.hours < 2 || buffer.hours % 2 != 0) error_message(L"РљРѕР»РёС‡РµСЃС‚РІРѕ С‡Р°СЃРѕРІ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј РёР»Рё РЅРµ РєСЂР°С‚РЅС‹Рј 2.");
 			else
-				error_message(L"Вы можете ввести только цифры.");
+				error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 		}
 
-		wcout << L"Какой по счету семестр:" << endl;
+		wcout << L"РљР°РєРѕР№ РїРѕ СЃС‡РµС‚Сѓ СЃРµРјРµСЃС‚СЂ:" << endl;
 		while (!(wcin >> buffer.number_of_semester) || wcin.peek() != L'\n' || buffer.number_of_semester > 8 || buffer.number_of_semester < 1)
 		{
 			wcin.clear();
 			wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-			if (buffer.number_of_semester > 8 || buffer.number_of_semester < 1) error_message(L"Всего может быть только 8 семестров.");
-			else error_message(L"Вы можете ввести только цифры.");
+			if (buffer.number_of_semester > 8 || buffer.number_of_semester < 1) error_message(L"Р’СЃРµРіРѕ РјРѕР¶РµС‚ Р±С‹С‚СЊ С‚РѕР»СЊРєРѕ 8 СЃРµРјРµСЃС‚СЂРѕРІ.");
+			else error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 		}
 		for (register int i = 0; i < array.size(); i++)
 			if (buffer.name == array[i].name)
 				if (buffer.number_of_semester == array[i].number_of_semester)
 				{
-					error_message(L"Этот предмет уже записан. Не совпадают семестры.");
+					error_message(L"Р­С‚РѕС‚ РїСЂРµРґРјРµС‚ СѓР¶Рµ Р·Р°РїРёСЃР°РЅ. РќРµ СЃРѕРІРїР°РґР°СЋС‚ СЃРµРјРµСЃС‚СЂС‹.");
 					flag = 0;
 					continue;
 				}
@@ -421,7 +404,7 @@ void subject::change_subj() {
 		show_info_subj(L"non_sorted");
 		int buffer;
 		int flag = 1;
-		wcout << L"Введите код предмета, который хотите поменять." << endl;
+		wcout << L"Р’РІРµРґРёС‚Рµ РєРѕРґ РїСЂРµРґРјРµС‚Р°, РєРѕС‚РѕСЂС‹Р№ С…РѕС‚РёС‚Рµ РїРѕРјРµРЅСЏС‚СЊ." << endl;
 		buffer = input_check();
 		for (register int i = 0; i < array.size(); i++)
 			if (buffer == array[i].code_of_subject) {
@@ -432,74 +415,77 @@ void subject::change_subj() {
 		if (flag == 0) {
 			subject buf;
 			while (1) {
-				wcout << L"Введите новые данные по предмету." << endl;
-				wcout << L"Код предмета" << endl;
-				while (!(wcin >> buf.code_of_subject) || wcin.peek() != L'\n' || buf.code_of_subject < 0) {
-					wcin.clear();
-					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-					if (buf.code_of_subject < 0) error_message(L"Код предмета не может быть отрицательным.");
-					else
-						error_message(L"Вы можете ввести только цифры.");
-				}
-				for (register int i = 0; i < array.size(); i++)
-				{
-					if (buf.code_of_subject == array[buffer].code_of_subject) break;
-					if (buf.code_of_subject == array[i].code_of_subject) {
-						flag = 1;
-						break;
+				wcout << L"Р’РІРµРґРёС‚Рµ РЅРѕРІС‹Рµ РґР°РЅРЅС‹Рµ РїРѕ РїСЂРµРґРјРµС‚Сѓ." << endl;
+				wcout << L"РљРѕРґ РїСЂРµРґРјРµС‚Р°" << endl;
+				while (1) {
+					while (!(wcin >> buf.code_of_subject) || wcin.peek() != L'\n' || buf.code_of_subject < 0) {
+						wcin.clear();
+						wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
+						if (buf.code_of_subject < 0) error_message(L"РљРѕРґ РїСЂРµРґРјРµС‚Р° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј.");
+						else
+							error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 					}
+					for (register int i = 0; i < array.size(); i++)
+					{
+						if (buf.code_of_subject == array[buffer].code_of_subject) break;
+						if (buf.code_of_subject == array[i].code_of_subject) {
+							flag = 1;
+							break;
+						}
+					}
+					if (flag == 1) {
+						flag = 0;
+						error_message(L"РўР°РєРѕР№ РєРѕРґ РїСЂРµРґРјРµС‚Р° СѓР¶Рµ РІРІРµРґРµРЅ.");
+						continue;
+					}
+					break;
 				}
-				if (flag == 1) {
-					flag = 0;
-					error_message(L"Такой код предмета уже введен.");
-					continue;
-				}
-				wcout << L"Название предмета:" << endl;
+				wcout << L"РќР°Р·РІР°РЅРёРµ РїСЂРµРґРјРµС‚Р°:" << endl;
 				while (1)
 				{
 					rewind(stdin);
 					getline(wcin, buf.name, L'\n');
 					if (buf.name.size() > 20)
 					{
-						error_message(L"Имя предмета не должно превышать 20 символов.");
+						error_message(L"РРјСЏ РїСЂРµРґРјРµС‚Р° РЅРµ РґРѕР»Р¶РЅРѕ РїСЂРµРІС‹С€Р°С‚СЊ 20 СЃРёРјРІРѕР»РѕРІ.");
 						continue;
 					}
 					else break;
 				}
-				wcout << L"ФИО преподавателя:" << endl;
+				wcout << L"Р¤РРћ РїСЂРµРїРѕРґР°РІР°С‚РµР»СЏ:" << endl;
 				while (1)
 				{
 					rewind(stdin);
 					getline(wcin, buf.teacher_name, L'\n');
 					if (buf.teacher_name.size() > 20)
 					{
-						error_message(L"Имя преподавателя не должно превышать 20 символов.");
+						error_message(L"РРјСЏ РїСЂРµРїРѕРґР°РІР°С‚РµР»СЏ РЅРµ РґРѕР»Р¶РЅРѕ РїСЂРµРІС‹С€Р°С‚СЊ 20 СЃРёРјРІРѕР»РѕРІ.");
 						continue;
 					}
 					else break;
 				}
-				wcout << L"Количество часов:" << endl;
+				wcout << L"РљРѕР»РёС‡РµСЃС‚РІРѕ С‡Р°СЃРѕРІ:" << endl;
 				while (!(wcin >> buf.hours) || wcin.peek() != L'\n' || buf.hours < 2 || buf.hours % 2 != 0)
 				{
 					wcin.clear();
 					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-					if (buf.hours < 2 || buf.hours % 2 != 0) error_message(L"Количество часов не может быть отрицательным или не кратным 2.");
+					if (buf.hours < 2 || buf.hours % 2 != 0) error_message(L"РљРѕР»РёС‡РµСЃС‚РІРѕ С‡Р°СЃРѕРІ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј РёР»Рё РЅРµ РєСЂР°С‚РЅС‹Рј 2.");
 					else
-						error_message(L"Вы можете ввести только цифры.");
+						error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 				}
-				wcout << L"Какой по счету семестр:" << endl;
+				wcout << L"РљР°РєРѕР№ РїРѕ СЃС‡РµС‚Сѓ СЃРµРјРµСЃС‚СЂ:" << endl;
 				while (!(wcin >> buf.number_of_semester) || wcin.peek() != L'\n' || buf.number_of_semester > 8 || buf.number_of_semester < 1)
 				{
 					wcin.clear();
 					wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-					if (buf.number_of_semester > 8 || buf.number_of_semester < 1) error_message(L"Всего может быть только 8 семестров.");
-					else error_message(L"Вы можете ввести только цифры.");
+					if (buf.number_of_semester > 8 || buf.number_of_semester < 1) error_message(L"Р’СЃРµРіРѕ РјРѕР¶РµС‚ Р±С‹С‚СЊ С‚РѕР»СЊРєРѕ 8 СЃРµРјРµСЃС‚СЂРѕРІ.");
+					else error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹.");
 				}
 				for (register int i = 0; i < array.size(); i++)
 					if (buf.name == array[i].name)
 						if (buf.number_of_semester == array[i].number_of_semester)
 						{
-							error_message(L"Этот предмет уже записан. Не совпадает семестр.");
+							error_message(L"Р­С‚РѕС‚ РїСЂРµРґРјРµС‚ СѓР¶Рµ Р·Р°РїРёСЃР°РЅ. РќРµ СЃРѕРІРїР°РґР°РµС‚ СЃРµРјРµСЃС‚СЂ.");
 							flag = 0;
 							break;
 						}
@@ -510,10 +496,9 @@ void subject::change_subj() {
 				break;
 			}
 		}
-		else error_message(L"Вы ввели неизвестный код предмета.");
+		else error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРёР·РІРµСЃС‚РЅС‹Р№ РєРѕРґ РїСЂРµРґРјРµС‚Р°.");
 	}
-	else error_message(L"Нет информации по предметам.");
-	system("pause");
+	else error_message(L"РќРµС‚ РёРЅС„РѕСЂРјР°С†РёРё РїРѕ РїСЂРµРґРјРµС‚Р°Рј.");
 }
 
 void subject::delete_subj_or_sort_subj(wstring type) {
@@ -525,7 +510,7 @@ void subject::delete_subj_or_sort_subj(wstring type) {
 		else {
 			show_info_subj(L"non_sorted");
 			int buffer;
-			wcout << L"Введите код предмета, который хотите удалить." << endl;
+			wcout << L"Р’РІРµРґРёС‚Рµ РєРѕРґ РїСЂРµРґРјРµС‚Р°, РєРѕС‚РѕСЂС‹Р№ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ." << endl;
 			buffer = input_check();
 			for (register int i = 0; i < array.size(); i++)
 				if (buffer == array[i].code_of_subject) {
@@ -537,18 +522,46 @@ void subject::delete_subj_or_sort_subj(wstring type) {
 					for (register int j = 0; j < acc.size(); j++)
 						if (buffer == acc[i].get_code_of_subject())
 							acc.erase(acc.begin() + j);
-					wcout << L"Так как вы удалили данные о предмете, весь учет этого предмета тоже удален." << endl;
+					wcout << L"РўР°Рє РєР°Рє РІС‹ СѓРґР°Р»РёР»Рё РґР°РЅРЅС‹Рµ Рѕ РїСЂРµРґРјРµС‚Рµ, РІРµСЃСЊ СѓС‡РµС‚ СЌС‚РѕРіРѕ РїСЂРµРґРјРµС‚Р° С‚РѕР¶Рµ СѓРґР°Р»РµРЅ." << endl;
 					account.change_data_in_file(acc, L"delete");
 					break;
 				}
 			if (flag == 0) {
 				flag = -1;
-				error_message(L"Вы ввели неизвестный код предмета.");
+				error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРёР·РІРµСЃС‚РЅС‹Р№ РєРѕРґ РїСЂРµРґРјРµС‚Р°.");
 			}
 		}
 		if (flag != -1)
 			change_data_in_file(array, type);
 	}
-	else error_message(L"Нет информации по предметам.");
-	system("pause");
+	else error_message(L"РќРµС‚ РёРЅС„РѕСЂРјР°С†РёРё РїРѕ РїСЂРµРґРјРµС‚Р°Рј.");
+}
+
+void subject::print(vector<subject> array) {
+	int max_size_name = 0, max_size_teacher_name = 0;
+	for (int i = 0; i < array.size(); i++)
+	{
+		if (array.at(i).name.length() > max_size_name)
+			max_size_name = array.at(i).name.size();
+		if (array.at(i).teacher_name.length() > max_size_teacher_name)
+			max_size_teacher_name = array.at(i).teacher_name.size();
+	}
+	int table_width = space_subjects + ((max_size_teacher_name > 18) ? max_size_teacher_name + 1 : 18) + (max_size_name > 18 ? max_size_name + 1 : 18);
+	wcout << L"в”Њ" << wstring(table_width, L'в”Ђ') << L"в”ђ" << endl;
+	wcout << L"в”‚";
+	SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
+	wcout << L"РљРѕРґ РїСЂРµРґРјРµС‚Р° " << setw(max_size_name > 18 ? max_size_name + 1 : 18) << left << L"РќР°Р·РІР°РЅРёРµ РїСЂРµРґРјРµС‚Р° "
+		<< setw(max_size_teacher_name > 18 ? max_size_teacher_name + 1 : 18) << L"Р¤РРћ РџСЂРµРїРѕРґР°РІР°С‚РµР»СЏ "
+		<< setw(6) << L"Р§Р°СЃС‹"
+		<< setw(7) << L"РЎРµРјРµСЃС‚СЂ";
+	SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+	wcout << L"в”‚" << endl;
+	for (register int j = 0; j < array.size(); j++) {
+		wcout << L"в”њ" << wstring(table_width, L'в”Ђ') << L"в”¤" << endl;
+		wcout << L"в”‚" << setw(13) << left << array[j].code_of_subject << setw(max_size_name > 18 ? max_size_name + 1 : 18) << left << array[j].name
+			<< setw(max_size_teacher_name > 18 ? max_size_teacher_name + 1 : 18) << array[j].teacher_name
+			<< setw(6) << array[j].hours
+			<< setw(7) << array[j].number_of_semester << L"в”‚" << endl;
+	}
+	wcout << L"в””" << wstring(table_width, L'в”Ђ') << L"в”" << endl;
 }

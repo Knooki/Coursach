@@ -40,7 +40,6 @@ void show_info(wstring type) {
 	case 4: return;
 	default:
 		error_message(L"Вы ввели неизвестную опцию.");
-		system("pause");
 		break;
 	}
 }
@@ -74,7 +73,7 @@ void show_sorted_info(wstring type) {
 	case 4: return;
 	default:
 		error_message(L"Вы ввели неизвестную опцию.");
-		break
+		break;
 	}
 	system("pause");
 }
@@ -168,7 +167,7 @@ bool check_date(wstring str, wstring type) {
 		if (type == L"stud")
 			if (ye > local.tm_year + 1900 - 15)
 			{
-				error_message(< "Студент не может быть настолько молод.");
+				error_message(L"Студент не может быть настолько молод.");
 				flag++;
 				break;
 			}
@@ -280,7 +279,7 @@ bool is_russian_alpha(wchar_t c) {
 }
 
 bool is_repeat_operation() {
-	wcout << L"Чтобы продолжить нажмите любую клавишу." << endl;
-	wcout << L"Чтобы вернуться в меню уровня ниже нажмите esc." << endl;
+	wcout << L"Чтобы продолжить в меню 2-го уровня нажмите любую клавишу." << endl;
+	wcout << L"Чтобы вернуться в меню первого уровня нажмите esc." << endl;
 	return(_getch() != 27);
 }

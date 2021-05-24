@@ -5,7 +5,6 @@
 // There aren't search and user_manage
 
 int admin::menu_admin() {
-	int sw;
 	wcout << L"Выберите опцию:" << endl;
 	wcout << L"1)Добавление записи." << endl;
 	wcout << L"2)Редактирование записи." << endl;
@@ -17,12 +16,7 @@ int admin::menu_admin() {
 	wcout << L"8)Удалить пользователей из определенной группы." << endl;
 	wcout << L"9)Изменение пароля." << endl;
 	wcout << L"10)Выход в меню 1-го уровня." << endl;
-	while (!(wcin >> sw) || wcin.peek() != L'\n') {
-		wcin.clear();
-		wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-		error_message(L"Ошибка. Вы можете ввести только цифры.");
-	}
-	return(sw);
+	return(input_check());
 }
 
 void admin::operation() {
@@ -64,7 +58,7 @@ void admin::operation() {
 			return;
 		default: error_message(L"Вы ввели несуществующую опцию.");
 		}
-	} while (1);
+	} while (is_repeat_operation());
 }
 
 void admin::sort_data() {
