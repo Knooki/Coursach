@@ -1,4 +1,4 @@
-#include "main.h"
+п»ї#include "main.h"
 #include "Classes.h"
 
 int input_check() {
@@ -6,18 +6,18 @@ int input_check() {
 	while (!(wcin >> sw) || wcin.peek() != L'\n') {
 		wcin.clear();
 		wcin.ignore(numeric_limits<streamsize>::max(), L'\n');
-		error_message(L"Вы можете ввести только цифры");
+		error_message(L"Р’С‹ РјРѕР¶РµС‚Рµ РІРІРµСЃС‚Рё С‚РѕР»СЊРєРѕ С†РёС„СЂС‹");
 	}
 	return sw;
 }
 
 void show_info(wstring type) {
 	system("cls");
-	wcout << L"Выбериет опцию:" << endl;
-	wcout << L"1)Просмотр данных о студентах." << endl;
-	wcout << L"2)Просмотр данных о предметах." << endl;
-	wcout << L"3)Просмотр данных об успеваемости студентов." << endl;
-	wcout << L"4)Выход." << endl;
+	wcout << L"Р’С‹Р±РµСЂРёРµС‚ РѕРїС†РёСЋ:" << endl;
+	wcout << L"1)РџСЂРѕСЃРјРѕС‚СЂ РґР°РЅРЅС‹С… Рѕ СЃС‚СѓРґРµРЅС‚Р°С…." << endl;
+	wcout << L"2)РџСЂРѕСЃРјРѕС‚СЂ РґР°РЅРЅС‹С… Рѕ РїСЂРµРґРјРµС‚Р°С…." << endl;
+	wcout << L"3)РџСЂРѕСЃРјРѕС‚СЂ РґР°РЅРЅС‹С… РѕР± СѓСЃРїРµРІР°РµРјРѕСЃС‚Рё СЃС‚СѓРґРµРЅС‚РѕРІ." << endl;
+	wcout << L"4)Р’С‹С…РѕРґ." << endl;
 	switch (input_check()) {
 	case 1:
 	{
@@ -39,18 +39,18 @@ void show_info(wstring type) {
 	break;
 	case 4: return;
 	default:
-		error_message(L"Вы ввели неизвестную опцию.");
+		error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРёР·РІРµСЃС‚РЅСѓСЋ РѕРїС†РёСЋ.");
 		break;
 	}
 }
 
 void show_sorted_info(wstring type) {
 	system("cls");
-	wcout << L"Выбериет опцию:" << endl;
-	wcout << L"1)Сортировка и просмотр данных о студентах." << endl;
-	wcout << L"2)Сортировка и просмотр данных о предметах." << endl;
-	wcout << L"3)Сортировка и просмотр об успеваемости студентов." << endl;
-	wcout << L"4)Выход." << endl;
+	wcout << L"Р’С‹Р±РµСЂРёРµС‚ РѕРїС†РёСЋ:" << endl;
+	wcout << L"1)РЎРѕСЂС‚РёСЂРѕРІРєР° Рё РїСЂРѕСЃРјРѕС‚СЂ РґР°РЅРЅС‹С… Рѕ СЃС‚СѓРґРµРЅС‚Р°С…." << endl;
+	wcout << L"2)РЎРѕСЂС‚РёСЂРѕРІРєР° Рё РїСЂРѕСЃРјРѕС‚СЂ РґР°РЅРЅС‹С… Рѕ РїСЂРµРґРјРµС‚Р°С…." << endl;
+	wcout << L"3)РЎРѕСЂС‚РёСЂРѕРІРєР° Рё РїСЂРѕСЃРјРѕС‚СЂ РѕР± СѓСЃРїРµРІР°РµРјРѕСЃС‚Рё СЃС‚СѓРґРµРЅС‚РѕРІ." << endl;
+	wcout << L"4)Р’С‹С…РѕРґ." << endl;
 	switch (input_check()) {
 	case 1:
 	{
@@ -72,27 +72,27 @@ void show_sorted_info(wstring type) {
 	break;
 	case 4: return;
 	default:
-		error_message(L"Вы ввели неизвестную опцию.");
+		error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРёР·РІРµСЃС‚РЅСѓСЋ РѕРїС†РёСЋ.");
 		break;
 	}
 }
 
 int switch_sort() {
 	system("cls");
-	wcout << L"Выбериет опцию:" << endl;
-	wcout << L"1)В алфавитном порядке//по возврастанию." << endl;
-	wcout << L"2)Не в алфавитном порядке//по убыванию." << endl;
-	wcout << L"3)Выход." << endl;
+	wcout << L"Р’С‹Р±РµСЂРёРµС‚ РѕРїС†РёСЋ:" << endl;
+	wcout << L"1)Р’ Р°Р»С„Р°РІРёС‚РЅРѕРј РїРѕСЂСЏРґРєРµ//РїРѕ РІРѕР·РІСЂР°СЃС‚Р°РЅРёСЋ." << endl;
+	wcout << L"2)РќРµ РІ Р°Р»С„Р°РІРёС‚РЅРѕРј РїРѕСЂСЏРґРєРµ//РїРѕ СѓР±С‹РІР°РЅРёСЋ." << endl;
+	wcout << L"3)Р’С‹С…РѕРґ." << endl;
 	return input_check();
 }
 
 void search_info(wstring group) {
 	system("cls");
-	wcout << L"Выберите опцию" << endl;
-	wcout << L"1)Поиск студентов" << endl;
-	wcout << L"2)Поиск предметов" << endl;
-	wcout << L"3)Поиск данных учета" << endl;
-	wcout << L"4)Выход" << endl;
+	wcout << L"Р’С‹Р±РµСЂРёС‚Рµ РѕРїС†РёСЋ" << endl;
+	wcout << L"1)РџРѕРёСЃРє СЃС‚СѓРґРµРЅС‚РѕРІ" << endl;
+	wcout << L"2)РџРѕРёСЃРє РїСЂРµРґРјРµС‚РѕРІ" << endl;
+	wcout << L"3)РџРѕРёСЃРє РґР°РЅРЅС‹С… СѓС‡РµС‚Р°" << endl;
+	wcout << L"4)Р’С‹С…РѕРґ" << endl;
 	switch (input_check()) {
 	case 1: {
 		student st;
@@ -112,7 +112,7 @@ void search_info(wstring group) {
 	}
 	break;
 	default:
-		error_message(L"Вы ввели неизвестную опцию");
+		error_message(L"Р’С‹ РІРІРµР»Рё РЅРµРёР·РІРµСЃС‚РЅСѓСЋ РѕРїС†РёСЋ");
 	}
 }
 
@@ -130,18 +130,18 @@ void complete_message(wstring message) {
 
 bool check_date(wstring str, wstring type) {
 	if (str.size() != 10) {
-		error_message(L"Дата дожна быть длиной 10 символов.");
+		error_message(L"Р”Р°С‚Р° РґРѕР¶РЅР° Р±С‹С‚СЊ РґР»РёРЅРѕР№ 10 СЃРёРјРІРѕР»РѕРІ.");
 		return false;
 	}
 	if (str[2] != L'.' || str[5] != L'.')
 	{
-		error_message(L"Неверный формат даты.");
+		error_message(L"РќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ РґР°С‚С‹.");
 		return false;
 	}
 	for (register int i = 0; i < 10; i++)
 		if (!isdigit(str[i]) && str[i] != L'.')
 		{
-			error_message(L"В дате могут быть только цифры и точки.");
+			error_message(L"Р’ РґР°С‚Рµ РјРѕРіСѓС‚ Р±С‹С‚СЊ С‚РѕР»СЊРєРѕ С†РёС„СЂС‹ Рё С‚РѕС‡РєРё.");
 			return false;
 		}
 	wstring date, month, year;
@@ -158,37 +158,37 @@ bool check_date(wstring str, wstring type) {
 	localtime_s(&local, &now);
 	while (1) {
 		if (ye < 1950) {
-			error_message(L"Год не может быть введен раньше чем 1950");
+			error_message(L"Р“РѕРґ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РІРІРµРґРµРЅ СЂР°РЅСЊС€Рµ С‡РµРј 1950");
 			flag++;
 			break;
 		}
 		if (type == L"stud")
 			if (ye > local.tm_year + 1900 - 15)
 			{
-				error_message(L"Студент не может быть настолько молод.");
+				error_message(L"РЎС‚СѓРґРµРЅС‚ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅР°СЃС‚РѕР»СЊРєРѕ РјРѕР»РѕРґ.");
 				flag++;
 				break;
 			}
 		if (mo > 12 || mo == 0) {
-			error_message(L"Неверное количество месяцев.");
+			error_message(L"РќРµРІРµСЂРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РјРµСЃСЏС†РµРІ.");
 			flag++;
 			break;
 		}
 		if (da > 31 || da == 0) {
-			error_message(L"Неверное количество дней.");
+			error_message(L"РќРµРІРµСЂРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РґРЅРµР№.");
 			flag++;
 			break;
 		}
 		if (ye > local.tm_year + 1900)
 		{
-			error_message(L"Эта дата еще не наступила.");
+			error_message(L"Р­С‚Р° РґР°С‚Р° РµС‰Рµ РЅРµ РЅР°СЃС‚СѓРїРёР»Р°.");
 			flag++;
 			break;
 		}
 		if (ye == local.tm_year + 1900)
 			if (mo > local.tm_mon + 1)
 			{
-				error_message(L"Эта дата еще не наступила.");
+				error_message(L"Р­С‚Р° РґР°С‚Р° РµС‰Рµ РЅРµ РЅР°СЃС‚СѓРїРёР»Р°.");
 				flag++;
 				break;
 			}
@@ -196,7 +196,7 @@ bool check_date(wstring str, wstring type) {
 			if (mo == local.tm_mon + 1)
 				if (da > local.tm_mday)
 				{
-					error_message(L"Эта дата еще не наступила.");
+					error_message(L"Р­С‚Р° РґР°С‚Р° РµС‰Рµ РЅРµ РЅР°СЃС‚СѓРїРёР»Р°.");
 					flag++;
 					break;
 				}
@@ -204,7 +204,7 @@ bool check_date(wstring str, wstring type) {
 			if (mo == 2)
 				if (da > 29 || da == 0)
 				{
-					error_message(L"В високосный год в феврале максимум 29 чисел.");
+					error_message(L"Р’ РІРёСЃРѕРєРѕСЃРЅС‹Р№ РіРѕРґ РІ С„РµРІСЂР°Р»Рµ РјР°РєСЃРёРјСѓРј 29 С‡РёСЃРµР».");
 					flag++;
 					break;
 				}
@@ -212,13 +212,13 @@ bool check_date(wstring str, wstring type) {
 			if (mo == 2)
 				if (da > 28 || da == 0)
 				{
-					error_message(L"В не високосный год в феврале максимум 28 чисел.");
+					error_message(L"Р’ РЅРµ РІРёСЃРѕРєРѕСЃРЅС‹Р№ РіРѕРґ РІ С„РµРІСЂР°Р»Рµ РјР°РєСЃРёРјСѓРј 28 С‡РёСЃРµР».");
 					flag++;
 					break;
 				}
 		if (mo == 4 || mo == 6 || mo == 9 || mo == 11)
 			if (da > 30) {
-				error_message(L"Неверное количество дней. В этом месяце максимум 30 дней.");
+				error_message(L"РќРµРІРµСЂРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РґРЅРµР№. Р’ СЌС‚РѕРј РјРµСЃСЏС†Рµ РјР°РєСЃРёРјСѓРј 30 РґРЅРµР№.");
 				flag++;
 				break;
 			}
@@ -242,29 +242,29 @@ bool check_date(wstring str, int number_of_semester, int course_of_stud) {
 		int possible_year;
 		int current_semester = 0;
 		if (local.tm_mon + 1 > 8)
-			current_semester = 1;//первый сем
+			current_semester = 1;//РїРµСЂРІС‹Р№ СЃРµРј
 		else if (local.tm_mon + 1 < 7)
-			current_semester = 0;//второй сем
+			current_semester = 0;//РІС‚РѕСЂРѕР№ СЃРµРј
 		else
-			current_semester = -1; //каникулы
+			current_semester = -1; //РєР°РЅРёРєСѓР»С‹
 		possible_year = (local.tm_year + 1900) - course_of_stud + ceil((float)number_of_semester / 2) + current_semester;
 		if (ye != possible_year)
 		{
-			error_message(L"Введенный студент данного курса, не мог сдавать предмет данного семестра в введенном вами году.");
+			error_message(L"Р’РІРµРґРµРЅРЅС‹Р№ СЃС‚СѓРґРµРЅС‚ РґР°РЅРЅРѕРіРѕ РєСѓСЂСЃР°, РЅРµ РјРѕРі СЃРґР°РІР°С‚СЊ РїСЂРµРґРјРµС‚ РґР°РЅРЅРѕРіРѕ СЃРµРјРµСЃС‚СЂР° РІ РІРІРµРґРµРЅРЅРѕРј РІР°РјРё РіРѕРґСѓ.");
 			return (false);
 		}
 		if (number_of_semester % 2 == 1)
 		{
 			if (mo != 1)
 			{
-				error_message(L"Сессия в нечетных семестрах проходит в январе(01).");
+				error_message(L"РЎРµСЃСЃРёСЏ РІ РЅРµС‡РµС‚РЅС‹С… СЃРµРјРµСЃС‚СЂР°С… РїСЂРѕС…РѕРґРёС‚ РІ СЏРЅРІР°СЂРµ(01).");
 				return false;
 			}
 		}
 		else
 			if (mo != 6)
 			{
-				error_message(L"Сессия в четных семестрах проходит в июне(06).");
+				error_message(L"РЎРµСЃСЃРёСЏ РІ С‡РµС‚РЅС‹С… СЃРµРјРµСЃС‚СЂР°С… РїСЂРѕС…РѕРґРёС‚ РІ РёСЋРЅРµ(06).");
 				return false;
 			}
 		return true;
@@ -273,11 +273,11 @@ bool check_date(wstring str, int number_of_semester, int course_of_stud) {
 }
 
 bool is_russian_alpha(wchar_t c) {
-	return (c >= L'А' && c <= L'я' || c == L' ' || c == L'Ё' || c == L'ё');
+	return (c >= L'Рђ' && c <= L'СЏ' || c == L' ' || c == L'РЃ' || c == L'С‘');
 }
 
 bool is_repeat_operation() {
-	wcout << L"Чтобы продолжить в меню 2-го уровнянажмите любую клавишу." << endl;
-	wcout << L"Чтобы вернуться в меню первого уровня нажмите esc." << endl;
+	wcout << L"Р§С‚РѕР±С‹ РїСЂРѕРґРѕР»Р¶РёС‚СЊ РІ РјРµРЅСЋ 2-РіРѕ СѓСЂРѕРІРЅСЏРЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ." << endl;
+	wcout << L"Р§С‚РѕР±С‹ РІРµСЂРЅСѓС‚СЊСЃСЏ РІ РјРµРЅСЋ РїРµСЂРІРѕРіРѕ СѓСЂРѕРІРЅСЏ РЅР°Р¶РјРёС‚Рµ esc." << endl;
 	return(_getch() != 27);
 }

@@ -1,28 +1,26 @@
-#pragma once
+ï»¿#pragma once
 #include "main.h"
 #include "Classes.h"
 
-// There aren't search and user_manage
-
 int admin::menu_admin() {
-	wcout << L"Âûáåðèòå îïöèþ:" << endl;
-	wcout << L"1)Äîáàâëåíèå çàïèñè." << endl;
-	wcout << L"2)Ðåäàêòèðîâàíèå çàïèñè." << endl;
-	wcout << L"3)Óäàëåíèå çàïèñè." << endl;
-	wcout << L"4)Îòñîðòèðîâàòü äàííûå." << endl;
-	wcout << L"5)Ïðîñìîòð äàííûõ â òàáëè÷íîé ôîðìå." << endl;
-	wcout << L"6)Ïîèñê äàííûõ." << endl;
-	wcout << L"7)Ïîêàç äàííûõ â îòñîðòèðîâàííîì âèäå(ôàéëû íå ìåíÿþòñÿ)." << endl;
-	wcout << L"8)Óäàëèòü ïîëüçîâàòåëåé èç îïðåäåëåííîé ãðóïïû." << endl;
-	wcout << L"9)Èçìåíåíèå ïàðîëÿ." << endl;
-	wcout << L"10)Âûõîä â ìåíþ 1-ãî óðîâíÿ." << endl;
+	wcout << L"Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð¾Ð¿Ñ†Ð¸ÑŽ:" << endl;
+	wcout << L"1)Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð·Ð°Ð¿Ð¸ÑÐ¸." << endl;
+	wcout << L"2)Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð·Ð°Ð¿Ð¸ÑÐ¸." << endl;
+	wcout << L"3)Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ð·Ð°Ð¿Ð¸ÑÐ¸." << endl;
+	wcout << L"4)ÐžÑ‚ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ." << endl;
+	wcout << L"5)ÐŸÑ€Ð¾ÑÐ¼Ð¾Ñ‚Ñ€ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð² Ñ‚Ð°Ð±Ð»Ð¸Ñ‡Ð½Ð¾Ð¹ Ñ„Ð¾Ñ€Ð¼Ðµ." << endl;
+	wcout << L"6)ÐŸÐ¾Ð¸ÑÐº Ð´Ð°Ð½Ð½Ñ‹Ñ…." << endl;
+	wcout << L"7)ÐŸÐ¾ÐºÐ°Ð· Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð² Ð¾Ñ‚ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð¾Ð¼ Ð²Ð¸Ð´Ðµ(Ñ„Ð°Ð¹Ð»Ñ‹ Ð½Ðµ Ð¼ÐµÐ½ÑÑŽÑ‚ÑÑ)." << endl;
+	wcout << L"8)Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÐµÐ¹ Ð¸Ð· Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð½Ð¾Ð¹ Ð³Ñ€ÑƒÐ¿Ð¿Ñ‹." << endl;
+	wcout << L"9)Ð˜Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ Ð¿Ð°Ñ€Ð¾Ð»Ñ." << endl;
+	wcout << L"10)Ð’Ñ‹Ñ…Ð¾Ð´ Ð² Ð¼ÐµÐ½ÑŽ 1-Ð³Ð¾ ÑƒÑ€Ð¾Ð²Ð½Ñ." << endl;
 	return(input_check());
 }
 
 void admin::operation() {
 	do {
 		system("cls");
-		wcout << L"Ìåíþ àäìèíà." << endl;
+		wcout << L"ÐœÐµÐ½ÑŽ Ð°Ð´Ð¼Ð¸Ð½Ð°." << endl;
 		switch (menu_admin()) {
 		case 1:
 			add_data();
@@ -56,7 +54,7 @@ void admin::operation() {
 		break;
 		case 10:
 			return;
-		default: error_message(L"Âû ââåëè íåñóùåñòâóþùóþ îïöèþ.");
+		default: error_message(L"Ð’Ñ‹ Ð²Ð²ÐµÐ»Ð¸ Ð½ÐµÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰ÑƒÑŽ Ð¾Ð¿Ñ†Ð¸ÑŽ.");
 		}
 	} while (is_repeat_operation());
 }
@@ -64,11 +62,11 @@ void admin::operation() {
 void admin::sort_data() {
 	while (1) {
 		system("cls");
-		wcout << L"Âûáåðèåò îïöèþ:" << endl;
-		wcout << L"1)Ñîðòèðîâêà äàííûõ î ñòóäåíòàõ." << endl;
-		wcout << L"2)Ñîðòèðîâêà äàííûõ î ïðåäìåòàõ." << endl;
-		wcout << L"3)Ñîðòèðîâêà îá óñïåâàåìîñòè ñòóäåíòîâ." << endl;
-		wcout << L"4)Âûõîä." << endl;
+		wcout << L"Ð’Ñ‹Ð±ÐµÑ€Ð¸ÐµÑ‚ Ð¾Ð¿Ñ†Ð¸ÑŽ:" << endl;
+		wcout << L"1)Ð¡Ð¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ° Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¾ ÑÑ‚ÑƒÐ´ÐµÐ½Ñ‚Ð°Ñ…." << endl;
+		wcout << L"2)Ð¡Ð¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ° Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¾ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ð°Ñ…." << endl;
+		wcout << L"3)Ð¡Ð¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ° Ð¾Ð± ÑƒÑÐ¿ÐµÐ²Ð°ÐµÐ¼Ð¾ÑÑ‚Ð¸ ÑÑ‚ÑƒÐ´ÐµÐ½Ñ‚Ð¾Ð²." << endl;
+		wcout << L"4)Ð’Ñ‹Ñ…Ð¾Ð´." << endl;
 		switch (input_check()) {
 		case 1:
 		{
@@ -90,7 +88,7 @@ void admin::sort_data() {
 		break;
 		case 4: return;
 		default:
-			error_message(L"Âû ââåëè íåèçâåñòíóþ îïöèþ.");
+			error_message(L"Ð’Ñ‹ Ð²Ð²ÐµÐ»Ð¸ Ð½ÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½ÑƒÑŽ Ð¾Ð¿Ñ†Ð¸ÑŽ.");
 			break;
 		}
 	}
@@ -99,11 +97,11 @@ void admin::sort_data() {
 void admin::add_data() {
 	while (1) {
 		system("cls");
-		wcout << L"Âûáåðèòå îïöèþ." << endl;
-		wcout << L"1)Äîáàâèòü íîâîãî ñòóäåíòà." << endl;
-		wcout << L"2)Äîáàâèòü íîâûé ïðåäìåò." << endl;
-		wcout << L"3)Äîáàâèòü íîâûé ó÷åò î ñäà÷å." << endl;
-		wcout << L"4)Âûõîä â ìåíþ àäìèíà." << endl;
+		wcout << L"Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð¾Ð¿Ñ†Ð¸ÑŽ." << endl;
+		wcout << L"1)Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð½Ð¾Ð²Ð¾Ð³Ð¾ ÑÑ‚ÑƒÐ´ÐµÐ½Ñ‚Ð°." << endl;
+		wcout << L"2)Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð½Ð¾Ð²Ñ‹Ð¹ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚." << endl;
+		wcout << L"3)Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð½Ð¾Ð²Ñ‹Ð¹ ÑƒÑ‡ÐµÑ‚ Ð¾ ÑÐ´Ð°Ñ‡Ðµ." << endl;
+		wcout << L"4)Ð’Ñ‹Ñ…Ð¾Ð´ Ð² Ð¼ÐµÐ½ÑŽ Ð°Ð´Ð¼Ð¸Ð½Ð°." << endl;
 		switch (input_check()) {
 		case 1:
 		{
@@ -125,7 +123,7 @@ void admin::add_data() {
 		break;
 		case 4:
 			return;
-		default: error_message(L"Âû ââåëè íåèçâåñòíóþ îïöèþ.");
+		default: error_message(L"Ð’Ñ‹ Ð²Ð²ÐµÐ»Ð¸ Ð½ÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½ÑƒÑŽ Ð¾Ð¿Ñ†Ð¸ÑŽ.");
 			break;
 		}
 	}
@@ -134,11 +132,11 @@ void admin::add_data() {
 void admin::change_data() {
 	while (1) {
 		system("cls");
-		wcout << L"Âûáåðèòå îïöèþ." << endl;
-		wcout << L"1)Ïîìåíÿòü äàííûå î ñòóäåíòàõ." << endl;
-		wcout << L"2)Ïîìåíÿòü äàííûå î ïðåäìåòàõ." << endl;
-		wcout << L"3)Ïîìåíÿòü äàííûå îá ó÷åòå ñäà÷è." << endl;
-		wcout << L"4)Âûõîä â ìåíþ àäìèíà." << endl;
+		wcout << L"Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð¾Ð¿Ñ†Ð¸ÑŽ." << endl;
+		wcout << L"1)ÐŸÐ¾Ð¼ÐµÐ½ÑÑ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¾ ÑÑ‚ÑƒÐ´ÐµÐ½Ñ‚Ð°Ñ…." << endl;
+		wcout << L"2)ÐŸÐ¾Ð¼ÐµÐ½ÑÑ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¾ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ð°Ñ…." << endl;
+		wcout << L"3)ÐŸÐ¾Ð¼ÐµÐ½ÑÑ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¾Ð± ÑƒÑ‡ÐµÑ‚Ðµ ÑÐ´Ð°Ñ‡Ð¸." << endl;
+		wcout << L"4)Ð’Ñ‹Ñ…Ð¾Ð´ Ð² Ð¼ÐµÐ½ÑŽ Ð°Ð´Ð¼Ð¸Ð½Ð°." << endl;
 		switch (input_check()) {
 		case 1:
 		{
@@ -160,7 +158,7 @@ void admin::change_data() {
 		break;
 		case 4:
 			return;
-		default: error_message(L"Âû ââåëè íåèçâåñòíóþ îïöèþ.");
+		default: error_message(L"Ð’Ñ‹ Ð²Ð²ÐµÐ»Ð¸ Ð½ÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½ÑƒÑŽ Ð¾Ð¿Ñ†Ð¸ÑŽ.");
 			break;
 		}
 	}
@@ -169,11 +167,11 @@ void admin::change_data() {
 void admin::delete_data() {
 	while (1) {
 		system("cls");
-		wcout << L"Âûáåðèòå îïöèþ." << endl;
-		wcout << L"1)Óäàëèòü äàííûå î ñòóäåíòàõ." << endl;
-		wcout << L"2)Óäàëèòü äàííûå î ïðåäìåòàõ." << endl;
-		wcout << L"3)Óäàëèòü äàííûå îá ó÷åòå ñäà÷è." << endl;
-		wcout << L"4)Âûõîä â ìåíþ àäìèíà" << endl;
+		wcout << L"Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð¾Ð¿Ñ†Ð¸ÑŽ." << endl;
+		wcout << L"1)Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¾ ÑÑ‚ÑƒÐ´ÐµÐ½Ñ‚Ð°Ñ…." << endl;
+		wcout << L"2)Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¾ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ð°Ñ…." << endl;
+		wcout << L"3)Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¾Ð± ÑƒÑ‡ÐµÑ‚Ðµ ÑÐ´Ð°Ñ‡Ð¸." << endl;
+		wcout << L"4)Ð’Ñ‹Ñ…Ð¾Ð´ Ð² Ð¼ÐµÐ½ÑŽ Ð°Ð´Ð¼Ð¸Ð½Ð°" << endl;
 		switch (input_check()) {
 		case 1:
 		{
@@ -195,7 +193,7 @@ void admin::delete_data() {
 		break;
 		case 4:
 			return;
-		default: error_message(L"Âû ââåëè íåèçâåñòíóþ îïöèþ.");
+		default: error_message(L"Ð’Ñ‹ Ð²Ð²ÐµÐ»Ð¸ Ð½ÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½ÑƒÑŽ Ð¾Ð¿Ñ†Ð¸ÑŽ.");
 			break;
 		}
 	}
@@ -204,19 +202,19 @@ void admin::delete_data() {
 void admin::user_manage() {
 	wstring string_buffer;
 	rewind(stdin);
-	wcout << "Ââåäèòå ãðóïïó" << endl;
+	wcout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð³Ñ€ÑƒÐ¿Ð¿Ñƒ" << endl;
 	while (1) {
 		int flag = 1;
 		getline(wcin, string_buffer, L'\n');
 		if (string_buffer.size() != 6)
 		{
-			error_message(L"Ãðóïïà äîëæíà áûòü 6-òèçíà÷íûì ÷èñëîì.");
+			error_message(L"Ð“Ñ€ÑƒÐ¿Ð¿Ð° Ð´Ð¾Ð»Ð¶Ð½Ð° Ð±Ñ‹Ñ‚ÑŒ 6-Ñ‚Ð¸Ð·Ð½Ð°Ñ‡Ð½Ñ‹Ð¼ Ñ‡Ð¸ÑÐ»Ð¾Ð¼.");
 			continue;
 		}
 		for (register int i = 0; i < string_buffer.size(); i++) {
 			if (!isdigit(string_buffer[i]))
 			{
-				error_message(L"Â ãðóïïå ìîãóò áûòü òîëüêî öèôðû.");
+				error_message(L"Ð’ Ð³Ñ€ÑƒÐ¿Ð¿Ðµ Ð¼Ð¾Ð³ÑƒÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ñ†Ð¸Ñ„Ñ€Ñ‹.");
 				flag = -1;
 				break;
 			}
