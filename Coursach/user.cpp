@@ -28,10 +28,8 @@ void user::operation() {
 		}
 		break;
 		case 3:
-		{
 			search_info(*group);
-		}
-		break;
+			break;
 		case 4:
 			show_sorted_info(*group);
 			break;
@@ -48,6 +46,5 @@ void user::operation() {
 			error_message(L"Вы ввели несуществующую опцию.");
 			break;
 		}
-		system("pause");
 	}
 }

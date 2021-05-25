@@ -331,11 +331,6 @@ void subject::add_subj() {
 		{
 			rewind(stdin);
 			getline(wcin, buffer.name, L'\n');
-			if (buffer.name.size() > 20)
-			{
-				error_message(L"Имя предмета не должно превышать 20 символов.");
-				continue;
-			}
 			for (register int i = 0; i < buffer.name.size(); i++)
 				if (!is_russian_alpha(buffer.name[i])) {
 					error_message(L"Пожaлуйста, используйте только русские буквы.");
@@ -351,11 +346,6 @@ void subject::add_subj() {
 		{
 			rewind(stdin);
 			getline(wcin, buffer.teacher_name, L'\n');
-			if (buffer.name.size() > 20)
-			{
-				error_message(L"Имя преподавателя не должно превышать 20 символов.");
-				continue;
-			}
 			for (register int i = 0; i < buffer.teacher_name.size(); i++)
 				if (!is_russian_alpha(buffer.teacher_name[i]) && buffer.teacher_name[i] != L'.') {
 					error_message(L"Пожaлуйста, используйте только русские буквы.");
@@ -445,24 +435,34 @@ void subject::change_subj() {
 				{
 					rewind(stdin);
 					getline(wcin, buf.name, L'\n');
-					if (buf.name.size() > 20)
-					{
-						error_message(L"Имя предмета не должно превышать 20 символов.");
+					for (register int i = 0; i < buf.name.size(); i++)
+						if (!is_russian_alpha(buf.name[i])) {
+							error_message(L"Пожaлуйста, используйте только русские буквы.");
+							flag = 1;
+							break;
+						}
+					if (flag == 1) {
+						flag = 0;
 						continue;
 					}
-					else break;
+					break;
 				}
 				wcout << L"ФИО преподавателя:" << endl;
 				while (1)
 				{
 					rewind(stdin);
 					getline(wcin, buf.teacher_name, L'\n');
-					if (buf.teacher_name.size() > 20)
-					{
-						error_message(L"Имя преподавателя не должно превышать 20 символов.");
+					for (register int i = 0; i < buf.teacher_name.size(); i++)
+						if (!is_russian_alpha(buf.teacher_name[i])) {
+							error_message(L"Пожaлуйста, используйте только русские буквы.");
+							flag = 1;
+							break;
+						}
+					if (flag == 1) {
+						flag = 0;
 						continue;
 					}
-					else break;
+					break;
 				}
 				wcout << L"Количество часов:" << endl;
 				while (!(wcin >> buf.hours) || wcin.peek() != L'\n' || buf.hours < 2 || buf.hours % 2 != 0)

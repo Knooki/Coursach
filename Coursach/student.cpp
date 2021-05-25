@@ -129,14 +129,37 @@ vector<student> student::sort_date(vector<student> array, int type) {
 vector<student> student::sort_array(vector<student> arr) {
 	system("cls");
 	wcout << L"Выберите опцию:" << endl;
-	wcout << L"1)Отсортировать по ФИО студента." << endl;
-	wcout << L"2)Отсортировать по дате рождения студента." << endl;
-	wcout << L"3)Отсортировать по специальности студента." << endl;
-	wcout << L"4)Отсортировать по группе студента." << endl;
-	wcout << L"5)Выход." << endl;
+	wcout << L"1)Отсортировать по коду студента" << endl;
+	wcout << L"2)Отсортировать по ФИО студента." << endl;
+	wcout << L"3)Отсортировать по дате рождения студента." << endl;
+	wcout << L"4)Отсортировать по специальности студента." << endl;
+	wcout << L"5)Отсортировать по группе студента." << endl;
+	wcout << L"6)Выход." << endl;
 	student temp;
 	switch (input_check()) {
 	case 1:
+		if (switch_sort() == 1)
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].code_of_student > arr[j + 1].code_of_student) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		else
+			for (register int i = 0; i < arr.size(); i++) {
+				for (register int j = 0; j < arr.size() - i - 1; j++) {
+					if (arr[j].code_of_student < arr[j + 1].code_of_student) {
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}
+				}
+			}
+		return (arr);
+	case 2:
 		if (switch_sort() == 1)
 			for (register int i = 0; i < arr.size(); i++) {
 				for (register int j = 0; j < arr.size() - i - 1; j++) {
@@ -158,12 +181,12 @@ vector<student> student::sort_array(vector<student> arr) {
 				}
 			}
 		return (arr);
-	case 2:
+	case 3:
 		if (switch_sort() == 1)
 			arr = sort_date(arr, 1);
 		else arr = sort_date(arr, 2);
 		return (arr);
-	case 3:
+	case 4:
 		if (switch_sort() == 1)
 			for (register int i = 0; i < arr.size(); i++) {
 				for (register int j = 0; j < arr.size() - i - 1; j++) {
@@ -185,7 +208,7 @@ vector<student> student::sort_array(vector<student> arr) {
 				}
 			}
 		return (arr);
-	case 4:
+	case 5:
 		if (switch_sort() == 1)
 			for (register int i = 0; i < arr.size(); i++) {
 				for (register int j = 0; j < arr.size() - i - 1; j++) {
@@ -207,7 +230,7 @@ vector<student> student::sort_array(vector<student> arr) {
 				}
 			}
 		return (arr);
-	case 5:
+	case 6:
 		return (arr);
 	default:
 		error_message(L"Вы ввели неизвестную опцию.");
@@ -441,16 +464,16 @@ void student::add_stud() {
 		{
 			rewind(stdin);
 			getline(wcin, buffer.full_name, L'\n');
-			for (register int i = 0; i < buffer.full_name.size(); i++)
-				if (!is_russian_alpha(buffer.full_name[i])) {
-					error_message(L"Пожaлуйста, используйте только русские буквы.");
-					flag = 1;
-					break;
-				}
 			for (register int i = 0; i < array.size(); i++)
 				if (buffer.full_name == array[i].full_name) {
 					flag = 1;
 					error_message(L"Такое имя студента уже введено.");
+					break;
+				}
+			for (register int i = 0; i < buffer.full_name.size(); i++)
+				if (!is_russian_alpha(buffer.full_name[i])) {
+					error_message(L"Пожaлуйста, используйте только русские буквы.");
+					flag = 1;
 					break;
 				}
 			if (flag == 1) {

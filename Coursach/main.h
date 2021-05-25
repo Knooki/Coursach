@@ -1,31 +1,33 @@
 #pragma once
 #include <iostream>
-#include <conio.h>
 #include <cstdlib>
-#include <cstring>
+
+#include <conio.h>
+#include <cctype>
+#include <cwchar>
+
 #include <string>
 #include <fstream>
 #include <vector>
 #include <iomanip>
+
 #include <cstdio>
 #include <locale.h>
 #include <ctime>
-#include <time.h>
-#include "sha1.h"
-#define NOMINMAX
-#include <Windows.h>
 #include <io.h>
 #include <fcntl.h>
 #include <codecvt>
-#include <set>
+
 #include <algorithm>
+#include "sha1.h"
+#define NOMINMAX
+#include <Windows.h>
 
 #define file_authentication "authentication_data.txt"
 #define file "file.txt"
 #define file_student "student_data.txt"
 #define file_subject "subject_data.txt"
 #define file_accounting "accounting_data.txt"
-#define file_faculty "faculty_data.txt"
 
 using namespace std;
 static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);

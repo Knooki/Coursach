@@ -75,7 +75,6 @@ void show_sorted_info(wstring type) {
 		error_message(L"Вы ввели неизвестную опцию.");
 		break;
 	}
-	system("pause");
 }
 
 int switch_sort() {
@@ -115,7 +114,6 @@ void search_info(wstring group) {
 	default:
 		error_message(L"Вы ввели неизвестную опцию");
 	}
-	system("pause");
 }
 
 void error_message(wstring message) {
@@ -279,7 +277,7 @@ bool is_russian_alpha(wchar_t c) {
 }
 
 bool is_repeat_operation() {
-	wcout << L"Чтобы продолжить в меню 2-го уровня нажмите любую клавишу." << endl;
+	wcout << L"Чтобы продолжить в меню 2-го уровнянажмите любую клавишу." << endl;
 	wcout << L"Чтобы вернуться в меню первого уровня нажмите esc." << endl;
 	return(_getch() != 27);
 }

@@ -17,20 +17,54 @@ int entrance::entering() {
 	}
 	else {
 		counter = load_from_file();
-		wstring login, password, group;
+		wstring login = L"", password = L"", group;
 		int type;
+		wint_t p;
 		switch (entr_menu()) {
 		case 1:
 		{
 			int amount = 0;
 			do {
 				system("cls");
+				login = L"";
+				password = L"";
 				wcout << L"Введите логин." << endl;
-				rewind(stdin);
-				getline(wcin, login);
+				do {
+					rewind(stdin);
+					p = _getwch();
+
+					if (p == 13) break;
+					if (p == L'\b' && !login.empty())
+					{
+						wcout << L'\b';
+						wcout << L' ';
+						wcout << L'\b';
+						login.pop_back();
+						continue;
+					}
+					if (p != L'\b')
+						wcout << L'*';
+					login.push_back(p);
+				} while (1);
+				wcout << L'\n';
 				wcout << L"Введите пароль." << endl;
-				rewind(stdin);
-				getline(wcin, password);
+				do {
+					p = _getwch();
+
+					if (p == 13) break;
+					if (p == L'\b' && !password.empty())
+					{
+						wcout << L'\b';
+						wcout << L' ';
+						wcout << L'\b';
+						password.pop_back();
+						continue;
+					}
+					if (p != L'\b')
+						wcout << L'*';
+					password.push_back(p);
+				} while (1);
+				wcout << L'\n';
 				string string_login = sha1(string(login.begin(), login.end()));
 				string string_password = sha1(string(password.begin(), password.end()));
 				login = wstring(string_login.begin(), string_login.end());
@@ -61,9 +95,26 @@ int entrance::entering() {
 		{
 			while (1) {
 				system("cls");
+				login = L"";
+				password = L"";
 				wcout << L"Введите логин." << endl;
-				rewind(stdin);
-				getline(wcin, login);
+				do {
+					p = _getwch();
+
+					if (p == 13) break;
+					if (p == L'\b' && !login.empty())
+					{
+						wcout << L'\b';
+						wcout << L' ';
+						wcout << L'\b';
+						login.pop_back();
+						continue;
+					}
+					if (p != L'\b')
+						wcout << L'*';
+					login.push_back(p);
+				} while (1);
+				wcout << L'\n';
 				string string_login = sha1(string(login.begin(), login.end()));
 				login = wstring(string_login.begin(), string_login.end());
 				int i = 0;
@@ -84,8 +135,23 @@ int entrance::entering() {
 				if (i == counter) break;
 			}
 			wcout << L"Введите пароль." << endl;
-			rewind(stdin);
-			getline(wcin, password);
+			do {
+				p = _getwch();
+
+				if (p == 13) break;
+				if (p == L'\b' && !password.empty())
+				{
+					wcout << L'\b';
+					wcout << L' ';
+					wcout << L'\b';
+					password.pop_back();
+					continue;
+				}
+				if (p != L'\b')
+					wcout << L'*';
+				password.push_back(p);
+			} while (1);
+			wcout << L'\n';
 			string string_password = sha1(string(password.begin(), password.end()));
 			password = wstring(string_password.begin(), string_password.end());
 			vector<student> stud;
@@ -217,14 +283,48 @@ bool entrance::change_pas(wstring* login) {
 	while (i < counter) {
 		if (*login == _login[i]) {
 			wstring pas;
+			wint_t p;
 			wcout << L"Введите нынешний пароль." << endl;
-			wcin >> pas;
+			do {
+				rewind(stdin);
+				p = _getwch();
+				if (p == 13) break;
+				if (p == L'\b' && !pas.empty())
+				{
+					wcout << L'\b';
+					wcout << L' ';
+					wcout << L'\b';
+					pas.pop_back();
+					continue;
+				}
+				if (p != L'\b')
+					wcout << L'*';
+				pas.push_back(p);
+			} while (1);
+			wcout << L'\n';
 			string string_password = sha1(string(pas.begin(), pas.end()));
 			pas = wstring(string_password.begin(), string_password.end());
 			if (pas == _password[i])
 			{
 				wcout << L"Введите новый пароль." << endl;
-				wcin >> _password[i];
+				do {
+					rewind(stdin);
+					p = _getwch();
+
+					if (p == 13) break;
+					if (p == L'\b' && !_password[i].empty())
+					{
+						wcout << L'\b';
+						wcout << L' ';
+						wcout << L'\b';
+						_password[i].pop_back();
+						continue;
+					}
+					if (p != L'\b')
+						wcout << L'*';
+					_password[i].push_back(p);
+				} while (1);
+				wcout << L'\n';
 				wfstream fout;
 				fout.open(file, ios_base::out);
 				if (!fout.is_open())

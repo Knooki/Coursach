@@ -1,8 +1,10 @@
 ﻿#include "main.h"
 #include "Classes.h"
 
-//можно добавить вариативности посреедством показывания учета за прошлый год, только о первых курсах, за все года, 2 года назад и тд
-//надо сделать сортировку по учебным годам
+struct students {
+	int code_of_student;
+	float average_score;
+};
 
 void accounting::save_to_file(accounting new_acc) {
 	wfstream fout(file_accounting, ios_base::app);
@@ -78,8 +80,10 @@ vector<accounting> accounting::load_from_file() {
 					break;
 				}
 			for (register int j = 0; j < subj.size(); j++)
-				if (acc[i].code_of_subject == subj[j].get_number_of_semester()) {
-					acc[i].number_of_semester == subj[j].get_number_of_semester();
+				if (acc[i].code_of_subject == subj[j].get_code_of_subject()) {
+					acc[i].number_of_semester = subj[j].get_number_of_semester();
+					acc[i].name = subj[j].get_name();
+					acc[i].teacher_name = subj[j].get_teacher_name();
 					break;
 				}
 		}
@@ -89,120 +93,152 @@ vector<accounting> accounting::load_from_file() {
 
 vector<accounting> accounting::sort_array_of_accounting(vector<accounting> array_of_acc)
 {
-	vector<accounting> array_of_acc;
-	array_of_acc = load_from_file();
 	if (array_of_acc.size() != 0)
 	{
 		system("cls");
 		wcout << L"Выберите опцию:" << endl;
-		wcout << L"1)Отсортировать по информации студентов." << endl;
+		wcout << L"1)Отсортировать по имени студентов." << endl;
 		wcout << L"2)Отсортировать по успеваемости студентов." << endl;
 		wcout << L"3)Отсортировать по учебным годам." << endl;
 		wcout << L"4)Выход." << endl;
+		accounting tmp;
 		switch (input_check())
 		{
 		case 1:
 		{
-			vector<student> stud = student::load_from_file();
-			stud = student::sort_array(stud);
-			bruh
-				return (); }
+			switch (switch_sort()) {
+			case 1:
+				for (register int i = 0; i < array_of_acc.size(); i++)
+					for (register int j = 0; j < array_of_acc.size() - i - 1; j++)
+						if (array_of_acc[j].get_full_name() > array_of_acc[j + 1].get_full_name())
+						{
+							tmp = array_of_acc[j];
+							array_of_acc[j] = array_of_acc[j + 1];
+							array_of_acc[j + 1] = tmp;
+						}
+				break;
+			case 2:
+				for (register int i = 0; i < array_of_acc.size(); i++)
+					for (register int j = 0; j < array_of_acc.size() - i - 1; j++)
+						if (array_of_acc[j].get_full_name() < array_of_acc[j + 1].get_full_name())
+						{
+							tmp = array_of_acc[j];
+							array_of_acc[j] = array_of_acc[j + 1];
+							array_of_acc[j + 1] = tmp;
+						}
+				break;
+			}
+			return (array_of_acc);
+		}
 		case 2:
 		{
-			vector<student_account> stud_acc;
-			student_account tmp;
-			for (register int i = 0; i < array_of_stud.size(); i++)
+			vector <students> st;
+			students tmp;
+			int flag = 0;
+			for (register int i = 0; i < array_of_acc.size(); i++)
 			{
-				tmp.average_score = 0;
-				tmp.marks.clear();
-				for (register int j = 0; j < array_of_acc.size(); j++)
-					if (array_of_stud[i].get_code_of_student() == array_of_acc[j].code_of_student)
-					{
-						tmp.code_of_student = array_of_stud[i].get_code_of_student();
-						tmp.full_name = array_of_stud[i].get_full_name();
-						tmp.marks.push_back(array_of_acc[j].mark);
-					}
-				for (register int j = 0; j < tmp.marks.size(); j++)
-					tmp.average_score += tmp.marks[j];
-				tmp.average_score = tmp.average_score / tmp.marks.size();
-				tmp.code_of_student = array_of_stud[i].get_code_of_student();
-				tmp.full_name = array_of_stud[i].get_full_name();
-				stud_acc.push_back(tmp);
+				flag = 0;
+				for (register int j = 0; j < st.size(); j++)
+					if (array_of_acc[i].code_of_student == st[j].code_of_student)
+						flag++;
+				if (flag == 0)
+				{
+					tmp.code_of_student = array_of_acc[i].code_of_student;
+					st.push_back(tmp);
+				}
 			}
-			student temp;
+			for (register int i = 0; i < st.size(); i++)
+			{
+				flag = 0;
+				for (register int j = 0; j < array_of_acc.size(); j++)
+					if (array_of_acc[j].code_of_student == st[i].code_of_student)
+					{
+						st[i].average_score += array_of_acc[j].mark;
+						flag++;
+					}
+				st[i].average_score = st[i].average_score / flag;
+			}
 			switch (switch_sort())
 			{
 			case 1:
-				for (register int i = 0; i < stud_acc.size(); i++) {
-					for (register int j = 0; j < stud_acc.size() - i - 1; j++) {
-						if (stud_acc[j].average_score > stud_acc[j + 1].average_score) {
-							tmp = stud_acc[j];
-							stud_acc[j] = stud_acc[j + 1];
-							stud_acc[j + 1] = tmp;
-							temp = array_of_stud[j];
-							array_of_stud[j] = array_of_stud[j + 1];
-							array_of_stud[j + 1] = temp;
+				for (register int i = 0; i < st.size(); i++) {
+					for (register int j = 0; j < st.size() - i - 1; j++) {
+						if (st[j].average_score > st[j + 1].average_score) {
+							tmp = st[j];
+							st[j] = st[j + 1];
+							st[j + 1] = tmp;
 						}
 					}
 				}
 				break;
 			case 2:
-				for (register int i = 0; i < stud_acc.size(); i++) {
-					for (register int j = 0; j < stud_acc.size() - i - 1; j++) {
-						if (stud_acc[j].average_score < stud_acc[j + 1].average_score) {
-							tmp = stud_acc[j];
-							stud_acc[j] = stud_acc[j + 1];
-							stud_acc[j + 1] = tmp;
-							temp = array_of_stud[j];
-							array_of_stud[j] = array_of_stud[j + 1];
-							array_of_stud[j + 1] = temp;
+				for (register int i = 0; i < st.size(); i++) {
+					for (register int j = 0; j < st.size() - i - 1; j++) {
+						if (st[j].average_score < st[j + 1].average_score) {
+							tmp = st[j];
+							st[j] = st[j + 1];
+							st[j + 1] = tmp;
 						}
 					}
 				}
 				break;
 			}
-			return(array_of_stud);
+			vector<accounting> array;
+			for (register int i = 0; i < st.size(); i++)
+				for (register int j = 0; j < array_of_acc.size(); j++)
+					if (st[i].code_of_student == array_of_acc[j].code_of_student)
+						array.push_back(array_of_acc[j]);
+			return(array);
 		}
 		case 3: {
-			//string year, month;
-			//vector<int> amount_of_month;
-			//for (register int i = 0; i < array_of_acc.size(); i++)
-			//{
-			//	month = array_of_acc[i].date.substr(3, 2);
-			//	year = array_of_acc[i].date.substr(6, 4);
-			//	//надо сделать сортировку по учебным годам ......
-			//		amount_of_month.push_back(stoi(year) * 12 + stoi(month));
-			//}
-			//switch (switch_sort())
-			//{
-			//	if (type == 1)
-			//		for (register int i = 0; i < amount_of_days.size(); i++) {
-			//			for (register int j = 0; j < amount_of_days.size() - i - 1; j++) {
-			//				if (amount_of_days[j] > amount_of_days[j + 1]) {
-			//					temp = amount_of_days[j];
-			//					amount_of_days[j] = amount_of_days[j + 1];
-			//					amount_of_days[j + 1] = temp;
-			//					tmp = array[j];
-			//					array[j] = array[j + 1];
-			//					array[j + 1] = tmp;
-			//				}
-			//			}
-			//		}
-			//	else
-			//		for (register int i = 0; i < amount_of_days.size(); i++) {
-			//			for (register int j = 0; j < amount_of_days.size() - i - 1; j++) {
-			//				if (amount_of_days[j] < amount_of_days[j + 1]) {
-			//					tmp = array[j];
-			//					array[j] = array[j + 1];
-			//					array[j + 1] = tmp;
-			//				}
-			//			}
-			//		}
-			//}
+			wstring year, month, day;
+			vector<int> amount_of_days;
+			int temp;
+			for (register int i = 0; i < array_of_acc.size(); i++)
+			{
+				day = array_of_acc[i].date.substr(0, 2);
+				month = array_of_acc[i].date.substr(3, 2);
+				year = array_of_acc[i].date.substr(6, 4);
+				amount_of_days.push_back(stoi(year) * 365 + stoi(month) * 30 + stoi(day));
+			}
+			switch (switch_sort())
+			{
+			case 1:
+				for (register int i = 0; i < array_of_acc.size(); i++) {
+					for (register int j = 0; j < array_of_acc.size() - i - 1; j++) {
+						if (amount_of_days[j] > amount_of_days[j + 1]) {
+							tmp = array_of_acc[j];
+							array_of_acc[j] = array_of_acc[j + 1];
+							array_of_acc[j + 1] = tmp;
+							temp = amount_of_days[j];
+							amount_of_days[j] = amount_of_days[j + 1];
+							amount_of_days[j + 1] = temp;
+						}
+					}
+				}
+				break;
+			case 2:
+				for (register int i = 0; i < array_of_acc.size(); i++) {
+					for (register int j = 0; j < array_of_acc.size() - i - 1; j++) {
+						if (amount_of_days[j] < amount_of_days[j + 1]) {
+							tmp = array_of_acc[j];
+							array_of_acc[j] = array_of_acc[j + 1];
+							array_of_acc[j + 1] = tmp;
+							temp = amount_of_days[j];
+							amount_of_days[j] = amount_of_days[j + 1];
+							amount_of_days[j + 1] = temp;
+						}
+					}
+				}
+				break;
+			}
+			print(array_of_acc);
+			array_of_acc.clear();
+			return(array_of_acc);
 		}
 			  break;
 		case 4:
-			return(array_of_stud);
+			return(array_of_acc);
 		default: error_message(L"Вы ввели неизвестную опцию");
 			break;
 		}
@@ -216,6 +252,8 @@ void accounting::show_info(wstring group, wstring sort_type) {
 	if (acc.size() != 0) {
 		if (sort_type == L"sorted")
 			acc = sort_array_of_accounting(acc);
+		if (acc.size() == 0)
+			return;
 		wcout << L"Таблица успеваемости студентов." << endl;
 		print(acc, group);
 	}
@@ -750,17 +788,7 @@ void accounting::delete_info_or_sort_info(wstring type) {
 		system("cls");
 		int flag = 0;
 		if (type == L"sort")
-		{
-			vector<student> stud;
-			stud = student::load_from_file();
-			stud = sort_array_of_accounting(stud);
-			vector<accounting> tmp;
-			for (register int k = 0; k < stud.size(); k++)
-				for (register int j = 0; j < array.size(); j++)
-					if (stud[k].get_code_of_student() == array[j].code_of_student)
-						tmp.push_back(array[j]);
-			array = tmp;
-		}
+			array = sort_array_of_accounting(array);
 		else {
 			show_info(L"admin", L"non_sorted");
 			int buffer;
@@ -821,54 +849,55 @@ void accounting::print(vector<accounting> acc, wstring group) {
 		<< L"Код записи";
 	SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
 	wcout << L"│" << endl;
-
 	vector <int> students;
+	int flag = 0, j;
 	for (register int i = 0; i < acc.size(); i++)
-		students.push_back(acc[i].code_of_student);
-
-	for (register int k = 0; k < Set.size(); k++)
+	{
+		flag = 0;
+		for (j = 0; j < students.size(); j++)
+			if (acc[i].code_of_student == students[j])
+				flag++;
+		if (flag == 0)
+			students.push_back(acc[i].code_of_student);
+	}
+	for (register int i = 0; i < students.size(); i++)
 	{
 		wcout << L"\r";
-		if (group != L"admin")
+		wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
+		wcout << L"│" << setw(13) << left << students[i];
+		flag = 0;
+		for (register int j = 0; j < acc.size(); j++)
 		{
-			if (acc[k].group.compare(0, 4, group, 0, 4) == 0)
+			if (students[i] == acc[j].code_of_student)
 			{
-				wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
-				wcout << L"│" << setw(13) << left << stud[k].get_code_of_student()
-					<< setw(max_size_full_name > 13 ? max_size_full_name + 1 : 13) << left << stud[k].get_full_name();
-				for (register int j = 0; j < acc.size(); j++)
+				if (group != L"admin")
 				{
-					if (stud[k].get_code_of_student() == acc[j].code_of_student)
-						for (register int g = 0; g < subj.size(); g++)
-							if (acc[j].code_of_subject == subj[g].get_code_of_subject())
-							{
-								wcout << setw(max_size_name > 8 ? max_size_name + 1 : 8) << left << subj[g].get_name()
-									<< setw(11) << left << acc[j].date
-									<< setw(7) << left << acc[j].mark
-									<< setw(8) << left << subj[g].get_number_of_semester()
-									<< setw(10) << acc[j].code_of_acc << L"│" << endl;
-								wcout << L"│" << setw(52) << "";
-							}
+					if (flag == 0) {
+						wcout << setw(max_size_full_name > 13 ? max_size_full_name + 1 : 13) << left << acc[j].full_name;
+						flag++;
+					}
+					if (acc[i].group.compare(0, 4, group, 0, 4) == 0)
+					{
+						wcout << setw(max_size_name > 8 ? max_size_name + 1 : 8) << left << acc[j].name
+							<< setw(11) << left << acc[j].date
+							<< setw(7) << left << acc[j].mark
+							<< setw(8) << left << acc[j].number_of_semester
+							<< setw(10) << acc[j].code_of_acc << L"│" << endl;
+						wcout << L"│" << setw(13 + (max_size_full_name > 13 ? max_size_full_name + 1 : 13)) << "";
+					}
 				}
-			}
-		}
-		else {
-			wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
-			wcout << L"│" << setw(13) << left << stud[k].get_code_of_student()
-				<< setw(max_size_full_name > 13 ? max_size_full_name + 1 : 13) << left << stud[k].get_full_name();
-			for (register int j = 0; j < acc.size(); j++)
-			{
-				if (stud[k].get_code_of_student() == acc[j].code_of_student)
-					for (register int g = 0; g < subj.size(); g++)
-						if (acc[j].code_of_subject == subj[g].get_code_of_subject())
-						{
-							wcout << setw(max_size_name > 8 ? max_size_name + 1 : 8) << left << subj[g].get_name()
-								<< setw(11) << left << acc[j].date
-								<< setw(7) << left << acc[j].mark
-								<< setw(8) << left << subj[g].get_number_of_semester()
-								<< setw(10) << acc[j].code_of_acc << L"│" << endl;
-							wcout << L"│" << setw(52) << "";
-						}
+				else {
+					if (flag == 0) {
+						wcout << setw(max_size_full_name > 13 ? max_size_full_name + 1 : 13) << left << acc[j].full_name;
+						flag++;
+					}
+					wcout << setw(max_size_name > 8 ? max_size_name + 1 : 8) << left << acc[j].name
+						<< setw(11) << left << acc[j].date
+						<< setw(7) << left << acc[j].mark
+						<< setw(8) << left << acc[j].number_of_semester
+						<< setw(10) << acc[j].code_of_acc << L"│" << endl;
+					wcout << L"│" << setw(13 + (max_size_full_name > 13 ? max_size_full_name + 1 : 13)) << "";
+				}
 			}
 		}
 	}
@@ -885,7 +914,7 @@ void accounting::print(vector<accounting> array) {
 		if (array.at(i).full_name.length() > max_size_full_name)
 			max_size_full_name = array.at(i).full_name.size();
 	}
-	int table_width = space_students + ((max_size_full_name > 13) ? max_size_full_name + 1 : 13) + (max_size_name > 8 ? max_size_name + 1 : 8);
+	int table_width = space_accounting + ((max_size_full_name > 13) ? max_size_full_name + 1 : 13) + (max_size_name > 8 ? max_size_name + 1 : 8);
 	wcout << L"┌" << wstring(table_width, L'─') << L"┐" << endl;
 	wcout << L"│";
 	SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
@@ -894,7 +923,7 @@ void accounting::print(vector<accounting> array) {
 		<< L"Дата сдачи "
 		<< L"Оценка "
 		<< L"Семестр "
-		<< L"Код записи" << endl;
+		<< L"Код записи";
 	SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
 	wcout << L"│" << endl;
 	for (register int k = 0; k < array.size(); k++)
