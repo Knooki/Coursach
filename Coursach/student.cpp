@@ -70,7 +70,7 @@ vector<student> student::load_from_file() {
 		wcout << L"Нет информации о предметах." << endl;
 	}
 	else {
-		struct student buffer;
+		student buffer;
 		int i = 0;
 		while (fin >> buffer.code_of_student) {
 			fin.ignore(1);
@@ -766,12 +766,19 @@ void student::delete_stud_or_sort_stud(wstring type) {
 		}
 		if (flag != -1)
 			change_data_in_file(array, type);
-		else error_message(L"Нет информации о студентах.");
 	}
+	else error_message(L"Нет информации о студентах.");
 }
 
 void student::print(vector<student> array, wstring group) {
 	int max_size_speciality = 0, max_size_full_name = 0;
+	if (group != L"admin")
+		for (int i = 0; i < array.size(); i++)
+			if (array[i].group.compare(0, 4, group, 0, 4) != 0)
+			{
+				array.erase(array.begin() + i);
+				i--;
+			}
 	for (int i = 0; i < array.size(); i++)
 	{
 		if (array.at(i).speciality.length() > max_size_speciality)
@@ -793,26 +800,12 @@ void student::print(vector<student> array, wstring group) {
 	wcout << L"│" << endl;
 	for (register int j = 0; j < array.size(); j++) {
 		wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
-		if (group != L"admin")
-		{
-			if (array[j].group.compare(0, 4, group, 0, 4) == 0)
-			{
-				wcout << L"│" << setw(13) << left << array[j].code_of_student << setw(max_size_full_name > 19 ? max_size_full_name + 1 : 19) << left << array[j].full_name
-					<< setw(14) << array[j].birth_date
-					<< setw(max_size_speciality > 14 ? max_size_speciality + 1 : 14) << array[j].speciality
-					<< setw(7) << array[j].group
-					<< setw(10) << array[j].faculty
-					<< setw(4) << array[j].course << L"│" << endl;
-			}
-		}
-		else {
-			wcout << L"│" << setw(13) << left << array[j].code_of_student << setw(max_size_full_name > 19 ? max_size_full_name + 1 : 19) << left << array[j].full_name
-				<< setw(14) << array[j].birth_date
-				<< setw(max_size_speciality > 14 ? max_size_speciality + 1 : 14) << array[j].speciality
-				<< setw(7) << array[j].group
-				<< setw(10) << array[j].faculty
-				<< setw(4) << array[j].course << L"│" << endl;
-		}
+		wcout << L"│" << setw(13) << left << array[j].code_of_student << setw(max_size_full_name > 19 ? max_size_full_name + 1 : 19) << left << array[j].full_name
+			<< setw(14) << array[j].birth_date
+			<< setw(max_size_speciality > 14 ? max_size_speciality + 1 : 14) << array[j].speciality
+			<< setw(7) << array[j].group
+			<< setw(10) << array[j].faculty
+			<< setw(4) << array[j].course << L"│" << endl;
 	}
 	wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
 }

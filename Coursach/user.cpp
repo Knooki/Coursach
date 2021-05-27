@@ -14,7 +14,7 @@ int user::menu_user() {
 }
 
 void user::operation() {
-	while (1) {
+	do {
 		system("cls");
 		wcout << L"Меню простого пользователя." << endl;
 		switch (menu_user()) {
@@ -46,5 +46,101 @@ void user::operation() {
 			error_message(L"Вы ввели несуществующую опцию.");
 			break;
 		}
+	} while (is_repeat_operation());
+}
+
+void user::show_info(wstring type) {
+	system("cls");
+	wcout << L"Выбериет опцию:" << endl;
+	wcout << L"1)Просмотр данных о студентах." << endl;
+	wcout << L"2)Просмотр данных о предметах." << endl;
+	wcout << L"3)Просмотр данных об успеваемости студентов." << endl;
+	wcout << L"4)Выход." << endl;
+	switch (input_check()) {
+	case 1:
+	{
+		student st;
+		st.show_info_stud(type, L"non_sorted");
+	}
+	break;
+	case 2:
+	{
+		subject sub;
+		sub.show_info_subj(L"non_sorted");
+	}
+	break;
+	case 3:
+	{
+		accounting acc;
+		acc.show_info(type, L"non_sorted");
+	}
+	break;
+	case 4: return;
+	default:
+		error_message(L"Вы ввели неизвестную опцию.");
+		break;
+	}
+}
+
+void user::show_sorted_info(wstring type) {
+	system("cls");
+	wcout << L"Выбериет опцию:" << endl;
+	wcout << L"1)Сортировка и просмотр данных о студентах." << endl;
+	wcout << L"2)Сортировка и просмотр данных о предметах." << endl;
+	wcout << L"3)Сортировка и просмотр об успеваемости студентов." << endl;
+	wcout << L"4)Выход." << endl;
+	switch (input_check()) {
+	case 1:
+	{
+		student st;
+		st.show_info_stud(type, L"sorted");
+	}
+	break;
+	case 2:
+	{
+		subject sub;
+		sub.show_info_subj(L"sorted");
+	}
+	break;
+	case 3:
+	{
+		accounting acc;
+		acc.show_info(type, L"sorted");
+	}
+	break;
+	case 4: return;
+	default:
+		error_message(L"Вы ввели неизвестную опцию.");
+		break;
+	}
+}
+
+void user::search_info(wstring group) {
+	system("cls");
+	wcout << L"Выберите опцию" << endl;
+	wcout << L"1)Поиск студентов" << endl;
+	wcout << L"2)Поиск предметов" << endl;
+	wcout << L"3)Поиск данных учета" << endl;
+	wcout << L"4)Выход" << endl;
+	switch (input_check()) {
+	case 1: {
+		student st;
+		st.search_student(group);
+	}
+		  break;
+	case 2:
+	{
+		subject sub;
+		sub.search_subject();
+	}
+	break;
+	case 3:
+	{
+		accounting acc;
+		acc.search_info(group);
+	}
+	break;
+	default:
+		error_message(L"Вы ввели неизвестную опцию");
 	}
 }

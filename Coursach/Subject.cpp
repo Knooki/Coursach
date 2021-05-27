@@ -1,6 +1,8 @@
 ﻿#include "main.h"
 #include "Classes.h"
 
+//довести до стандарта CSV
+
 void subject::save_to_file(subject new_subj) {
 	wfstream fout(file_subject, ios_base::app);
 	fout.imbue(locale(locale::empty(), new codecvt_utf8<wchar_t>));
@@ -51,7 +53,7 @@ vector<subject> subject::load_from_file() {
 		error_message(L"Нет информации о предметах.");
 	}
 	else {
-		struct subject buffer;
+		subject buffer;
 		int i = 0;
 		while (fin >> buffer.code_of_subject) {
 			fin.ignore(1);
@@ -332,8 +334,8 @@ void subject::add_subj() {
 			rewind(stdin);
 			getline(wcin, buffer.name, L'\n');
 			for (register int i = 0; i < buffer.name.size(); i++)
-				if (!is_russian_alpha(buffer.name[i])) {
-					error_message(L"Пожaлуйста, используйте только русские буквы.");
+				if (!is_russian_alpha(buffer.name[i]) || buffer.name[i] != L'.' || buffer.name[i] != L',') {
+					error_message(L"Пожaлуйста, используйте только русские буквы, запятые и точки.");
 					flag = -1;
 					break;
 				}
@@ -436,8 +438,8 @@ void subject::change_subj() {
 					rewind(stdin);
 					getline(wcin, buf.name, L'\n');
 					for (register int i = 0; i < buf.name.size(); i++)
-						if (!is_russian_alpha(buf.name[i])) {
-							error_message(L"Пожaлуйста, используйте только русские буквы.");
+						if (!is_russian_alpha(buf.name[i]) || buf.name[i] != L'.' || buf.name[i] != L',') {
+							error_message(L"Пожaлуйста, используйте только русские буквы, запятые и точки.");
 							flag = 1;
 							break;
 						}

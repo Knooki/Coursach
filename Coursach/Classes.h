@@ -1,7 +1,27 @@
 #pragma once
 #include "main.h"
 
-class admin {
+class user {
+private:
+	wstring* login, * group;
+	int menu_user();
+protected:
+	void show_info(wstring group);
+	void show_sorted_info(wstring group);
+	void search_info(wstring group);
+public:
+	user(wstring* login, wstring* group) {
+		this->login = login;
+		this->group = group;
+	}
+	user(wstring* login, wstring group) {
+		this->login = login;
+		this->group = &group;
+	}
+	void operation();
+};
+
+class admin : private user {
 private:
 	wstring* login;
 	int menu_admin();
@@ -11,40 +31,29 @@ private:
 	void sort_data();
 	void user_manage();
 public:
-	admin(wstring* login) {
+	admin(wstring* login) :user(login, L"admin") {
 		this->login = login;
-	}
-	void operation();
-};
-
-class user {
-private:
-	wstring* login, * group;
-	int menu_user();
-public:
-	user(wstring* login, wstring* group) {
-		this->login = login;
-		this->group = group;
 	}
 	void operation();
 };
 
 class student {
-protected:
-	int code_of_student;
-	wstring full_name;
+private:
 	wstring birth_date;
 	wstring speciality;
-	wstring group;
 	wstring faculty;
-	int course;
-	vector<student> load_from_file();
 	vector<student> sort_array(vector<student> array);
 	vector<student> sort_date(vector<student> array, int type);
 	void save_to_file(student new_stud);
 	void change_data_in_file(vector<student> array, wstring type_sort);
 	int search_menu(wstring type);
 	void print(vector<student> array, wstring group);
+protected:
+	int code_of_student;
+	wstring full_name;
+	wstring group;
+	int course;
+	vector<student> load_from_file();
 public:
 	student() {}
 	int get_code_of_student() {
@@ -88,18 +97,19 @@ public:
 };
 
 class subject {
-protected:
-	int code_of_subject;
-	wstring name;
-	wstring teacher_name;
+private:
 	int hours;
-	int number_of_semester;
-	vector<subject> load_from_file();
 	vector<subject> sort_array(vector<subject> arr);
 	int search_menu();
 	void save_to_file(subject new_subj);
 	void change_data_in_file(vector<subject> array, wstring type_sort);
 	void print(vector<subject> array);
+protected:
+	int code_of_subject;
+	wstring name;
+	wstring teacher_name;
+	int number_of_semester;
+	vector<subject> load_from_file();
 public:
 	subject() {}
 	int get_code_of_subject() {
@@ -154,9 +164,4 @@ struct student_account {
 	vector<int> marks;
 	int amount_of_negative_marks;
 	float average_score;
-};
-
-struct faculty {
-	int faculty;
-	vector<wstring> speciality;
 };

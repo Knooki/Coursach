@@ -18,7 +18,6 @@ int entrance::entering() {
 	else {
 		counter = load_from_file();
 		wstring login = L"", password = L"", group;
-		int type;
 		wint_t p;
 		switch (entr_menu()) {
 		case 1:

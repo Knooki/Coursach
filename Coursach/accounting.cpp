@@ -830,6 +830,13 @@ void accounting::delete_all_info_about_student(int code_of_student) {
 
 void accounting::print(vector<accounting> acc, wstring group) {
 	int max_size_name = 0, max_size_full_name = 0;
+	if (group != L"admin")
+		for (int i = 0; i < acc.size(); i++)
+			if (acc[i].group.compare(0, 4, group, 0, 4) != 0)
+			{
+				acc.erase(acc.begin() + i);
+				i--;
+			}
 	for (register int i = 0; i < acc.size(); i++)
 	{
 		if (acc.at(i).get_name().length() > max_size_name)
@@ -870,34 +877,16 @@ void accounting::print(vector<accounting> acc, wstring group) {
 		{
 			if (students[i] == acc[j].code_of_student)
 			{
-				if (group != L"admin")
-				{
-					if (flag == 0) {
-						wcout << setw(max_size_full_name > 13 ? max_size_full_name + 1 : 13) << left << acc[j].full_name;
-						flag++;
-					}
-					if (acc[i].group.compare(0, 4, group, 0, 4) == 0)
-					{
-						wcout << setw(max_size_name > 8 ? max_size_name + 1 : 8) << left << acc[j].name
-							<< setw(11) << left << acc[j].date
-							<< setw(7) << left << acc[j].mark
-							<< setw(8) << left << acc[j].number_of_semester
-							<< setw(10) << acc[j].code_of_acc << L"│" << endl;
-						wcout << L"│" << setw(13 + (max_size_full_name > 13 ? max_size_full_name + 1 : 13)) << "";
-					}
+				if (flag == 0) {
+					wcout << setw(max_size_full_name > 13 ? max_size_full_name + 1 : 13) << left << acc[j].full_name;
+					flag++;
 				}
-				else {
-					if (flag == 0) {
-						wcout << setw(max_size_full_name > 13 ? max_size_full_name + 1 : 13) << left << acc[j].full_name;
-						flag++;
-					}
-					wcout << setw(max_size_name > 8 ? max_size_name + 1 : 8) << left << acc[j].name
-						<< setw(11) << left << acc[j].date
-						<< setw(7) << left << acc[j].mark
-						<< setw(8) << left << acc[j].number_of_semester
-						<< setw(10) << acc[j].code_of_acc << L"│" << endl;
-					wcout << L"│" << setw(13 + (max_size_full_name > 13 ? max_size_full_name + 1 : 13)) << "";
-				}
+				wcout << setw(max_size_name > 8 ? max_size_name + 1 : 8) << left << acc[j].name
+					<< setw(11) << left << acc[j].date
+					<< setw(7) << left << acc[j].mark
+					<< setw(8) << left << acc[j].number_of_semester
+					<< setw(10) << acc[j].code_of_acc << L"│" << endl;
+				wcout << L"│" << setw(13 + (max_size_full_name > 13 ? max_size_full_name + 1 : 13)) << "";
 			}
 		}
 	}
